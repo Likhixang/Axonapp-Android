@@ -2,7 +2,7 @@
 
 [English](README.en.md)
 
-AxonHub Android 是 AxonHub 管理客户端的原生 Android 移植版。应用使用 Kotlin、Jetpack Compose Material 3 和原生网络/安全存储实现，不包含 WebView 包装层。
+AxonHub Android 是 AxonHub 管理客户端的原生 Android 移植版。应用使用 Kotlin、Jetpack Compose Foundation 自绘苹果风格控件和原生网络/安全存储实现，不包含 WebView 包装层。
 
 ## 功能
 
@@ -12,13 +12,16 @@ AxonHub Android 是 AxonHub 管理客户端的原生 Android 移植版。应用�
 - 可观测性：请求、Trace、Thread、Usage 的分页列表、详情、关系和脱敏正文/会话检查器。
 - Playground：管理员通道以及 OpenAI Chat Completions、OpenAI Responses、Anthropic Messages、Gemini 流式协议。
 - 备份：原生 JSON 导出和 GraphQL multipart 恢复，恢复前验证文件结构并要求二次确认。
-- 外观：手机底部导航、平板导航栏、浅色/深色/跟随系统、自定义强调色和应用语言选择。
+- 外观：苹果风格大标题、分组卡片、悬浮四标签底栏、自绘输入/开关/分段控件/弹层，浅色/深色/跟随系统、自定义强调色和应用语言选择。
+- 渠道/模型多选：状态筛选与批量启用/禁用，串行调用真实 API 并逐项读回，明确反馈部分失败，不宣称原子操作。
 
 详细映射和已知差异见 [docs/PARITY.md](docs/PARITY.md)。安全模型见 [SECURITY.md](SECURITY.md)。
 
 ## 构建
 
-要求：
+本项目的交付构建统一由 [GitHub Actions](https://github.com/Likhixang/Axonhub-App-Android/actions) 执行：单元测试、lint、Debug APK 打包及签名/对齐检查。不运行模拟器；成功后下载 `axonhub-debug-apk` artifact。Debug 签名通过 `ANDROID_DEBUG_KEYSTORE_BASE64` GitHub Secret 复用，源码不包含签名文件。
+
+以下命令仅为构建说明，本轮没有在本地执行。要求：
 
 - JDK 17
 - Android SDK Platform 35

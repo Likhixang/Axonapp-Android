@@ -1,6 +1,6 @@
 # AxonHub Android
 
-AxonHub Android is a native Android port of the AxonHub administration client. It is built with Kotlin and Jetpack Compose Material 3; it is not a WebView wrapper.
+AxonHub Android is a native Android port of the AxonHub administration client. It is built with Kotlin and custom Apple-style Jetpack Compose Foundation controls; it is not a WebView wrapper.
 
 ## Highlights
 
@@ -15,6 +15,8 @@ AxonHub Android is a native Android port of the AxonHub administration client. I
 See [docs/PARITY.md](docs/PARITY.md) for the detailed mapping and [SECURITY.md](SECURITY.md) for the threat model.
 
 ## Build and install
+
+Delivery builds run exclusively in GitHub Actions (unit tests, lint, APK assembly and signature/alignment checks), without an emulator. Download the `axonhub-debug-apk` artifact after a successful run. Stable debug signing is restored from the `ANDROID_DEBUG_KEYSTORE_BASE64` GitHub Secret. The following commands are reference instructions, not locally executed validation.
 
 Install JDK 17, Android SDK Platform 35, and Build Tools 35.x, then run:
 
