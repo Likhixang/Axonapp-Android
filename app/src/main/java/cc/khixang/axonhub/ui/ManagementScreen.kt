@@ -1,6 +1,14 @@
 package cc.khixang.axonhub.ui
 
 import android.provider.OpenableColumns
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import cc.khixang.axonhub.R
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -9,7 +17,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,23 +46,54 @@ private val modules = listOf(
 @Composable fun ManagementScreen(app: AxonHubApplication, initialModule: String? = null) {
     var module by remember { mutableStateOf(initialModule?.let { id -> modules.firstOrNull { it.id == id } }) }
     var system by remember { mutableStateOf(false) }; var observability by remember { mutableStateOf(false) }; var analytics by remember { mutableStateOf(false) }; var advanced by remember { mutableStateOf(false) }
+    BackHandler(module != null || system || advanced) { module = null; system = false; advanced = false }
     when {
         analytics -> AnalyticsScreen(app) { analytics = false }
         observability -> ObservabilityScreen(app) { observability = false }
         system -> SystemOperationsScreen(app) { system = false }
         advanced -> AdvancedOperationsScreen(app) { advanced = false }
         module != null -> AdminModuleScreen(app, module!!) { module = null }
-        else -> LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            item { Text("Management", style = MaterialTheme.typography.headlineMedium) }
-            item { Text("Workspace", style = MaterialTheme.typography.titleLarge) }; items(modules.take(3)) { item -> MenuCard(item.title, Icons.Default.Folder) { module = item } }
-            item { Text("Audit and history", style = MaterialTheme.typography.titleLarge) }; item { MenuCard("Requests, traces, threads, and usage", Icons.Default.QueryStats) { observability = true } }; item { MenuCard("Analytics, dimensions, and performance", Icons.Default.Analytics) { analytics = true } }
-            item { Text("Access and security", style = MaterialTheme.typography.titleLarge) }; items(modules.drop(3).take(6)) { item -> MenuCard(item.title, Icons.Default.Security) { module = item } }
-            item { Text("System and operations", style = MaterialTheme.typography.titleLarge) }; items(modules.drop(9)) { item -> MenuCard(item.title, Icons.Default.Storage) { module = item } }; item { MenuCard("System settings, cache, backup, catalog, and account", Icons.Default.Settings) { system = true } }; item { MenuCard("All schema operations", Icons.Default.DataObject) { advanced = true } }
+        else -> LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            item { IosPageHeader(stringResource(R.string.ws_management), stringResource(R.string.ws_workspace_help)) }
+            item { IosSectionTitle(stringResource(R.string.ws_workspace)) }
+            item { IosCard(Modifier.fillMaxWidth()) {
+                listOf("projects", "apiKeys", "prompts").forEachIndexed { index, id -> val entry = modules.first { it.id == id }; ManagementMenuRow(moduleTitle(entry), moduleIcon(entry)) { module = entry }; if (index < 2) MenuDivider() }
+            } }
+            item { IosSectionTitle(stringResource(R.string.ws_audit)) }
+            item { IosCard(Modifier.fillMaxWidth()) {
+                ManagementMenuRow(stringResource(R.string.ws_observability), Icons.Default.Timeline, stringResource(R.string.ws_observability_help)) { observability = true }
+                MenuDivider()
+                ManagementMenuRow(stringResource(R.string.ws_analytics), Icons.Default.QueryStats, stringResource(R.string.ws_analytics_help)) { analytics = true }
+            } }
+            item { IosSectionTitle(stringResource(R.string.ws_security)) }
+            item { IosCard(Modifier.fillMaxWidth()) {
+                listOf("users", "roles", "projectUsers", "projectRoles", "templates", "protection").forEachIndexed { index, id -> val entry = modules.first { it.id == id }; ManagementMenuRow(moduleTitle(entry), moduleIcon(entry)) { module = entry }; if (index < 5) MenuDivider() }
+            } }
+            item { IosSectionTitle(stringResource(R.string.ws_operations)) }
+            item { IosCard(Modifier.fillMaxWidth()) {
+                val entry = modules.first { it.id == "storage" }
+                ManagementMenuRow(moduleTitle(entry), moduleIcon(entry)) { module = entry }; MenuDivider()
+                ManagementMenuRow(stringResource(R.string.ws_system), Icons.Default.Settings, stringResource(R.string.ws_system_help)) { system = true }; MenuDivider()
+                ManagementMenuRow(stringResource(R.string.ws_advanced), Icons.Default.DataObject, stringResource(R.string.ws_advanced_help)) { advanced = true }
+            } }
         }
     }
 }
 
-@Composable private fun MenuCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, action: () -> Unit) { ElevatedCard(onClick = action, Modifier.fillMaxWidth()) { Row(Modifier.padding(16.dp)) { Icon(icon, null); Spacer(Modifier.width(12.dp)); Text(title, style = MaterialTheme.typography.titleMedium) } } }
+@Composable private fun moduleTitle(module: AdminModule): String = stringResource(when (module.id) {
+    "apiKeys" -> R.string.ws_api_keys; "templates" -> R.string.ws_templates; "projects" -> R.string.ws_projects; "users" -> R.string.ws_users; "roles" -> R.string.ws_roles; "projectUsers" -> R.string.ws_project_users; "projectRoles" -> R.string.ws_project_roles; "prompts" -> R.string.ws_prompts; "protection" -> R.string.ws_protection; else -> R.string.ws_storage
+})
+private fun moduleIcon(module: AdminModule): androidx.compose.ui.graphics.vector.ImageVector = when (module.id) {
+    "apiKeys" -> Icons.Default.Key; "templates" -> Icons.Default.Policy; "projects" -> Icons.Default.Folder; "users", "projectUsers" -> Icons.Default.People; "roles", "projectRoles" -> Icons.Default.AdminPanelSettings; "prompts" -> Icons.Default.ChatBubbleOutline; "protection" -> Icons.Default.Shield; else -> Icons.Default.Storage
+}
+@Composable private fun MenuDivider() { HorizontalDivider(Modifier.padding(start = 60.dp, end = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)) }
+@Composable private fun ManagementMenuRow(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, subtitle: String? = null, action: () -> Unit) {
+    Row(Modifier.fillMaxWidth().clickable(interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }, indication = null, onClick = action).heightIn(min = 60.dp).padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.size(32.dp).background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(9.dp)), contentAlignment = Alignment.Center) { Icon(icon, null, Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onSurface) }
+        Column(Modifier.weight(1f).padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) { Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium); subtitle?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) } }
+        Icon(Icons.Default.ChevronRight, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
 
 @Composable private fun AdminModuleScreen(app: AxonHubApplication, module: AdminModule, back: () -> Unit) {
     var rows by remember(module.id) { mutableStateOf<List<JsonObject>>(emptyList()) }; var cursor by remember(module.id) { mutableStateOf<String?>(null) }; var total by remember { mutableStateOf<Int?>(null) }; var search by remember { mutableStateOf("") }; var project by remember { mutableStateOf<String?>(null) }; var projects by remember { mutableStateOf<List<JsonObject>>(emptyList()) }; var busy by remember { mutableStateOf(false) }; var error by remember { mutableStateOf<String?>(null) }; var selected by remember { mutableStateOf<JsonElement?>(null) }; var operation by remember { mutableStateOf<Pair<AdminOperation, JsonElement>?>(null) }; var invitation by remember { mutableStateOf(false) }; val scope = rememberCoroutineScope()
@@ -76,17 +118,52 @@ private val modules = listOf(
             }
         } catch (t: Throwable) { error = t.message } finally { busy = false }
     }
+    suspend fun loadProjects() {
+        if (busy) return
+        busy = true; error = null
+        try { projects = app.admin.read("myProjects").arr.map(JsonElement::obj); project = projects.firstOrNull()?.get("id")?.text; app.repository.selectProject(project) }
+        catch (t: Throwable) { error = t.message ?: "Unable to load projects" }
+        finally { busy = false }
+    }
     LaunchedEffect(module.id) {
-        if (module.project) runCatching { app.admin.read("myProjects") }.getOrNull()?.arr?.let { projects = it.map(JsonElement::obj); project = projects.firstOrNull()?.get("id")?.text; app.repository.selectProject(project) }
+        if (module.project) loadProjects()
         load()
     }
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Row { IconButton(back) { Icon(Icons.Default.ArrowBack, "Back") }; Text(module.title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f)); if (module.id == "projectUsers") IconButton(enabled = !project.isNullOrBlank(), onClick = { invitation = true }) { Icon(Icons.Default.Link, "Create invitation") }; module.create?.let { create -> IconButton({ operation = app.adminCatalog.operation(create) to JsonNull }) { Icon(Icons.Default.Add, "Create") } }; IconButton({ scope.launch { load() } }) { Icon(Icons.Default.Refresh, "Refresh") } }
-        if (module.project) EnumDropdown("Project", project.orEmpty(), listOf("") + projects.map { it["id"].text }, label = { id -> projects.firstOrNull { it["id"].text == id }?.get("name")?.text ?: "Select project" }) { project = it.takeIf(String::isNotBlank); scope.launch { load() } }
-        OutlinedTextField(search, { search = it }, label = { Text("Search") }, trailingIcon = { IconButton({ scope.launch { load() } }) { Icon(Icons.Default.Search, "Search") } }, modifier = Modifier.fillMaxWidth())
-        total?.let { Text("${rows.size} of $it", style = MaterialTheme.typography.bodySmall) }; error?.let { Text(it, color = MaterialTheme.colorScheme.error) }; if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
-        if (!busy && rows.isEmpty()) Text(if (module.project && project == null) "Select a project" else "No records", Modifier.padding(24.dp))
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) { items(rows, key = { it["id"].text.ifBlank { it.toString() } }) { row -> ElevatedCard(onClick = { selected = row }, Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) { Text(recordLabel(row), style = MaterialTheme.typography.titleMedium); Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { row["status"].text.takeIf(String::isNotBlank)?.let { AssistChip({}, { Text(it) }) }; row["type"].text.takeIf(String::isNotBlank)?.let { Text(it, style = MaterialTheme.typography.bodySmall) } }; row["description"].text.takeIf(String::isNotBlank)?.let { Text(it, maxLines = 2) } } } }; if (cursor != null) item { OutlinedButton({ scope.launch { load(true) } }, Modifier.fillMaxWidth()) { Text("Load next page") } } }
+    val selectProjectLabel = stringResource(R.string.ws_select_project)
+    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        WorkspaceBack(back)
+        IosPageHeader(moduleTitle(module)) {
+            if (module.id == "projectUsers") IconButton(enabled = !project.isNullOrBlank() && !busy, onClick = { invitation = true }) { Icon(Icons.Default.Link, stringResource(R.string.ws_invitation)) }
+            module.create?.let { create -> IconButton(enabled = !busy && (!module.project || !project.isNullOrBlank()), onClick = { operation = app.adminCatalog.operation(create) to JsonNull }) { Icon(Icons.Default.Add, stringResource(R.string.ws_create)) } }
+            IconButton(onClick = { scope.launch { load() } }, enabled = !busy) { Icon(Icons.Default.Refresh, stringResource(R.string.ws_refresh)) }
+        }
+        if (module.project) EnumDropdown(stringResource(R.string.ws_projects), project.orEmpty(), listOf("") + projects.map { it["id"].text }, label = { id -> projects.firstOrNull { it["id"].text == id }?.get("name")?.text ?: selectProjectLabel }) { project = it.takeIf(String::isNotBlank); rows = emptyList(); cursor = null; total = null; scope.launch { load() } }
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            IosSearchField(search, { search = it }, stringResource(R.string.ws_search_records), Modifier.weight(1f))
+            IconButton(onClick = { scope.launch { load() } }, enabled = !busy) { Icon(Icons.Default.Search, stringResource(R.string.ws_search)) }
+        }
+        total?.let { Text(stringResource(R.string.ws_count, rows.size, it), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+        if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+        error?.let { ErrorState(it) { scope.launch { if (module.project && project == null) loadProjects(); load() } } }
+        if (!busy && error == null && rows.isEmpty()) WorkspaceEmpty(
+            stringResource(if (module.project && project == null) R.string.ws_select_project else R.string.ws_no_records),
+            stringResource(if (module.project && project == null) R.string.ws_project_help else R.string.ws_no_records_help))
+        LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            items(rows, key = { it["id"].text.ifBlank { it.toString() } }) { row ->
+                IosCard(Modifier.fillMaxWidth(), onClick = { selected = row }) {
+                    Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text(recordLabel(row), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                            val metadata = listOf("status", "type").mapNotNull { row[it].text.takeIf(String::isNotBlank) }
+                            if (metadata.isNotEmpty()) Text(metadata.joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            row["description"].text.takeIf(String::isNotBlank)?.let { Text(it, maxLines = 2, style = MaterialTheme.typography.bodySmall) }
+                        }
+                        Icon(Icons.Default.ChevronRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+            if (cursor != null) item { OutlinedButton(onClick = { scope.launch { load(true) } }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.ws_next_page)) } }
+        }
     }
     selected?.let { summary -> AdminDetailDialog(app, module, summary, { selected = null }, { op, baseline -> operation = op to baseline; selected = null }, { scope.launch { load() } }) }
     operation?.let { (op, baseline) -> OperationDialog(app, op, baseline, project, { operation = null }, { scope.launch { load() } }) }
@@ -155,7 +232,7 @@ private fun operationVariables(schema: AdminSchema, op: AdminOperation, baseline
 
 @Composable private fun SystemOperationsScreen(app: AxonHubApplication, back: () -> Unit) {
     val groups = listOf("System Settings", "Account"); var selected by remember { mutableStateOf<AdminOperation?>(null) }; var restore by remember { mutableStateOf(false) }
-    Column(Modifier.fillMaxSize().padding(16.dp)) { Row { IconButton(back) { Icon(Icons.Default.ArrowBack, "Back") }; Text("System and account", style = MaterialTheme.typography.headlineSmall) }; LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) { item { Text("Backup and restore", style = MaterialTheme.typography.titleLarge) }; item { ElevatedCard(onClick = { restore = true }, Modifier.fillMaxWidth()) { Column(Modifier.padding(14.dp)) { Text("Restore from backup", style = MaterialTheme.typography.titleMedium); Text("Select and validate an AxonHub JSON backup, then upload it with the official multipart contract.", style = MaterialTheme.typography.bodySmall) } } }; groups.forEach { group -> item { Text(group, style = MaterialTheme.typography.titleLarge) }; items(app.adminCatalog.schema.operations.filter { it.group == group && !it.secretRead && it.root != "restore" }, key = { it.id }) { op -> ElevatedCard(onClick = { selected = op }, Modifier.fillMaxWidth()) { Column(Modifier.padding(14.dp)) { Text(op.id, style = MaterialTheme.typography.titleMedium); Text(if (op.mutation) "Change with readback verification" else "Read current server state", style = MaterialTheme.typography.bodySmall) } } } } } }
+    Column(Modifier.fillMaxSize().padding(16.dp)) { WorkspaceBack(back); IosPageHeader(stringResource(R.string.ws_system)); LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) { item { Text("Backup and restore", style = MaterialTheme.typography.titleLarge) }; item { ElevatedCard(onClick = { restore = true }, Modifier.fillMaxWidth()) { Column(Modifier.padding(14.dp)) { Text("Restore from backup", style = MaterialTheme.typography.titleMedium); Text("Select and validate an AxonHub JSON backup, then upload it with the official multipart contract.", style = MaterialTheme.typography.bodySmall) } } }; groups.forEach { group -> item { Text(group, style = MaterialTheme.typography.titleLarge) }; items(app.adminCatalog.schema.operations.filter { it.group == group && !it.secretRead && it.root != "restore" }, key = { it.id }) { op -> ElevatedCard(onClick = { selected = op }, Modifier.fillMaxWidth()) { Column(Modifier.padding(14.dp)) { Text(op.id, style = MaterialTheme.typography.titleMedium); Text(if (op.mutation) "Change with readback verification" else "Read current server state", style = MaterialTheme.typography.bodySmall) } } } } } }
     selected?.let { OperationDialog(app, it, JsonNull, null, { selected = null }, {}) }
     if (restore) RestoreDialog(app) { restore = false }
 }
@@ -229,9 +306,10 @@ private fun readBounded(stream: java.io.InputStream?, maxBytes: Int): ByteArray 
         .filter { search.isBlank() || it.id.contains(search, true) || it.group.contains(search, true) || it.root.contains(search, true) }
         .groupBy { it.group.ifBlank { "Other" } }.toSortedMap()
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) { IconButton(back) { Icon(Icons.Default.ArrowBack, "Back") }; Text("All schema operations", style = MaterialTheme.typography.headlineSmall) }
+        WorkspaceBack(back)
+        IosPageHeader(stringResource(R.string.ws_advanced))
         Text("Native schema-driven forms for every imported safe operation; secret reads remain available only in their explicit detail screens.", style = MaterialTheme.typography.bodySmall)
-        OutlinedTextField(search, { search = it }, label = { Text("Search operations") }, leadingIcon = { Icon(Icons.Default.Search, null) }, modifier = Modifier.fillMaxWidth())
+        IosSearchField(search, { search = it }, stringResource(R.string.ws_search_records))
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             operations.forEach { (group, rows) ->
                 item { Text(group, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 8.dp)) }

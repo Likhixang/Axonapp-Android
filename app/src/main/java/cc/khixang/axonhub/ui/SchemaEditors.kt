@@ -1,10 +1,18 @@
 package cc.khixang.axonhub.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -22,21 +30,24 @@ const val INVALID_SCHEMA_VALUE_PREFIX = "__AXONHUB_INVALID__"
         val elementType = clean.substring(1, clean.length - 1); val items = value.arr
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(label, style = MaterialTheme.typography.labelLarge)
-            items.forEachIndexed { index, item -> OutlinedCard(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp)) { SchemaValueEditor(schema, elementType, item, { next -> onChange(JsonArray(items.toMutableList().also { it[index] = next })) }, "${index + 1}", sensitive, depth + 1); TextButton({ onChange(JsonArray(items.toMutableList().also { it.removeAt(index) })) }) { Icon(Icons.Default.Delete, null); Text("Remove") } } } }
+            items.forEachIndexed { index, item -> IosCard(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp)) { SchemaValueEditor(schema, elementType, item, { next -> onChange(JsonArray(items.toMutableList().also { it[index] = next })) }, "${index + 1}", sensitive, depth + 1); TextButton({ onChange(JsonArray(items.toMutableList().also { it.removeAt(index) })) }) { Icon(Icons.Default.Delete, null); Text("Remove") } } } }
             OutlinedButton({ onChange(JsonArray(items + schema.defaultValue(elementType))) }) { Icon(Icons.Default.Add, null); Text("Add item") }
         }; return
     }
     val info = schema.types[schema.base(type)]
     if (info?.kind == "object") {
         var expanded by remember(type, depth) { mutableStateOf(depth < 2) }
-        OutlinedCard(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextButton({ expanded = !expanded }, Modifier.fillMaxWidth()) { Text(if (expanded) "Hide $label" else "Configure $label") }
+        IosCard(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            TextButton({ expanded = !expanded }, Modifier.fillMaxWidth()) {
+                Text(label, modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold)
+                Icon(if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore, null)
+            }
             if (expanded) ObjectFields(schema, info.fields, value.obj, { onChange(it) }, sensitive, depth + 1)
         } }; return
     }
     if (info?.kind == "enum") { EnumDropdown(label, value.text.ifBlank { info.values.firstOrNull().orEmpty() }, info.values) { onChange(JsonPrimitive(it)) }; return }
     when (schema.base(type)) {
-        "Boolean" -> Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(label); Switch(value.boolOrNull ?: false, { onChange(JsonPrimitive(it)) }) }
+        "Boolean" -> Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { Text(label); Switch(value.boolOrNull ?: false, { onChange(JsonPrimitive(it)) }) }
         "JSONRawMessage", "JSONRawMessageInput", "Any" -> {
             var text by remember(type, label) { mutableStateOf(value.toString()) }
             val valid = runCatching { Json.parseToJsonElement(text) }.isSuccess
@@ -45,7 +56,7 @@ const val INVALID_SCHEMA_VALUE_PREFIX = "__AXONHUB_INVALID__"
         "Int", "Float" -> {
             var text by remember(type, label) { mutableStateOf(value.text) }
             val number = if (schema.base(type) == "Int") text.toIntOrNull() else text.toDoubleOrNull()
-            OutlinedTextField(text, { next -> text = next; val parsed = if (schema.base(type) == "Int") next.toIntOrNull() else next.toDoubleOrNull(); onChange(parsed?.let(::JsonPrimitive) ?: JsonPrimitive(INVALID_SCHEMA_VALUE_PREFIX + next)) }, label = { Text(label + if (type.endsWith("!")) " *" else "") }, supportingText = { if (number == null) Text("Enter a valid number") }, isError = number == null, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(text, { next -> text = next; val parsed = if (schema.base(type) == "Int") next.toIntOrNull() else next.toDoubleOrNull(); onChange(parsed?.let(::JsonPrimitive) ?: JsonPrimitive(INVALID_SCHEMA_VALUE_PREFIX + next)) }, label = { Text(label + if (type.endsWith("!")) " *" else "") }, supportingText = { if (number == null) Text("Enter a valid number") }, isError = number == null, singleLine = true, keyboardOptions = KeyboardOptions(keyboardType = if (schema.base(type) == "Int") KeyboardType.Number else KeyboardType.Decimal), modifier = Modifier.fillMaxWidth())
         }
         else -> OutlinedTextField(value.text, { onChange(JsonPrimitive(it)) }, label = { Text(label + if (type.endsWith("!")) " *" else "") }, visualTransformation = if (sensitive || SensitiveFields.matches(label)) PasswordVisualTransformation() else androidx.compose.ui.text.input.VisualTransformation.None, modifier = Modifier.fillMaxWidth())
     }

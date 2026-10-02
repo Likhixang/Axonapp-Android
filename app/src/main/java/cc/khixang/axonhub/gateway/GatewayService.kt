@@ -3,6 +3,9 @@ package cc.khixang.axonhub.gateway
 import cc.khixang.axonhub.core.*
 import cc.khixang.axonhub.data.AxonRepository
 import cc.khixang.axonhub.network.AxonException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.json.*
 
 class GatewayService(private val repository: AxonRepository) {
@@ -79,6 +82,27 @@ class GatewayService(private val repository: AxonRepository) {
     suspend fun setChannelEnabled(id: String, enabled: Boolean) = status(id, enabled, true)
     suspend fun setModelEnabled(id: String, enabled: Boolean) = status(id, enabled, false)
     private suspend fun status(id: String, enabled: Boolean, channel: Boolean) = repository.fencedMutation { session, project ->
+        updateStatus(session, project, id, enabled, channel)
+    }
+
+    /** Serial, individually read-back writes, never an atomic bulk mutation. */
+    suspend fun setChannelsEnabled(ids: List<String>, enabled: Boolean): GatewayBatchResult = batchStatus(ids, enabled, true)
+    suspend fun setModelsEnabled(ids: List<String>, enabled: Boolean): GatewayBatchResult = batchStatus(ids, enabled, false)
+
+    private suspend fun batchStatus(ids: List<String>, enabled: Boolean, channel: Boolean): GatewayBatchResult {
+        // Capture before waiting for the mutation mutex: a queued batch must not silently retarget.
+        val fence = repository.currentFence()
+        return repository.fencedMutation { session, project ->
+            repository.verify(fence)
+            runGatewayBatch(ids) { id ->
+                repository.verify(fence)
+                updateStatus(session, project, id, enabled, channel)
+                repository.verify(fence)
+            }
+        }
+    }
+
+    private suspend fun updateStatus(session: cc.khixang.axonhub.network.AxonSession, project: String?, id: String, enabled: Boolean, channel: Boolean) {
         val expected = if (enabled) "enabled" else "disabled"
         val doc = if (channel) CHANNEL_STATUS else MODEL_STATUS; val root = if (channel) "updateChannelStatus" else "updateModelStatus"
         val result = repository.api.graphQl(session, doc, buildJsonObject { put("id", id); put("status", expected) }, project)[root]
@@ -210,6 +234,63 @@ class GatewayService(private val repository: AxonRepository) {
         const val TEST_CHANNEL = "mutation TestChannel(${ '$' }input: TestChannelInput!) { testChannel(input: ${ '$' }input) { success latency error } }"
         const val FETCH_MODELS = "query ChannelFetchModels(${ '$' }input: FetchModelsInput!) { fetchModels(input: ${ '$' }input) { models { id } error } }"
         const val SYNC_MODELS = "mutation ChannelSyncModels(${ '$' }id: ID!, ${ '$' }pattern: String) { syncChannelModels(channelID: ${ '$' }id, pattern: ${ '$' }pattern) { channelID supportedModels } }"
+    }
+}
+
+data class GatewayBatchItem(val id: String, val verified: Boolean, val error: String? = null, val attempted: Boolean = true)
+data class GatewayBatchResult(val items: List<GatewayBatchItem>) {
+    val succeeded get() = items.count { it.verified }
+    val failed get() = items.count { it.attempted && !it.verified }
+    val notAttempted get() = items.count { !it.attempted }
+}
+
+/** Keep provider/network exception prose out of every Gateway UI path. */
+fun gatewayErrorMessage(error: Throwable): String = when (error) {
+    AxonException.TargetChanged -> "实例或项目已变化，请返回列表重新打开；未继续执行后续操作。"
+    AxonException.VerificationFailed -> "服务器写入结果未通过读回校验；可能已生效，请刷新确认。"
+    AxonException.Unauthorized, AxonException.InvalidCredentials -> "认证已失效，请重新登录后重试。"
+    AxonException.Forbidden -> "没有执行此操作的权限。"
+    AxonException.TimedOut -> "请求超时；写入可能已生效，请刷新确认后重试。"
+    AxonException.Transport -> "无法连接服务器，请检查网络与证书。"
+    is AxonException.HttpStatus -> "服务器返回 HTTP ${error.status}；请刷新确认后重试。"
+    AxonException.Rejected -> "服务器拒绝操作，请检查权限与输入。"
+    AxonException.InvalidResponse -> "服务器响应无效；请刷新确认后重试。"
+    is IllegalArgumentException -> "输入或配置不完整。编辑凭据与设置前，请先授权读取完整配置。"
+    else -> "操作未完成，请刷新确认后重试。错误详情已隐藏以保护凭据。"
+}
+
+internal suspend fun runGatewayBatch(ids: List<String>, operation: suspend (String) -> Unit): GatewayBatchResult {
+    require(ids.all { it.isNotBlank() }) { "Empty Gateway target" }
+    val results = mutableListOf<GatewayBatchItem>()
+    var stopped: String? = null
+    for (id in ids.distinct()) {
+        currentCoroutineContext().ensureActive()
+        val reason = stopped
+        if (reason != null) {
+            results += GatewayBatchItem(id, verified = false, error = reason, attempted = false)
+            continue
+        }
+        try {
+            operation(id)
+            results += GatewayBatchItem(id, verified = true)
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (error: Exception) {
+            val message = gatewayErrorMessage(error)
+            results += GatewayBatchItem(id, verified = false, error = message)
+            if (error == AxonException.TargetChanged || error == AxonException.Unauthorized || error == AxonException.InvalidCredentials) stopped = message
+        }
+    }
+    return GatewayBatchResult(results)
+}
+
+enum class GatewayStatusFilter(val label: String) {
+    ALL("全部"), ENABLED("启用中"), DISABLED("已禁用"), OTHER("其他状态");
+    fun matches(status: String): Boolean = when (this) {
+        ALL -> true
+        ENABLED -> status == "enabled"
+        DISABLED -> status == "disabled"
+        OTHER -> status != "enabled" && status != "disabled"
     }
 }
 

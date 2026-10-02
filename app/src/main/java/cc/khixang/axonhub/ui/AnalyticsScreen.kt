@@ -1,10 +1,13 @@
 package cc.khixang.axonhub.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -24,6 +27,7 @@ import java.time.LocalDate
 /** Parent owns navigation. No gateway mutations or inference requests are issued here. */
 @Composable
 fun AnalyticsScreen(app: AxonHubApplication, back: () -> Unit) {
+    BackHandler(onBack = back)
     val instanceId by app.repository.selectedId.collectAsState()
     val projectId by app.repository.projectId.collectAsState()
     val instances by app.repository.instances.collectAsState()
@@ -35,7 +39,6 @@ fun AnalyticsScreen(app: AxonHubApplication, back: () -> Unit) {
     } else key(fence) { AnalyticsBoundScreen(app, fence, back) }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, back: () -> Unit) {
     val service = remember(app) { app.analytics }
@@ -97,18 +100,22 @@ private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, ba
     LaunchedEffect(search, descending, chartField, channelType, warningOnly) { page = 0 }
     val safePage = page.coerceAtMost(((visible.size - 1).coerceAtLeast(0)) / 25)
 
-    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.ax_analytics_title)) }, navigationIcon = { TextButton(back) { Text(stringResource(R.string.ax_analytics_back)) } }, actions = { TextButton({ refresh++ }, enabled = !busy) { Text(stringResource(R.string.ax_analytics_refresh)) } }) }) { padding ->
-        LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(Modifier.fillMaxSize()) {
+        LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             item {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(mode == 0, { mode = 0 }, label = { Text(stringResource(R.string.ax_analytics_analysis)) })
-                    FilterChip(mode == 1, { mode = 1 }, label = { Text(stringResource(R.string.ax_analytics_statistics)) })
+                WorkspaceBack(back)
+                IosPageHeader(stringResource(R.string.ax_analytics_title)) {
+                    TextButton({ refresh++ }, enabled = !busy) { Text(stringResource(R.string.ax_analytics_refresh)) }
                 }
+            }
+            item {
+                IosSegmentedControl(listOf(stringResource(R.string.ax_analytics_analysis), stringResource(R.string.ax_analytics_statistics)), mode, { mode = it })
                 Text(stringResource(R.string.ax_analytics_scope, fence.instanceId, fence.projectId ?: "—"), style = MaterialTheme.typography.bodySmall)
                 TextButton({ filterOpen = !filterOpen }) { Text(stringResource(R.string.ax_analytics_filters)) }
             }
             if (filterOpen) item {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                IosCard(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     if (mode == 0) {
                         AnalyticsChoice(stringResource(R.string.ax_analytics_dimension), dimension, AnalyticsDimension.entries, { stringResource(dimensionLabel(it)) }) { dimension = it }
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(stringResource(R.string.ax_analytics_dates)); Switch(dates, { dates = it }) }
@@ -140,8 +147,9 @@ private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, ba
                     }
                 }
             }
-            if (busy) item { Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) { CircularProgressIndicator(Modifier.size(24.dp)); Text(stringResource(R.string.ax_analytics_loading)) } }
-            error?.let { message -> item { Text(message, color = MaterialTheme.colorScheme.error); OutlinedButton({ refresh++ }, enabled = !busy) { Text(stringResource(R.string.ax_analytics_retry)) } } }
+            }
+            if (busy) item { WorkspaceLoading() }
+            error?.let { message -> item { ErrorState(message) { refresh++ } } }
             bundle?.let { data ->
                 item {
                     Text(stringResource(R.string.ax_analytics_earliest, data.metadata["earliestDate"].text.ifBlank { "—" }))
@@ -159,7 +167,7 @@ private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, ba
             }
             if (bundle != null || dashboard != null) {
                 item {
-                    OutlinedTextField(search, { search = it }, label = { Text(stringResource(R.string.ax_analytics_search)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                    IosSearchField(search, { search = it }, stringResource(R.string.ax_analytics_search))
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(stringResource(R.string.ax_analytics_descending)); Switch(descending, { descending = it }) }
                     if (mode == 1 && metric == AnalyticsMetric.CHANNEL_SUCCESS) {
                         AnalyticsChoice(stringResource(R.string.ax_analytics_channel_type), channelType, listOf("") + rows.map { it["channelType"].text }.filter(String::isNotBlank).distinct().sorted(), { it.ifBlank { stringResource(R.string.ax_analytics_all) } }) { channelType = it }
@@ -197,7 +205,7 @@ private fun <T> AnalyticsChoice(label: String, selected: T, choices: List<T>, ti
 @Composable
 private fun AnalyticsFields(title: String, value: JsonElement) {
     var expanded by remember(title, value) { mutableStateOf(false) }
-    OutlinedCard(Modifier.fillMaxWidth()) {
+    IosCard(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             TextButton({ expanded = !expanded }) { Text(title) }
             if (expanded) AnalyticsValue(value)

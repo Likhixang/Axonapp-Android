@@ -4,9 +4,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.activity.compose.BackHandler
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import cc.khixang.axonhub.R
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,13 +27,39 @@ import kotlinx.serialization.json.*
     var kind by remember { mutableStateOf(ObserveKind.REQUESTS) }; var rows by remember { mutableStateOf<List<JsonObject>>(emptyList()) }; var cursor by remember { mutableStateOf<String?>(null) }; var total by remember { mutableStateOf<Int?>(null) }; var search by remember { mutableStateOf("") }; var status by remember { mutableStateOf("all") }; var busy by remember { mutableStateOf(false) }; var error by remember { mutableStateOf<String?>(null) }; var detail by remember { mutableStateOf<JsonElement?>(null) }; val scope = rememberCoroutineScope()
     suspend fun load(append: Boolean = false) { busy = true; try { val where = buildJsonObject { if (search.isNotBlank()) put(if (kind == ObserveKind.REQUESTS || kind == ObserveKind.USAGE) "modelIDContainsFold" else if (kind == ObserveKind.TRACES) "traceIDContainsFold" else "threadIDContainsFold", search); if (status != "all" && kind != ObserveKind.USAGE) put("statusIn", buildJsonArray { add(status) }) }; val page = app.observability.page(kind, 25, if (append) cursor else null, where); rows = if (append) rows + page.items else page.items; cursor = page.endCursor; total = page.total; error = null } catch (t: Throwable) { error = t.message } finally { busy = false } }
     LaunchedEffect(kind) { rows = emptyList(); cursor = null; load() }
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Row { IconButton(back) { Icon(Icons.Default.ArrowBack, "Back") }; Text("Observability", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f)); IconButton({ scope.launch { load() } }) { Icon(Icons.Default.Refresh, "Refresh") } }
-        EnumDropdown("Record type", kind, ObserveKind.entries, { it.name.lowercase() }) { kind = it }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { OutlinedTextField(search, { search = it }, label = { Text("Search") }, modifier = Modifier.weight(1f)); if (kind != ObserveKind.USAGE) Box(Modifier.weight(1f)) { EnumDropdown("Status", status, listOf("all", "pending", "processing", "completed", "failed", "canceled", "active", "archived", "retained")) { status = it } } }
-        Button({ scope.launch { load() } }, Modifier.fillMaxWidth()) { Text("Apply filters") }
-        total?.let { Text("${rows.size} of $it", style = MaterialTheme.typography.bodySmall) }; if (busy) LinearProgressIndicator(Modifier.fillMaxWidth()); error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) { items(rows, key = { it["id"].text }) { row -> ElevatedCard(onClick = { detail = row }, Modifier.fillMaxWidth()) { Column(Modifier.padding(14.dp)) { Text(listOf("modelID", "traceID", "threadID", "requestID").firstNotNullOfOrNull { row[it].text.takeIf(String::isNotBlank) } ?: row["createdAt"].text, style = MaterialTheme.typography.titleMedium); Text("${row["status"].text} · ${row["createdAt"].text}", style = MaterialTheme.typography.bodySmall); row["firstUserQuery"].text.takeIf(String::isNotBlank)?.let { Text(it, maxLines = 2) } } } }; if (cursor != null) item { OutlinedButton({ scope.launch { load(true) } }, Modifier.fillMaxWidth()) { Text("Load next page") } } }
+    BackHandler(onBack = back)
+    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        WorkspaceBack(back)
+        IosPageHeader(stringResource(R.string.ws_observability), stringResource(R.string.ws_observability_help)) {
+            IconButton(onClick = { scope.launch { load() } }, enabled = !busy) { Icon(Icons.Default.Refresh, stringResource(R.string.ws_refresh)) }
+        }
+        IosCard(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                EnumDropdown(stringResource(R.string.ws_record_type), kind, ObserveKind.entries, { it.name.lowercase() }) { kind = it }
+                IosSearchField(search, { search = it }, stringResource(R.string.ws_search_records))
+                if (kind != ObserveKind.USAGE) EnumDropdown(stringResource(R.string.ws_status), status, listOf("all", "pending", "processing", "completed", "failed", "canceled", "active", "archived", "retained")) { status = it }
+                Button(onClick = { scope.launch { load() } }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.ws_apply)) }
+            }
+        }
+        total?.let { Text(stringResource(R.string.ws_count, rows.size, it), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+        if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+        error?.let { ErrorState(it) { scope.launch { load() } } }
+        LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            if (!busy && error == null && rows.isEmpty()) item { WorkspaceEmpty(stringResource(R.string.ws_no_records), stringResource(R.string.ws_no_records_help)) }
+            items(rows, key = { it["id"].text }) { row ->
+                IosCard(Modifier.fillMaxWidth(), onClick = { detail = row }) {
+                    Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text(listOf("modelID", "traceID", "threadID", "requestID").firstNotNullOfOrNull { row[it].text.takeIf(String::isNotBlank) } ?: row["createdAt"].text, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                            Text(listOf("status", "createdAt").mapNotNull { row[it].text.takeIf(String::isNotBlank) }.joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            row["firstUserQuery"].text.takeIf(String::isNotBlank)?.let { Text(it, maxLines = 2, style = MaterialTheme.typography.bodyMedium) }
+                        }
+                        Icon(Icons.Default.ChevronRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+            if (cursor != null) item { OutlinedButton(onClick = { scope.launch { load(true) } }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.ws_next_page)) } }
+        }
     }
     detail?.let { ObservabilityDetailDialog(app, kind, it["id"].text, { detail = null }) }
 }
