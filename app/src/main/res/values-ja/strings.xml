@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AxonHub</string><string name="dashboard">ダッシュボード</string><string name="gateway">ゲートウェイ</string><string name="keys">キー</string><string name="management">管理</string><string name="models">モデル</string><string name="playground">プレイグラウンド</string><string name="settings">設定</string><string name="add_instance">インスタンスを追加</string><string name="retry">再試行</string>
+</resources>

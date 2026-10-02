@@ -1,0 +1,561 @@
+{
+  "AxonOverview": [
+    {
+      "label": "no variables",
+      "variables": {}
+    }
+  ],
+  "ChannelDetail": [
+    {
+      "label": "exact id",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ModelDetail": [
+    {
+      "label": "exact id",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "DeleteChannel": [
+    {
+      "label": "exact id",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "DeleteModel": [
+    {
+      "label": "exact id",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "UpdateChannelStatus": [
+    {
+      "label": "enabled",
+      "variables": {
+        "id": "1",
+        "status": "enabled"
+      }
+    },
+    {
+      "label": "disabled",
+      "variables": {
+        "id": "1",
+        "status": "disabled"
+      }
+    }
+  ],
+  "UpdateModelStatus": [
+    {
+      "label": "enabled",
+      "variables": {
+        "id": "1",
+        "status": "enabled"
+      }
+    },
+    {
+      "label": "disabled",
+      "variables": {
+        "id": "1",
+        "status": "disabled"
+      }
+    }
+  ],
+  "TestChannel": [
+    {
+      "label": "default test model",
+      "variables": {
+        "input": {
+          "channelID": "1"
+        }
+      }
+    },
+    {
+      "label": "explicit model",
+      "variables": {
+        "input": {
+          "channelID": "1",
+          "modelID": "upstream-chat"
+        }
+      }
+    }
+  ],
+  "CheckModelRoute": [
+    {
+      "label": "upstream model routing",
+      "variables": {
+        "associations": [
+          {
+            "type": "model",
+            "priority": 0,
+            "disabled": false,
+            "modelId": {
+              "modelId": "upstream-chat"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "CreateChannel": [
+    {
+      "label": "openai",
+      "variables": {
+        "input": {
+          "type": "openai",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "openai_responses",
+      "variables": {
+        "input": {
+          "type": "openai_responses",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "anthropic",
+      "variables": {
+        "input": {
+          "type": "anthropic",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "deepseek",
+      "variables": {
+        "input": {
+          "type": "deepseek",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "openrouter",
+      "variables": {
+        "input": {
+          "type": "openrouter",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "gemini",
+      "variables": {
+        "input": {
+          "type": "gemini",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    }
+  ],
+  "EditChannel": [
+    {
+      "label": "name only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "Renamed"
+        }
+      }
+    },
+    {
+      "label": "baseURL only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "baseURL": "https://upstream.example/v1"
+        }
+      }
+    },
+    {
+      "label": "clearBaseURL only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearBaseURL": true
+        }
+      }
+    },
+    {
+      "label": "supportedModels only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "supportedModels": [
+            "upstream-chat"
+          ]
+        }
+      }
+    },
+    {
+      "label": "defaultTestModel only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "defaultTestModel": "upstream-chat"
+        }
+      }
+    },
+    {
+      "label": "tags only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "label": "orderingWeight only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "orderingWeight": -1
+        }
+      }
+    },
+    {
+      "label": "remark only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "remark": ""
+        }
+      }
+    }
+  ],
+  "CreateModel": [
+    {
+      "label": "chat",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "chat"
+        }
+      }
+    },
+    {
+      "label": "embedding",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "embedding"
+        }
+      }
+    },
+    {
+      "label": "rerank",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "rerank"
+        }
+      }
+    },
+    {
+      "label": "image_generation",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "image_generation"
+        }
+      }
+    },
+    {
+      "label": "video_generation",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "video_generation"
+        }
+      }
+    }
+  ],
+  "EditModel": [
+    {
+      "label": "name only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "Renamed"
+        }
+      }
+    },
+    {
+      "label": "modelID only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "modelID": "new-id"
+        }
+      }
+    },
+    {
+      "label": "developer only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "developer": "new-developer"
+        }
+      }
+    },
+    {
+      "label": "type only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "type": "embedding"
+        }
+      }
+    },
+    {
+      "label": "group only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "group": "new-group"
+        }
+      }
+    },
+    {
+      "label": "icon only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "icon": "DeepSeek"
+        }
+      }
+    },
+    {
+      "label": "remark only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "remark": ""
+        }
+      }
+    },
+    {
+      "label": "modelCard only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "modelCard": {
+            "reasoning": {
+              "supported": true,
+              "default": false
+            },
+            "toolCall": true,
+            "temperature": true,
+            "modalities": {
+              "input": [
+                "text"
+              ],
+              "output": [
+                "text"
+              ]
+            },
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "limit": {
+              "context": 128000,
+              "output": 8192
+            },
+            "vision": false,
+            "knowledge": "2026",
+            "releaseDate": "2026-01-01",
+            "lastUpdated": "2026-01-01"
+          }
+        }
+      }
+    }
+  ]
+}

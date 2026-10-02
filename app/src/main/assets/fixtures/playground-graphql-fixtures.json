@@ -1,0 +1,5 @@
+{
+  "PlaygroundIdentity": [{"label":"administrator identity and project list", "variables":{}}],
+  "PlaygroundChannels": [{"label":"project scoped channel model catalog", "variables":{}}],
+  "PlaygroundModels": [{"label":"first enabled chat model page", "variables":{"after":null}}, {"label":"subsequent enabled chat model page", "variables":{"after":"contract-cursor"}}]
+}

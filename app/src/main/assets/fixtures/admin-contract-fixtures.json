@@ -1,0 +1,9206 @@
+{
+  "AdminGetApiKeys": [
+    {
+      "label": "required variables",
+      "variables": {
+        "first": 20
+      }
+    },
+    {
+      "label": "orderBy.direction",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    },
+    {
+      "label": "orderBy.field",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT"
+        }
+      }
+    },
+    {
+      "label": "where.not",
+      "variables": {
+        "first": 20,
+        "where": {
+          "not": {}
+        }
+      }
+    },
+    {
+      "label": "where.and",
+      "variables": {
+        "first": 20,
+        "where": {
+          "and": []
+        }
+      }
+    },
+    {
+      "label": "where.or",
+      "variables": {
+        "first": 20,
+        "where": {
+          "or": []
+        }
+      }
+    },
+    {
+      "label": "where.id",
+      "variables": {
+        "first": 20,
+        "where": {
+          "id": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.createdAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.userID",
+      "variables": {
+        "first": 20,
+        "where": {
+          "userID": "1"
+        }
+      }
+    },
+    {
+      "label": "where.userIDNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "userIDNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.userIDIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "userIDIn": []
+        }
+      }
+    },
+    {
+      "label": "where.userIDNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "userIDNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.userIDIsNil",
+      "variables": {
+        "first": 20,
+        "where": {
+          "userIDIsNil": false
+        }
+      }
+    },
+    {
+      "label": "where.userIDNotNil",
+      "variables": {
+        "first": 20,
+        "where": {
+          "userIDNotNil": false
+        }
+      }
+    },
+    {
+      "label": "where.projectID",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectID": "1"
+        }
+      }
+    },
+    {
+      "label": "where.projectIDNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.projectIDIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDIn": []
+        }
+      }
+    },
+    {
+      "label": "where.projectIDNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.key",
+      "variables": {
+        "first": 20,
+        "where": {
+          "key": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyIn": []
+        }
+      }
+    },
+    {
+      "label": "where.keyNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.keyGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.keyContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "keyContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.name",
+      "variables": {
+        "first": 20,
+        "where": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.type",
+      "variables": {
+        "first": 20,
+        "where": {
+          "type": "user"
+        }
+      }
+    },
+    {
+      "label": "where.typeNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "typeNEQ": "user"
+        }
+      }
+    },
+    {
+      "label": "where.typeIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "typeIn": []
+        }
+      }
+    },
+    {
+      "label": "where.typeNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "typeNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.status",
+      "variables": {
+        "first": 20,
+        "where": {
+          "status": "enabled"
+        }
+      }
+    },
+    {
+      "label": "where.statusNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNEQ": "enabled"
+        }
+      }
+    },
+    {
+      "label": "where.statusIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusIn": []
+        }
+      }
+    },
+    {
+      "label": "where.statusNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.hasUser",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUser": false
+        }
+      }
+    },
+    {
+      "label": "where.hasUserWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUserWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasProject",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProject": false
+        }
+      }
+    },
+    {
+      "label": "where.hasProjectWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjectWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasRequests",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRequests": false
+        }
+      }
+    },
+    {
+      "label": "where.hasRequestsWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRequestsWith": []
+        }
+      }
+    }
+  ],
+  "AdminCreateAPIKey": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        }
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        }
+      }
+    },
+    {
+      "label": "input.type",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1",
+          "type": "user"
+        }
+      }
+    },
+    {
+      "label": "input.scopes",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1",
+          "scopes": []
+        }
+      }
+    },
+    {
+      "label": "input.allowedIps",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1",
+          "allowedIps": []
+        }
+      }
+    },
+    {
+      "label": "input.projectID",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        }
+      }
+    }
+  ],
+  "AdminUpdateAPIKey": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {}
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.scopes",
+      "variables": {
+        "id": "1",
+        "input": {
+          "scopes": []
+        }
+      }
+    },
+    {
+      "label": "input.appendScopes",
+      "variables": {
+        "id": "1",
+        "input": {
+          "appendScopes": []
+        }
+      }
+    },
+    {
+      "label": "input.clearScopes",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearScopes": false
+        }
+      }
+    },
+    {
+      "label": "input.allowedIps",
+      "variables": {
+        "id": "1",
+        "input": {
+          "allowedIps": []
+        }
+      }
+    },
+    {
+      "label": "input.appendAllowedIps",
+      "variables": {
+        "id": "1",
+        "input": {
+          "appendAllowedIps": []
+        }
+      }
+    },
+    {
+      "label": "input.clearAllowedIps",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearAllowedIps": false
+        }
+      }
+    }
+  ],
+  "AdminUpdateAPIKeyStatus": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "status": "enabled"
+      }
+    }
+  ],
+  "AdminUpdateAPIKeyProfiles": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {
+          "activeProfile": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.activeProfile",
+      "variables": {
+        "id": "1",
+        "input": {
+          "activeProfile": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.profiles",
+      "variables": {
+        "id": "1",
+        "input": {
+          "activeProfile": "fixture",
+          "profiles": []
+        }
+      }
+    }
+  ],
+  "AdminBulkDisableAPIKeys": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminBulkEnableAPIKeys": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminBulkArchiveAPIKeys": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminRotateAPIKey": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminAPIKeyQuotaUsages": [
+    {
+      "label": "required variables",
+      "variables": {
+        "apiKeyId": "1"
+      }
+    }
+  ],
+  "AdminAPIKeyTokenUsageStats": [
+    {
+      "label": "required variables",
+      "variables": {}
+    },
+    {
+      "label": "input.apiKeyIds",
+      "variables": {
+        "input": {
+          "apiKeyIds": []
+        }
+      }
+    },
+    {
+      "label": "input.createdAtGTE",
+      "variables": {
+        "input": {
+          "createdAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "input.createdAtLTE",
+      "variables": {
+        "input": {
+          "createdAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  ],
+  "AdminApiKeyProfileTemplates": [
+    {
+      "label": "required variables",
+      "variables": {
+        "first": 20
+      }
+    },
+    {
+      "label": "where.not",
+      "variables": {
+        "first": 20,
+        "where": {
+          "not": {}
+        }
+      }
+    },
+    {
+      "label": "where.and",
+      "variables": {
+        "first": 20,
+        "where": {
+          "and": []
+        }
+      }
+    },
+    {
+      "label": "where.or",
+      "variables": {
+        "first": 20,
+        "where": {
+          "or": []
+        }
+      }
+    },
+    {
+      "label": "where.id",
+      "variables": {
+        "first": 20,
+        "where": {
+          "id": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.createdAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.name",
+      "variables": {
+        "first": 20,
+        "where": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.description",
+      "variables": {
+        "first": 20,
+        "where": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.projectID",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectID": "1"
+        }
+      }
+    },
+    {
+      "label": "where.projectIDNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.projectIDIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDIn": []
+        }
+      }
+    },
+    {
+      "label": "where.projectIDNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.hasProject",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProject": false
+        }
+      }
+    },
+    {
+      "label": "where.hasProjectWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjectWith": []
+        }
+      }
+    }
+  ],
+  "AdminCreateApiKeyProfileTemplate": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1",
+          "description": "fixture"
+        },
+        "profile": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.projectID",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "profile.name",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "profile.templateID",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "templateID": 1
+        }
+      }
+    },
+    {
+      "label": "profile.templateName",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "templateName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "profile.modelMappings",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "modelMappings": []
+        }
+      }
+    },
+    {
+      "label": "profile.channelIDs",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "channelIDs": []
+        }
+      }
+    },
+    {
+      "label": "profile.channelTags",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "channelTags": []
+        }
+      }
+    },
+    {
+      "label": "profile.channelTagsMatchMode",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "channelTagsMatchMode": "any"
+        }
+      }
+    },
+    {
+      "label": "profile.modelIDs",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "modelIDs": []
+        }
+      }
+    },
+    {
+      "label": "profile.quota",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "quota": {
+            "period": {
+              "type": "all_time"
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "profile.loadBalanceStrategy",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "loadBalanceStrategy": "fixture"
+        }
+      }
+    },
+    {
+      "label": "profile.traceStickyMode",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        },
+        "profile": {
+          "name": "fixture",
+          "traceStickyMode": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminUpdateApiKeyProfileTemplate": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {}
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "id": "1",
+        "input": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "profile.name",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "profile.templateID",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "templateID": 1
+        }
+      }
+    },
+    {
+      "label": "profile.templateName",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "templateName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "profile.modelMappings",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "modelMappings": []
+        }
+      }
+    },
+    {
+      "label": "profile.channelIDs",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "channelIDs": []
+        }
+      }
+    },
+    {
+      "label": "profile.channelTags",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "channelTags": []
+        }
+      }
+    },
+    {
+      "label": "profile.channelTagsMatchMode",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "channelTagsMatchMode": "any"
+        }
+      }
+    },
+    {
+      "label": "profile.modelIDs",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "modelIDs": []
+        }
+      }
+    },
+    {
+      "label": "profile.quota",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "quota": {
+            "period": {
+              "type": "all_time"
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "profile.loadBalanceStrategy",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "loadBalanceStrategy": "fixture"
+        }
+      }
+    },
+    {
+      "label": "profile.traceStickyMode",
+      "variables": {
+        "id": "1",
+        "input": {},
+        "profile": {
+          "name": "fixture",
+          "traceStickyMode": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminDeleteApiKeyProfileTemplate": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminLoadApiKeyProfileTemplate": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "templateID": "1",
+          "apiKeyID": "1"
+        }
+      }
+    },
+    {
+      "label": "input.templateID",
+      "variables": {
+        "input": {
+          "templateID": "1",
+          "apiKeyID": "1"
+        }
+      }
+    },
+    {
+      "label": "input.apiKeyID",
+      "variables": {
+        "input": {
+          "templateID": "1",
+          "apiKeyID": "1"
+        }
+      }
+    }
+  ],
+  "AdminDataStorages": [
+    {
+      "label": "required variables",
+      "variables": {
+        "first": 20
+      }
+    },
+    {
+      "label": "where.not",
+      "variables": {
+        "first": 20,
+        "where": {
+          "not": {}
+        }
+      }
+    },
+    {
+      "label": "where.and",
+      "variables": {
+        "first": 20,
+        "where": {
+          "and": []
+        }
+      }
+    },
+    {
+      "label": "where.or",
+      "variables": {
+        "first": 20,
+        "where": {
+          "or": []
+        }
+      }
+    },
+    {
+      "label": "where.id",
+      "variables": {
+        "first": 20,
+        "where": {
+          "id": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.createdAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.name",
+      "variables": {
+        "first": 20,
+        "where": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.description",
+      "variables": {
+        "first": 20,
+        "where": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.primary",
+      "variables": {
+        "first": 20,
+        "where": {
+          "primary": false
+        }
+      }
+    },
+    {
+      "label": "where.primaryNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "primaryNEQ": false
+        }
+      }
+    },
+    {
+      "label": "where.type",
+      "variables": {
+        "first": 20,
+        "where": {
+          "type": "database"
+        }
+      }
+    },
+    {
+      "label": "where.typeNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "typeNEQ": "database"
+        }
+      }
+    },
+    {
+      "label": "where.typeIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "typeIn": []
+        }
+      }
+    },
+    {
+      "label": "where.typeNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "typeNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.status",
+      "variables": {
+        "first": 20,
+        "where": {
+          "status": "active"
+        }
+      }
+    },
+    {
+      "label": "where.statusNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNEQ": "active"
+        }
+      }
+    },
+    {
+      "label": "where.statusIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusIn": []
+        }
+      }
+    },
+    {
+      "label": "where.statusNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.hasRequests",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRequests": false
+        }
+      }
+    },
+    {
+      "label": "where.hasRequestsWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRequestsWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasExecutions",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasExecutions": false
+        }
+      }
+    },
+    {
+      "label": "where.hasExecutionsWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasExecutionsWith": []
+        }
+      }
+    },
+    {
+      "label": "orderBy.direction",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    },
+    {
+      "label": "orderBy.field",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT"
+        }
+      }
+    }
+  ],
+  "AdminCreateDataStorage": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "description": "fixture",
+          "type": "database",
+          "settings": {}
+        }
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "description": "fixture",
+          "type": "database",
+          "settings": {}
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "description": "fixture",
+          "type": "database",
+          "settings": {}
+        }
+      }
+    },
+    {
+      "label": "input.type",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "description": "fixture",
+          "type": "database",
+          "settings": {}
+        }
+      }
+    },
+    {
+      "label": "input.settings",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "description": "fixture",
+          "type": "database",
+          "settings": {}
+        }
+      }
+    },
+    {
+      "label": "input.status",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "description": "fixture",
+          "type": "database",
+          "settings": {},
+          "status": "active"
+        }
+      }
+    }
+  ],
+  "AdminUpdateDataStorage": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {}
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "id": "1",
+        "input": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.settings",
+      "variables": {
+        "id": "1",
+        "input": {
+          "settings": {}
+        }
+      }
+    },
+    {
+      "label": "input.status",
+      "variables": {
+        "id": "1",
+        "input": {
+          "status": "active"
+        }
+      }
+    }
+  ],
+  "AdminAddUserToProject": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1"
+        }
+      }
+    },
+    {
+      "label": "input.projectId",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1"
+        }
+      }
+    },
+    {
+      "label": "input.userId",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1"
+        }
+      }
+    },
+    {
+      "label": "input.isOwner",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1",
+          "isOwner": false
+        }
+      }
+    },
+    {
+      "label": "input.scopes",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1",
+          "scopes": []
+        }
+      }
+    },
+    {
+      "label": "input.roleIDs",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1",
+          "roleIDs": []
+        }
+      }
+    }
+  ],
+  "AdminRemoveUserFromProject": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1"
+        }
+      }
+    },
+    {
+      "label": "input.projectId",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1"
+        }
+      }
+    },
+    {
+      "label": "input.userId",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1"
+        }
+      }
+    }
+  ],
+  "AdminUpdateProjectUser": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1"
+        }
+      }
+    },
+    {
+      "label": "input.projectId",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1"
+        }
+      }
+    },
+    {
+      "label": "input.userId",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1"
+        }
+      }
+    },
+    {
+      "label": "input.isOwner",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1",
+          "isOwner": false
+        }
+      }
+    },
+    {
+      "label": "input.scopes",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1",
+          "scopes": []
+        }
+      }
+    },
+    {
+      "label": "input.addRoleIDs",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1",
+          "addRoleIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.removeRoleIDs",
+      "variables": {
+        "input": {
+          "projectId": "1",
+          "userId": "1",
+          "removeRoleIDs": []
+        }
+      }
+    }
+  ],
+  "AdminAllUsers": [
+    {
+      "label": "required variables",
+      "variables": {
+        "first": 20
+      }
+    },
+    {
+      "label": "where.not",
+      "variables": {
+        "first": 20,
+        "where": {
+          "not": {}
+        }
+      }
+    },
+    {
+      "label": "where.and",
+      "variables": {
+        "first": 20,
+        "where": {
+          "and": []
+        }
+      }
+    },
+    {
+      "label": "where.or",
+      "variables": {
+        "first": 20,
+        "where": {
+          "or": []
+        }
+      }
+    },
+    {
+      "label": "where.id",
+      "variables": {
+        "first": 20,
+        "where": {
+          "id": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.createdAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.email",
+      "variables": {
+        "first": 20,
+        "where": {
+          "email": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailIn": []
+        }
+      }
+    },
+    {
+      "label": "where.emailNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.emailGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.emailContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "emailContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.status",
+      "variables": {
+        "first": 20,
+        "where": {
+          "status": "activated"
+        }
+      }
+    },
+    {
+      "label": "where.statusNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNEQ": "activated"
+        }
+      }
+    },
+    {
+      "label": "where.statusIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusIn": []
+        }
+      }
+    },
+    {
+      "label": "where.statusNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguage",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguage": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageIn": []
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.preferLanguageContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "preferLanguageContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstName",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameIn": []
+        }
+      }
+    },
+    {
+      "label": "where.firstNameNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.firstNameGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.firstNameContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "firstNameContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastName",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameIn": []
+        }
+      }
+    },
+    {
+      "label": "where.lastNameNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.lastNameGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.lastNameContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "lastNameContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatar",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatar": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarIn": []
+        }
+      }
+    },
+    {
+      "label": "where.avatarNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.avatarGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarIsNil",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarIsNil": false
+        }
+      }
+    },
+    {
+      "label": "where.avatarNotNil",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarNotNil": false
+        }
+      }
+    },
+    {
+      "label": "where.avatarEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.avatarContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "avatarContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.isOwner",
+      "variables": {
+        "first": 20,
+        "where": {
+          "isOwner": false
+        }
+      }
+    },
+    {
+      "label": "where.isOwnerNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "isOwnerNEQ": false
+        }
+      }
+    },
+    {
+      "label": "where.hasProjects",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjects": false
+        }
+      }
+    },
+    {
+      "label": "where.hasProjectsWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjectsWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasAPIKeys",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasAPIKeys": false
+        }
+      }
+    },
+    {
+      "label": "where.hasAPIKeysWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasAPIKeysWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasRoles",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRoles": false
+        }
+      }
+    },
+    {
+      "label": "where.hasRolesWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRolesWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasChannelOverrideTemplates",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasChannelOverrideTemplates": false
+        }
+      }
+    },
+    {
+      "label": "where.hasChannelOverrideTemplatesWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasChannelOverrideTemplatesWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasOidcIdentities",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasOidcIdentities": false
+        }
+      }
+    },
+    {
+      "label": "where.hasOidcIdentitiesWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasOidcIdentitiesWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasProjectUsers",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjectUsers": false
+        }
+      }
+    },
+    {
+      "label": "where.hasProjectUsersWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjectUsersWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasUserRoles",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUserRoles": false
+        }
+      }
+    },
+    {
+      "label": "where.hasUserRolesWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUserRolesWith": []
+        }
+      }
+    }
+  ],
+  "AdminGetProjectRoles": [
+    {
+      "label": "required variables",
+      "variables": {
+        "first": 20
+      }
+    },
+    {
+      "label": "orderBy.direction",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    },
+    {
+      "label": "orderBy.field",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT"
+        }
+      }
+    },
+    {
+      "label": "where.not",
+      "variables": {
+        "first": 20,
+        "where": {
+          "not": {}
+        }
+      }
+    },
+    {
+      "label": "where.and",
+      "variables": {
+        "first": 20,
+        "where": {
+          "and": []
+        }
+      }
+    },
+    {
+      "label": "where.or",
+      "variables": {
+        "first": 20,
+        "where": {
+          "or": []
+        }
+      }
+    },
+    {
+      "label": "where.id",
+      "variables": {
+        "first": 20,
+        "where": {
+          "id": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.createdAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.name",
+      "variables": {
+        "first": 20,
+        "where": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.level",
+      "variables": {
+        "first": 20,
+        "where": {
+          "level": "system"
+        }
+      }
+    },
+    {
+      "label": "where.levelNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "levelNEQ": "system"
+        }
+      }
+    },
+    {
+      "label": "where.levelIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "levelIn": []
+        }
+      }
+    },
+    {
+      "label": "where.levelNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "levelNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.projectID",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectID": "1"
+        }
+      }
+    },
+    {
+      "label": "where.projectIDNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.projectIDIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDIn": []
+        }
+      }
+    },
+    {
+      "label": "where.projectIDNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.projectIDIsNil",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDIsNil": false
+        }
+      }
+    },
+    {
+      "label": "where.projectIDNotNil",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDNotNil": false
+        }
+      }
+    },
+    {
+      "label": "where.hasUsers",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUsers": false
+        }
+      }
+    },
+    {
+      "label": "where.hasUsersWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUsersWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasProject",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProject": false
+        }
+      }
+    },
+    {
+      "label": "where.hasProjectWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjectWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasUserRoles",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUserRoles": false
+        }
+      }
+    },
+    {
+      "label": "where.hasUserRolesWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUserRolesWith": []
+        }
+      }
+    }
+  ],
+  "AdminCreateRole": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.level",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "level": "system"
+        }
+      }
+    },
+    {
+      "label": "input.scopes",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "scopes": []
+        }
+      }
+    },
+    {
+      "label": "input.userIDs",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "userIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.projectID",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "projectID": "1"
+        }
+      }
+    }
+  ],
+  "AdminUpdateRole": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {}
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.scopes",
+      "variables": {
+        "id": "1",
+        "input": {
+          "scopes": []
+        }
+      }
+    },
+    {
+      "label": "input.appendScopes",
+      "variables": {
+        "id": "1",
+        "input": {
+          "appendScopes": []
+        }
+      }
+    },
+    {
+      "label": "input.clearScopes",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearScopes": false
+        }
+      }
+    },
+    {
+      "label": "input.addUserIDs",
+      "variables": {
+        "id": "1",
+        "input": {
+          "addUserIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.removeUserIDs",
+      "variables": {
+        "id": "1",
+        "input": {
+          "removeUserIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.clearUsers",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearUsers": false
+        }
+      }
+    },
+    {
+      "label": "input.projectID",
+      "variables": {
+        "id": "1",
+        "input": {
+          "projectID": "1"
+        }
+      }
+    },
+    {
+      "label": "input.clearProject",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearProject": false
+        }
+      }
+    }
+  ],
+  "AdminDeleteRole": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminGetProjects": [
+    {
+      "label": "required variables",
+      "variables": {
+        "first": 20
+      }
+    },
+    {
+      "label": "orderBy.direction",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    },
+    {
+      "label": "orderBy.field",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT"
+        }
+      }
+    },
+    {
+      "label": "where.not",
+      "variables": {
+        "first": 20,
+        "where": {
+          "not": {}
+        }
+      }
+    },
+    {
+      "label": "where.and",
+      "variables": {
+        "first": 20,
+        "where": {
+          "and": []
+        }
+      }
+    },
+    {
+      "label": "where.or",
+      "variables": {
+        "first": 20,
+        "where": {
+          "or": []
+        }
+      }
+    },
+    {
+      "label": "where.id",
+      "variables": {
+        "first": 20,
+        "where": {
+          "id": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.createdAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.name",
+      "variables": {
+        "first": 20,
+        "where": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.description",
+      "variables": {
+        "first": 20,
+        "where": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.status",
+      "variables": {
+        "first": 20,
+        "where": {
+          "status": "active"
+        }
+      }
+    },
+    {
+      "label": "where.statusNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNEQ": "active"
+        }
+      }
+    },
+    {
+      "label": "where.statusIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusIn": []
+        }
+      }
+    },
+    {
+      "label": "where.statusNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.hasUsers",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUsers": false
+        }
+      }
+    },
+    {
+      "label": "where.hasUsersWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUsersWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasRoles",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRoles": false
+        }
+      }
+    },
+    {
+      "label": "where.hasRolesWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRolesWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasAPIKeys",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasAPIKeys": false
+        }
+      }
+    },
+    {
+      "label": "where.hasAPIKeysWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasAPIKeysWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasRequests",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRequests": false
+        }
+      }
+    },
+    {
+      "label": "where.hasRequestsWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasRequestsWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasUsageLogs",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUsageLogs": false
+        }
+      }
+    },
+    {
+      "label": "where.hasUsageLogsWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasUsageLogsWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasThreads",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasThreads": false
+        }
+      }
+    },
+    {
+      "label": "where.hasThreadsWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasThreadsWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasTraces",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasTraces": false
+        }
+      }
+    },
+    {
+      "label": "where.hasTracesWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasTracesWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasPrompts",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasPrompts": false
+        }
+      }
+    },
+    {
+      "label": "where.hasPromptsWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasPromptsWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasAPIKeyProfileTemplates",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasAPIKeyProfileTemplates": false
+        }
+      }
+    },
+    {
+      "label": "where.hasAPIKeyProfileTemplatesWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasAPIKeyProfileTemplatesWith": []
+        }
+      }
+    },
+    {
+      "label": "where.hasProjectUsers",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjectUsers": false
+        }
+      }
+    },
+    {
+      "label": "where.hasProjectUsersWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjectUsersWith": []
+        }
+      }
+    }
+  ],
+  "AdminCreateProject": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.status",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "status": "active"
+        }
+      }
+    },
+    {
+      "label": "input.userIDs",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "userIDs": []
+        }
+      }
+    }
+  ],
+  "AdminUpdateProject": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {}
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "id": "1",
+        "input": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.status",
+      "variables": {
+        "id": "1",
+        "input": {
+          "status": "active"
+        }
+      }
+    },
+    {
+      "label": "input.addUserIDs",
+      "variables": {
+        "id": "1",
+        "input": {
+          "addUserIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.removeUserIDs",
+      "variables": {
+        "id": "1",
+        "input": {
+          "removeUserIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.clearUsers",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearUsers": false
+        }
+      }
+    }
+  ],
+  "AdminUpdateProjectStatus": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "status": "active"
+      }
+    }
+  ],
+  "AdminDeleteProject": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminMyProjects": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateProjectProfiles": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {
+          "activeProfile": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.activeProfile",
+      "variables": {
+        "id": "1",
+        "input": {
+          "activeProfile": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.profiles",
+      "variables": {
+        "id": "1",
+        "input": {
+          "activeProfile": "fixture",
+          "profiles": []
+        }
+      }
+    }
+  ],
+  "AdminGetPromptProtectionRules": [
+    {
+      "label": "required variables",
+      "variables": {
+        "first": 20
+      }
+    },
+    {
+      "label": "where.not",
+      "variables": {
+        "first": 20,
+        "where": {
+          "not": {}
+        }
+      }
+    },
+    {
+      "label": "where.and",
+      "variables": {
+        "first": 20,
+        "where": {
+          "and": []
+        }
+      }
+    },
+    {
+      "label": "where.or",
+      "variables": {
+        "first": 20,
+        "where": {
+          "or": []
+        }
+      }
+    },
+    {
+      "label": "where.id",
+      "variables": {
+        "first": 20,
+        "where": {
+          "id": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.createdAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.name",
+      "variables": {
+        "first": 20,
+        "where": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.description",
+      "variables": {
+        "first": 20,
+        "where": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.pattern",
+      "variables": {
+        "first": 20,
+        "where": {
+          "pattern": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternIn": []
+        }
+      }
+    },
+    {
+      "label": "where.patternNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.patternGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.patternContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "patternContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.status",
+      "variables": {
+        "first": 20,
+        "where": {
+          "status": "enabled"
+        }
+      }
+    },
+    {
+      "label": "where.statusNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNEQ": "enabled"
+        }
+      }
+    },
+    {
+      "label": "where.statusIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusIn": []
+        }
+      }
+    },
+    {
+      "label": "where.statusNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNotIn": []
+        }
+      }
+    },
+    {
+      "label": "orderBy.direction",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    },
+    {
+      "label": "orderBy.field",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT"
+        }
+      }
+    }
+  ],
+  "AdminCreatePromptProtectionRule": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "pattern": "fixture",
+          "settings": {
+            "action": "mask"
+          }
+        }
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "pattern": "fixture",
+          "settings": {
+            "action": "mask"
+          }
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "pattern": "fixture",
+          "settings": {
+            "action": "mask"
+          },
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.pattern",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "pattern": "fixture",
+          "settings": {
+            "action": "mask"
+          }
+        }
+      }
+    },
+    {
+      "label": "input.settings",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "pattern": "fixture",
+          "settings": {
+            "action": "mask"
+          }
+        }
+      }
+    }
+  ],
+  "AdminUpdatePromptProtectionRule": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {}
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "id": "1",
+        "input": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.pattern",
+      "variables": {
+        "id": "1",
+        "input": {
+          "pattern": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.status",
+      "variables": {
+        "id": "1",
+        "input": {
+          "status": "enabled"
+        }
+      }
+    },
+    {
+      "label": "input.settings",
+      "variables": {
+        "id": "1",
+        "input": {
+          "settings": {
+            "action": "mask"
+          }
+        }
+      }
+    }
+  ],
+  "AdminDeletePromptProtectionRule": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminUpdatePromptProtectionRuleStatus": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "status": "enabled"
+      }
+    }
+  ],
+  "AdminBulkDeletePromptProtectionRules": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminBulkEnablePromptProtectionRules": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminBulkDisablePromptProtectionRules": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminPreviewPromptProtectionRule": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "pattern": "fixture",
+          "testText": "fixture",
+          "settings": {
+            "action": "mask"
+          }
+        }
+      }
+    },
+    {
+      "label": "input.pattern",
+      "variables": {
+        "input": {
+          "pattern": "fixture",
+          "testText": "fixture",
+          "settings": {
+            "action": "mask"
+          }
+        }
+      }
+    },
+    {
+      "label": "input.testText",
+      "variables": {
+        "input": {
+          "pattern": "fixture",
+          "testText": "fixture",
+          "settings": {
+            "action": "mask"
+          }
+        }
+      }
+    },
+    {
+      "label": "input.settings",
+      "variables": {
+        "input": {
+          "pattern": "fixture",
+          "testText": "fixture",
+          "settings": {
+            "action": "mask"
+          }
+        }
+      }
+    }
+  ],
+  "AdminGetPrompts": [
+    {
+      "label": "required variables",
+      "variables": {
+        "first": 20
+      }
+    },
+    {
+      "label": "where.not",
+      "variables": {
+        "first": 20,
+        "where": {
+          "not": {}
+        }
+      }
+    },
+    {
+      "label": "where.and",
+      "variables": {
+        "first": 20,
+        "where": {
+          "and": []
+        }
+      }
+    },
+    {
+      "label": "where.or",
+      "variables": {
+        "first": 20,
+        "where": {
+          "or": []
+        }
+      }
+    },
+    {
+      "label": "where.id",
+      "variables": {
+        "first": 20,
+        "where": {
+          "id": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.idGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idGTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLT": "1"
+        }
+      }
+    },
+    {
+      "label": "where.idLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "idLTE": "1"
+        }
+      }
+    },
+    {
+      "label": "where.createdAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.createdAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "createdAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAt",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNEQ": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtGTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLT": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.updatedAtLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "updatedAtLTE": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "where.projectID",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectID": "1"
+        }
+      }
+    },
+    {
+      "label": "where.projectIDNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDNEQ": "1"
+        }
+      }
+    },
+    {
+      "label": "where.projectIDIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDIn": []
+        }
+      }
+    },
+    {
+      "label": "where.projectIDNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "projectIDNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.name",
+      "variables": {
+        "first": 20,
+        "where": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.nameGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.nameContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "nameContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.description",
+      "variables": {
+        "first": 20,
+        "where": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.descriptionContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "descriptionContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.role",
+      "variables": {
+        "first": 20,
+        "where": {
+          "role": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleIn": []
+        }
+      }
+    },
+    {
+      "label": "where.roleNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.roleGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.roleContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "roleContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.content",
+      "variables": {
+        "first": 20,
+        "where": {
+          "content": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentNEQ": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentIn": []
+        }
+      }
+    },
+    {
+      "label": "where.contentNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.contentGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentGT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentGTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentLT": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentLTE": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentContains",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentContains": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentHasPrefix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentHasPrefix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentHasSuffix",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentHasSuffix": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentEqualFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentEqualFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.contentContainsFold",
+      "variables": {
+        "first": 20,
+        "where": {
+          "contentContainsFold": "fixture"
+        }
+      }
+    },
+    {
+      "label": "where.status",
+      "variables": {
+        "first": 20,
+        "where": {
+          "status": "enabled"
+        }
+      }
+    },
+    {
+      "label": "where.statusNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNEQ": "enabled"
+        }
+      }
+    },
+    {
+      "label": "where.statusIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusIn": []
+        }
+      }
+    },
+    {
+      "label": "where.statusNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "statusNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.order",
+      "variables": {
+        "first": 20,
+        "where": {
+          "order": 1
+        }
+      }
+    },
+    {
+      "label": "where.orderNEQ",
+      "variables": {
+        "first": 20,
+        "where": {
+          "orderNEQ": 1
+        }
+      }
+    },
+    {
+      "label": "where.orderIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "orderIn": []
+        }
+      }
+    },
+    {
+      "label": "where.orderNotIn",
+      "variables": {
+        "first": 20,
+        "where": {
+          "orderNotIn": []
+        }
+      }
+    },
+    {
+      "label": "where.orderGT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "orderGT": 1
+        }
+      }
+    },
+    {
+      "label": "where.orderGTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "orderGTE": 1
+        }
+      }
+    },
+    {
+      "label": "where.orderLT",
+      "variables": {
+        "first": 20,
+        "where": {
+          "orderLT": 1
+        }
+      }
+    },
+    {
+      "label": "where.orderLTE",
+      "variables": {
+        "first": 20,
+        "where": {
+          "orderLTE": 1
+        }
+      }
+    },
+    {
+      "label": "where.hasProject",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProject": false
+        }
+      }
+    },
+    {
+      "label": "where.hasProjectWith",
+      "variables": {
+        "first": 20,
+        "where": {
+          "hasProjectWith": []
+        }
+      }
+    },
+    {
+      "label": "orderBy.direction",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    },
+    {
+      "label": "orderBy.field",
+      "variables": {
+        "first": 20,
+        "orderBy": {
+          "field": "CREATED_AT"
+        }
+      }
+    }
+  ],
+  "AdminCreatePrompt": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "role": "fixture",
+          "content": "fixture",
+          "settings": {
+            "action": {
+              "type": "prepend"
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "role": "fixture",
+          "content": "fixture",
+          "settings": {
+            "action": {
+              "type": "prepend"
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "role": "fixture",
+          "content": "fixture",
+          "settings": {
+            "action": {
+              "type": "prepend"
+            }
+          },
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.role",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "role": "fixture",
+          "content": "fixture",
+          "settings": {
+            "action": {
+              "type": "prepend"
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "input.content",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "role": "fixture",
+          "content": "fixture",
+          "settings": {
+            "action": {
+              "type": "prepend"
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "input.status",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "role": "fixture",
+          "content": "fixture",
+          "settings": {
+            "action": {
+              "type": "prepend"
+            }
+          },
+          "status": "enabled"
+        }
+      }
+    },
+    {
+      "label": "input.order",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "role": "fixture",
+          "content": "fixture",
+          "settings": {
+            "action": {
+              "type": "prepend"
+            }
+          },
+          "order": 1
+        }
+      }
+    },
+    {
+      "label": "input.settings",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "role": "fixture",
+          "content": "fixture",
+          "settings": {
+            "action": {
+              "type": "prepend"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "AdminUpdatePrompt": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {}
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.description",
+      "variables": {
+        "id": "1",
+        "input": {
+          "description": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.role",
+      "variables": {
+        "id": "1",
+        "input": {
+          "role": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.content",
+      "variables": {
+        "id": "1",
+        "input": {
+          "content": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.status",
+      "variables": {
+        "id": "1",
+        "input": {
+          "status": "enabled"
+        }
+      }
+    },
+    {
+      "label": "input.order",
+      "variables": {
+        "id": "1",
+        "input": {
+          "order": 1
+        }
+      }
+    },
+    {
+      "label": "input.settings",
+      "variables": {
+        "id": "1",
+        "input": {
+          "settings": {
+            "action": {
+              "type": "prepend"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "AdminDeletePrompt": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminUpdatePromptStatus": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "status": "enabled"
+      }
+    }
+  ],
+  "AdminBulkDeletePrompts": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminBulkDisablePrompts": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminBulkEnablePrompts": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminBulkDeleteRoles": [
+    {
+      "label": "required variables",
+      "variables": {
+        "ids": []
+      }
+    }
+  ],
+  "AdminSystemVersion": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminCheckForUpdate": [
+    {
+      "label": "required variables",
+      "variables": {
+        "includeBeta": false
+      }
+    }
+  ],
+  "AdminGetCacheDiagnostics": [
+    {
+      "label": "required variables",
+      "variables": {}
+    },
+    {
+      "label": "input.targets",
+      "variables": {
+        "input": {
+          "targets": []
+        }
+      }
+    }
+  ],
+  "AdminClearCache": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.targets",
+      "variables": {
+        "input": {
+          "targets": []
+        }
+      }
+    }
+  ],
+  "AdminBrandSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminStoragePolicy": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateBrandSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.brandName",
+      "variables": {
+        "input": {
+          "brandName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.brandLogo",
+      "variables": {
+        "input": {
+          "brandLogo": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.title",
+      "variables": {
+        "input": {
+          "title": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminUpdateStoragePolicy": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.storeChunks",
+      "variables": {
+        "input": {
+          "storeChunks": false
+        }
+      }
+    },
+    {
+      "label": "input.livePreview",
+      "variables": {
+        "input": {
+          "livePreview": false
+        }
+      }
+    },
+    {
+      "label": "input.storeRequestBody",
+      "variables": {
+        "input": {
+          "storeRequestBody": false
+        }
+      }
+    },
+    {
+      "label": "input.storeResponseBody",
+      "variables": {
+        "input": {
+          "storeResponseBody": false
+        }
+      }
+    },
+    {
+      "label": "input.cleanupOptions",
+      "variables": {
+        "input": {
+          "cleanupOptions": []
+        }
+      }
+    }
+  ],
+  "AdminRetryPolicy": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateRetryPolicy": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.maxChannelRetries",
+      "variables": {
+        "input": {
+          "maxChannelRetries": 1
+        }
+      }
+    },
+    {
+      "label": "input.maxSingleChannelRetries",
+      "variables": {
+        "input": {
+          "maxSingleChannelRetries": 1
+        }
+      }
+    },
+    {
+      "label": "input.retryDelayMs",
+      "variables": {
+        "input": {
+          "retryDelayMs": 1
+        }
+      }
+    },
+    {
+      "label": "input.streamFirstEventTimeoutSeconds",
+      "variables": {
+        "input": {
+          "streamFirstEventTimeoutSeconds": 1
+        }
+      }
+    },
+    {
+      "label": "input.nonStreamResponseTimeoutSeconds",
+      "variables": {
+        "input": {
+          "nonStreamResponseTimeoutSeconds": 1
+        }
+      }
+    },
+    {
+      "label": "input.loadBalancerStrategy",
+      "variables": {
+        "input": {
+          "loadBalancerStrategy": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.traceStickyMode",
+      "variables": {
+        "input": {
+          "traceStickyMode": "DISABLED"
+        }
+      }
+    },
+    {
+      "label": "input.enabled",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "label": "input.autoDisableChannel",
+      "variables": {
+        "input": {
+          "autoDisableChannel": {}
+        }
+      }
+    },
+    {
+      "label": "input.emptyResponseDetection",
+      "variables": {
+        "input": {
+          "emptyResponseDetection": false
+        }
+      }
+    },
+    {
+      "label": "input.upstreamErrorPolicy",
+      "variables": {
+        "input": {
+          "upstreamErrorPolicy": {}
+        }
+      }
+    }
+  ],
+  "AdminWebhookNotifierConfig": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateWebhookNotifierConfig": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.targets",
+      "variables": {
+        "input": {
+          "targets": []
+        }
+      }
+    },
+    {
+      "label": "input.subscriptions",
+      "variables": {
+        "input": {
+          "subscriptions": []
+        }
+      }
+    }
+  ],
+  "AdminDefaultDataStorageID": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateDefaultDataStorage": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "dataStorageID": "1"
+        }
+      }
+    },
+    {
+      "label": "input.dataStorageID",
+      "variables": {
+        "input": {
+          "dataStorageID": "1"
+        }
+      }
+    }
+  ],
+  "AdminOnboardingInfo": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminCompleteOnboarding": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.dummy",
+      "variables": {
+        "input": {
+          "dummy": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminCompleteSystemModelSettingOnboarding": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.dummy",
+      "variables": {
+        "input": {
+          "dummy": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminCompleteAutoDisableChannelOnboarding": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.dummy",
+      "variables": {
+        "input": {
+          "dummy": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminTriggerGcCleanup": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.requestsCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.usageLogsCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.requestBodiesCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1,
+          "requestBodiesCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.responseBodiesCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1,
+          "responseBodiesCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.responseChunksCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1,
+          "responseChunksCleanupDays": 1
+        }
+      }
+    }
+  ],
+  "AdminPreviewGcCleanup": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.requestsCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.usageLogsCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.requestBodiesCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1,
+          "requestBodiesCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.responseBodiesCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1,
+          "responseBodiesCleanupDays": 1
+        }
+      }
+    },
+    {
+      "label": "input.responseChunksCleanupDays",
+      "variables": {
+        "input": {
+          "requestsCleanupDays": 1,
+          "usageLogsCleanupDays": 1,
+          "responseChunksCleanupDays": 1
+        }
+      }
+    }
+  ],
+  "AdminModelSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateModelSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.fallbackToChannelsOnModelNotFound",
+      "variables": {
+        "input": {
+          "fallbackToChannelsOnModelNotFound": false
+        }
+      }
+    },
+    {
+      "label": "input.queryAllChannelModels",
+      "variables": {
+        "input": {
+          "queryAllChannelModels": false
+        }
+      }
+    },
+    {
+      "label": "input.defaultModelAPIIncludeAll",
+      "variables": {
+        "input": {
+          "defaultModelAPIIncludeAll": false
+        }
+      }
+    },
+    {
+      "label": "input.autoReasoningEffort",
+      "variables": {
+        "input": {
+          "autoReasoningEffort": false
+        }
+      }
+    },
+    {
+      "label": "input.modelBlacklistRegex",
+      "variables": {
+        "input": {
+          "modelBlacklistRegex": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.hideUnroutableModelsInList",
+      "variables": {
+        "input": {
+          "hideUnroutableModelsInList": false
+        }
+      }
+    },
+    {
+      "label": "input.developerSettings",
+      "variables": {
+        "input": {
+          "developerSettings": []
+        }
+      }
+    }
+  ],
+  "AdminSystemChannelSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateChannelSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.probe",
+      "variables": {
+        "input": {
+          "probe": {
+            "enabled": false,
+            "frequency": "ONE_MINUTE"
+          }
+        }
+      }
+    },
+    {
+      "label": "input.autoSync",
+      "variables": {
+        "input": {
+          "autoSync": {
+            "frequency": "ONE_HOUR"
+          }
+        }
+      }
+    },
+    {
+      "label": "input.testSystemPrompt",
+      "variables": {
+        "input": {
+          "testSystemPrompt": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.testUserPrompt",
+      "variables": {
+        "input": {
+          "testUserPrompt": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminSystemGeneralSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateSystemGeneralSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.currencyCode",
+      "variables": {
+        "input": {
+          "currencyCode": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.timezone",
+      "variables": {
+        "input": {
+          "timezone": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminVideoStorageSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateVideoStorageSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.enabled",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "label": "input.dataStorageID",
+      "variables": {
+        "input": {
+          "dataStorageID": 1
+        }
+      }
+    },
+    {
+      "label": "input.scanIntervalMinutes",
+      "variables": {
+        "input": {
+          "scanIntervalMinutes": 1
+        }
+      }
+    },
+    {
+      "label": "input.scanLimit",
+      "variables": {
+        "input": {
+          "scanLimit": 1
+        }
+      }
+    }
+  ],
+  "AdminSecuritySettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateSecuritySettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.blockedIPs",
+      "variables": {
+        "input": {
+          "blockedIPs": []
+        }
+      }
+    },
+    {
+      "label": "input.showRequestLogIPBanIcon",
+      "variables": {
+        "input": {
+          "showRequestLogIPBanIcon": false
+        }
+      }
+    }
+  ],
+  "AdminBackup": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false
+        }
+      }
+    },
+    {
+      "label": "input.includeSystemConfigs",
+      "variables": {
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "includeSystemConfigs": false
+        }
+      }
+    },
+    {
+      "label": "input.includeChannels",
+      "variables": {
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false
+        }
+      }
+    },
+    {
+      "label": "input.includeModelPrices",
+      "variables": {
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "includeModelPrices": false
+        }
+      }
+    },
+    {
+      "label": "input.includeModels",
+      "variables": {
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false
+        }
+      }
+    },
+    {
+      "label": "input.includeAPIKeys",
+      "variables": {
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false
+        }
+      }
+    },
+    {
+      "label": "input.includeUsageStats",
+      "variables": {
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "includeUsageStats": false
+        }
+      }
+    },
+    {
+      "label": "input.includeRequestLogs",
+      "variables": {
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "includeRequestLogs": false
+        }
+      }
+    }
+  ],
+  "AdminRestore": [
+    {
+      "label": "required variables",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip"
+        }
+      }
+    },
+    {
+      "label": "input.includeSystemConfigs",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip",
+          "includeSystemConfigs": false
+        }
+      }
+    },
+    {
+      "label": "input.includeChannels",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip"
+        }
+      }
+    },
+    {
+      "label": "input.includeModelPrices",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip",
+          "includeModelPrices": false
+        }
+      }
+    },
+    {
+      "label": "input.includeModels",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip"
+        }
+      }
+    },
+    {
+      "label": "input.includeAPIKeys",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip"
+        }
+      }
+    },
+    {
+      "label": "input.includeUsageStats",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip",
+          "includeUsageStats": false
+        }
+      }
+    },
+    {
+      "label": "input.includeRequestLogs",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip",
+          "includeRequestLogs": false
+        }
+      }
+    },
+    {
+      "label": "input.channelConflictStrategy",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip"
+        }
+      }
+    },
+    {
+      "label": "input.modelConflictStrategy",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip"
+        }
+      }
+    },
+    {
+      "label": "input.modelPriceConflictStrategy",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip"
+        }
+      }
+    },
+    {
+      "label": "input.apiKeyConflictStrategy",
+      "variables": {
+        "file": "fixture-upload-placeholder",
+        "input": {
+          "includeChannels": false,
+          "includeModels": false,
+          "includeAPIKeys": false,
+          "channelConflictStrategy": "skip",
+          "modelConflictStrategy": "skip",
+          "modelPriceConflictStrategy": "skip",
+          "apiKeyConflictStrategy": "skip"
+        }
+      }
+    }
+  ],
+  "AdminAutoBackupSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateAutoBackupSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.includeSystemConfigs",
+      "variables": {
+        "input": {
+          "includeSystemConfigs": false
+        }
+      }
+    },
+    {
+      "label": "input.enabled",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "label": "input.frequency",
+      "variables": {
+        "input": {
+          "frequency": "daily"
+        }
+      }
+    },
+    {
+      "label": "input.dataStorageID",
+      "variables": {
+        "input": {
+          "dataStorageID": 1
+        }
+      }
+    },
+    {
+      "label": "input.includeChannels",
+      "variables": {
+        "input": {
+          "includeChannels": false
+        }
+      }
+    },
+    {
+      "label": "input.includeModels",
+      "variables": {
+        "input": {
+          "includeModels": false
+        }
+      }
+    },
+    {
+      "label": "input.includeAPIKeys",
+      "variables": {
+        "input": {
+          "includeAPIKeys": false
+        }
+      }
+    },
+    {
+      "label": "input.includeModelPrices",
+      "variables": {
+        "input": {
+          "includeModelPrices": false
+        }
+      }
+    },
+    {
+      "label": "input.includeUsageStats",
+      "variables": {
+        "input": {
+          "includeUsageStats": false
+        }
+      }
+    },
+    {
+      "label": "input.includeRequestLogs",
+      "variables": {
+        "input": {
+          "includeRequestLogs": false
+        }
+      }
+    },
+    {
+      "label": "input.retentionDays",
+      "variables": {
+        "input": {
+          "retentionDays": 1
+        }
+      }
+    }
+  ],
+  "AdminTriggerAutoBackup": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminProxyPresets": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminSaveProxyPreset": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "url": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.name",
+      "variables": {
+        "input": {
+          "url": "fixture",
+          "name": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.url",
+      "variables": {
+        "input": {
+          "url": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.username",
+      "variables": {
+        "input": {
+          "url": "fixture",
+          "username": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.password",
+      "variables": {
+        "input": {
+          "url": "fixture",
+          "password": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminDeleteProxyPreset": [
+    {
+      "label": "required variables",
+      "variables": {
+        "url": "fixture"
+      }
+    }
+  ],
+  "AdminUserAgentPassThroughSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateUserAgentPassThroughSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "label": "input.enabled",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    }
+  ],
+  "AdminPassThroughSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdatePassThroughSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "label": "input.enabled",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    }
+  ],
+  "AdminUsageCostInjectionSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateUsageCostInjectionSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "label": "input.enabled",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    }
+  ],
+  "AdminQuotaEnforcementSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateQuotaEnforcementSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.enabled",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "label": "input.mode",
+      "variables": {
+        "input": {
+          "mode": "EXHAUSTED_ONLY"
+        }
+      }
+    },
+    {
+      "label": "input.allowedChannelIDs",
+      "variables": {
+        "input": {
+          "allowedChannelIDs": []
+        }
+      }
+    }
+  ],
+  "AdminProviderQuotaCollectionSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateProviderQuotaCollectionSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.enabled",
+      "variables": {
+        "input": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "label": "input.providers",
+      "variables": {
+        "input": {
+          "providers": []
+        }
+      }
+    }
+  ],
+  "AdminCatalogSettings": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateCatalogSettings": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.upstreamURL",
+      "variables": {
+        "input": {
+          "upstreamURL": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.refreshSeconds",
+      "variables": {
+        "input": {
+          "refreshSeconds": 1
+        }
+      }
+    }
+  ],
+  "AdminAllScopes": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminMe": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminCreateUser": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.email",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.status",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture",
+          "status": "activated"
+        }
+      }
+    },
+    {
+      "label": "input.preferLanguage",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture",
+          "preferLanguage": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.password",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.firstName",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture",
+          "firstName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.lastName",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture",
+          "lastName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.avatar",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture",
+          "avatar": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.isOwner",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture",
+          "isOwner": false
+        }
+      }
+    },
+    {
+      "label": "input.scopes",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture",
+          "scopes": []
+        }
+      }
+    },
+    {
+      "label": "input.projectIDs",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture",
+          "projectIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.roleIDs",
+      "variables": {
+        "input": {
+          "email": "fixture",
+          "password": "fixture",
+          "roleIDs": []
+        }
+      }
+    }
+  ],
+  "AdminUpdateUser": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "input": {}
+      }
+    },
+    {
+      "label": "input.email",
+      "variables": {
+        "id": "1",
+        "input": {
+          "email": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.status",
+      "variables": {
+        "id": "1",
+        "input": {
+          "status": "activated"
+        }
+      }
+    },
+    {
+      "label": "input.preferLanguage",
+      "variables": {
+        "id": "1",
+        "input": {
+          "preferLanguage": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.password",
+      "variables": {
+        "id": "1",
+        "input": {
+          "password": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.firstName",
+      "variables": {
+        "id": "1",
+        "input": {
+          "firstName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.lastName",
+      "variables": {
+        "id": "1",
+        "input": {
+          "lastName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.avatar",
+      "variables": {
+        "id": "1",
+        "input": {
+          "avatar": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.clearAvatar",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearAvatar": false
+        }
+      }
+    },
+    {
+      "label": "input.isOwner",
+      "variables": {
+        "id": "1",
+        "input": {
+          "isOwner": false
+        }
+      }
+    },
+    {
+      "label": "input.scopes",
+      "variables": {
+        "id": "1",
+        "input": {
+          "scopes": []
+        }
+      }
+    },
+    {
+      "label": "input.appendScopes",
+      "variables": {
+        "id": "1",
+        "input": {
+          "appendScopes": []
+        }
+      }
+    },
+    {
+      "label": "input.clearScopes",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearScopes": false
+        }
+      }
+    },
+    {
+      "label": "input.addProjectIDs",
+      "variables": {
+        "id": "1",
+        "input": {
+          "addProjectIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.removeProjectIDs",
+      "variables": {
+        "id": "1",
+        "input": {
+          "removeProjectIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.clearProjects",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearProjects": false
+        }
+      }
+    },
+    {
+      "label": "input.addRoleIDs",
+      "variables": {
+        "id": "1",
+        "input": {
+          "addRoleIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.removeRoleIDs",
+      "variables": {
+        "id": "1",
+        "input": {
+          "removeRoleIDs": []
+        }
+      }
+    },
+    {
+      "label": "input.clearRoles",
+      "variables": {
+        "id": "1",
+        "input": {
+          "clearRoles": false
+        }
+      }
+    }
+  ],
+  "AdminUpdateUserStatus": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1",
+        "status": "activated"
+      }
+    }
+  ],
+  "AdminDeleteUser": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminSystemStatus": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminUpdateMe": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {}
+      }
+    },
+    {
+      "label": "input.firstName",
+      "variables": {
+        "input": {
+          "firstName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.lastName",
+      "variables": {
+        "input": {
+          "lastName": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.preferLanguage",
+      "variables": {
+        "input": {
+          "preferLanguage": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.avatar",
+      "variables": {
+        "input": {
+          "avatar": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminUpdateMyPassword": [
+    {
+      "label": "required variables",
+      "variables": {
+        "input": {
+          "newPassword": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.oldPassword",
+      "variables": {
+        "input": {
+          "newPassword": "fixture",
+          "oldPassword": "fixture"
+        }
+      }
+    },
+    {
+      "label": "input.newPassword",
+      "variables": {
+        "input": {
+          "newPassword": "fixture"
+        }
+      }
+    }
+  ],
+  "AdminUnlinkOIDCIdentity": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminProjectUsers": [
+    {
+      "label": "required variables",
+      "variables": {
+        "projectId": "1"
+      }
+    }
+  ],
+  "AdminDetailAPIKey": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminDetailAPIKeyProfileTemplate": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminDetailUser": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminDetailRole": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminDetailProject": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminDetailDataStorage": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminDetailPrompt": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminDetailPromptProtectionRule": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminRevealAPIKey": [
+    {
+      "label": "required variables",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "AdminRevealWebhookNotifierConfig": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminRevealProxyPresets": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminProvidersCatalog": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ],
+  "AdminRefreshProvidersCatalog": [
+    {
+      "label": "required variables",
+      "variables": {}
+    }
+  ]
+}

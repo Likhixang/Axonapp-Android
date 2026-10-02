@@ -1,0 +1,8 @@
+{
+  "upstream": "Axonhub-App-iOS",
+  "upstreamCommit": "db811721692275273387c5999d790a7d50c3820c",
+  "schemaRevision": "939b2bc07cc05bdf7750d7ec872290d67784d13d",
+  "documentCount": 126,
+  "documentsSha256": "b73378381fbab017693a31f3da29833f0bee6f327a8342fd16c5e0ca6e0cd5fc",
+  "note": "API documents and fixtures copied for interoperability and regression testing; no credentials."
+}

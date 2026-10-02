@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AxonHub</string><string name="dashboard">대시보드</string><string name="gateway">게이트웨이</string><string name="keys">키</string><string name="management">관리</string><string name="models">모델</string><string name="playground">플레이그라운드</string><string name="settings">설정</string><string name="add_instance">인스턴스 추가</string><string name="retry">다시 시도</string>
+</resources>

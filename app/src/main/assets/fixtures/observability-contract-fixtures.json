@@ -1,0 +1,855 @@
+{
+  "ObserveRequestPage": [
+    {
+      "label": "first page",
+      "variables": {
+        "first": 25,
+        "where": {},
+        "order": {
+          "field": "CREATED_AT",
+          "direction": "DESC"
+        }
+      }
+    },
+    {
+      "label": "cursor and filters",
+      "variables": {
+        "first": 25,
+        "after": "fixture-cursor",
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z",
+          "createdAtLTE": "2026-01-31T23:59:59Z",
+          "projectIDIn": [
+            "1"
+          ],
+          "modelIDContainsFold": "chat",
+          "channelIDIn": [
+            "1"
+          ],
+          "sourceIn": [
+            "api"
+          ],
+          "apiKeyIDIn": [
+            "1"
+          ],
+          "statusIn": [
+            "completed",
+            "failed"
+          ],
+          "stream": true,
+          "clientIPContains": "127.",
+          "formatContainsFold": "openai",
+          "externalIDContains": "req_"
+        },
+        "order": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    }
+  ],
+  "ObserveTracePage": [
+    {
+      "label": "first page",
+      "variables": {
+        "first": 25,
+        "where": {},
+        "order": {
+          "field": "CREATED_AT",
+          "direction": "DESC"
+        }
+      }
+    },
+    {
+      "label": "cursor and filters",
+      "variables": {
+        "first": 25,
+        "after": "fixture-cursor",
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z",
+          "createdAtLTE": "2026-01-31T23:59:59Z",
+          "projectIDIn": [
+            "1"
+          ],
+          "statusIn": [
+            "active",
+            "retained"
+          ],
+          "traceIDContainsFold": "trace"
+        },
+        "order": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    }
+  ],
+  "ObserveThreadPage": [
+    {
+      "label": "first page",
+      "variables": {
+        "first": 25,
+        "where": {},
+        "order": {
+          "field": "CREATED_AT",
+          "direction": "DESC"
+        }
+      }
+    },
+    {
+      "label": "cursor and filters",
+      "variables": {
+        "first": 25,
+        "after": "fixture-cursor",
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z",
+          "createdAtLTE": "2026-01-31T23:59:59Z",
+          "projectIDIn": [
+            "1"
+          ],
+          "statusIn": [
+            "active",
+            "retained"
+          ],
+          "threadIDContainsFold": "trace"
+        },
+        "order": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    }
+  ],
+  "ObserveUsageLogPage": [
+    {
+      "label": "first page",
+      "variables": {
+        "first": 25,
+        "where": {},
+        "order": {
+          "field": "CREATED_AT",
+          "direction": "DESC"
+        }
+      }
+    },
+    {
+      "label": "cursor and filters",
+      "variables": {
+        "first": 25,
+        "after": "fixture-cursor",
+        "where": {
+          "createdAtGTE": "2026-01-01T00:00:00Z",
+          "createdAtLTE": "2026-01-31T23:59:59Z",
+          "projectIDIn": [
+            "1"
+          ],
+          "modelIDContainsFold": "chat",
+          "channelIDIn": [
+            "1"
+          ],
+          "sourceIn": [
+            "api"
+          ],
+          "apiKeyIDIn": [
+            1
+          ],
+          "formatContainsFold": "openai"
+        },
+        "order": {
+          "field": "CREATED_AT",
+          "direction": "ASC"
+        }
+      }
+    }
+  ],
+  "ObserveRequestDetail": [
+    {
+      "label": "exact node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveTraceDetail": [
+    {
+      "label": "exact node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveThreadDetail": [
+    {
+      "label": "exact node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveUsageLogDetail": [
+    {
+      "label": "exact node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveExecutions": [
+    {
+      "label": "all attempts",
+      "variables": {
+        "id": "1",
+        "first": 25,
+        "where": {}
+      }
+    },
+    {
+      "label": "failed cursor",
+      "variables": {
+        "id": "1",
+        "first": 25,
+        "after": "fixture-cursor",
+        "where": {
+          "status": "failed",
+          "channelID": "1"
+        }
+      }
+    }
+  ],
+  "ObserveRequestContent": [
+    {
+      "label": "explicit content reveal",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveRequestExecutionContent": [
+    {
+      "label": "explicit content reveal",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveTraceContent": [
+    {
+      "label": "explicit segment reveal",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveTraceRequests": [
+    {
+      "label": "linked requests",
+      "variables": {
+        "id": "1",
+        "first": 25,
+        "where": {}
+      }
+    },
+    {
+      "label": "cursor",
+      "variables": {
+        "id": "1",
+        "first": 25,
+        "after": "fixture-cursor",
+        "where": {
+          "status": "completed"
+        }
+      }
+    }
+  ],
+  "ObserveThreadTraces": [
+    {
+      "label": "all traces",
+      "variables": {
+        "id": "1",
+        "first": 25,
+        "where": {}
+      }
+    },
+    {
+      "label": "archived cursor",
+      "variables": {
+        "id": "1",
+        "first": 25,
+        "after": "fixture-cursor",
+        "where": {
+          "status": "archived"
+        }
+      }
+    }
+  ],
+  "ObserveArchiveTrace": [
+    {
+      "label": "exact confirmed node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveUnarchiveTrace": [
+    {
+      "label": "exact confirmed node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveRetainTrace": [
+    {
+      "label": "exact confirmed node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveUnretainTrace": [
+    {
+      "label": "exact confirmed node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveArchiveThread": [
+    {
+      "label": "exact confirmed node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveUnarchiveThread": [
+    {
+      "label": "exact confirmed node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveRetainThread": [
+    {
+      "label": "exact confirmed node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveUnretainThread": [
+    {
+      "label": "exact confirmed node",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ObserveAnalyticsMetadata": [
+    {
+      "label": "official defaults",
+      "variables": {}
+    }
+  ],
+  "ObserveAnalyticsOverview": [
+    {
+      "label": "all time",
+      "variables": {
+        "filter": null
+      }
+    },
+    {
+      "label": "all dimensions",
+      "variables": {
+        "filter": {
+          "startTime": "2026-01-01",
+          "endTime": "2026-01-31",
+          "projectIDs": [
+            "1"
+          ],
+          "channelIDs": [
+            "1"
+          ],
+          "modelIDs": [
+            "chat"
+          ],
+          "apiKeyIDs": [
+            "1"
+          ],
+          "userIDs": [
+            "1"
+          ]
+        }
+      }
+    }
+  ],
+  "ObserveAnalyticsDailyStats": [
+    {
+      "label": "all time",
+      "variables": {
+        "filter": null
+      }
+    },
+    {
+      "label": "all dimensions",
+      "variables": {
+        "filter": {
+          "startTime": "2026-01-01",
+          "endTime": "2026-01-31",
+          "projectIDs": [
+            "1"
+          ],
+          "channelIDs": [
+            "1"
+          ],
+          "modelIDs": [
+            "chat"
+          ],
+          "apiKeyIDs": [
+            "1"
+          ],
+          "userIDs": [
+            "1"
+          ]
+        }
+      }
+    }
+  ],
+  "ObserveAnalyticsDimensionStats": [
+    {
+      "label": "channel",
+      "variables": {
+        "filter": {
+          "startTime": "2026-01-01",
+          "endTime": "2026-01-31",
+          "projectIDs": [
+            "1"
+          ],
+          "channelIDs": [
+            "1"
+          ],
+          "modelIDs": [
+            "chat"
+          ],
+          "apiKeyIDs": [
+            "1"
+          ],
+          "userIDs": [
+            "1"
+          ]
+        },
+        "dimension": "channel"
+      }
+    },
+    {
+      "label": "model",
+      "variables": {
+        "filter": {
+          "startTime": "2026-01-01",
+          "endTime": "2026-01-31",
+          "projectIDs": [
+            "1"
+          ],
+          "channelIDs": [
+            "1"
+          ],
+          "modelIDs": [
+            "chat"
+          ],
+          "apiKeyIDs": [
+            "1"
+          ],
+          "userIDs": [
+            "1"
+          ]
+        },
+        "dimension": "model"
+      }
+    },
+    {
+      "label": "apiKey",
+      "variables": {
+        "filter": {
+          "startTime": "2026-01-01",
+          "endTime": "2026-01-31",
+          "projectIDs": [
+            "1"
+          ],
+          "channelIDs": [
+            "1"
+          ],
+          "modelIDs": [
+            "chat"
+          ],
+          "apiKeyIDs": [
+            "1"
+          ],
+          "userIDs": [
+            "1"
+          ]
+        },
+        "dimension": "apiKey"
+      }
+    },
+    {
+      "label": "user",
+      "variables": {
+        "filter": {
+          "startTime": "2026-01-01",
+          "endTime": "2026-01-31",
+          "projectIDs": [
+            "1"
+          ],
+          "channelIDs": [
+            "1"
+          ],
+          "modelIDs": [
+            "chat"
+          ],
+          "apiKeyIDs": [
+            "1"
+          ],
+          "userIDs": [
+            "1"
+          ]
+        },
+        "dimension": "user"
+      }
+    }
+  ],
+  "ObserveDashboardStats": [
+    {
+      "label": "official defaults",
+      "variables": {}
+    }
+  ],
+  "ObserveRequestsByChannel": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveRequestsByModel": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveRequestsByAPIKey": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveTokensByAPIKey": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveTokensByChannel": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveTokensByModel": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveCostByChannel": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveCostByModel": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveCostByAPIKey": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveDailyRequestStats": [
+    {
+      "label": "official defaults",
+      "variables": {}
+    }
+  ],
+  "ObserveTopProjects": [
+    {
+      "label": "official defaults",
+      "variables": {}
+    }
+  ],
+  "ObserveChannelSuccessRates": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day",
+        "limit": null
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week",
+        "limit": null
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month",
+        "limit": null
+      }
+    }
+  ],
+  "ObserveUsageStatsByUser": [
+    {
+      "label": "day",
+      "variables": {
+        "timeWindow": "day"
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "timeWindow": "week"
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "timeWindow": "month"
+      }
+    }
+  ],
+  "ObserveModelPerformanceStats": [
+    {
+      "label": "official defaults",
+      "variables": {}
+    }
+  ],
+  "ObserveChannelPerformanceStats": [
+    {
+      "label": "official defaults",
+      "variables": {}
+    }
+  ],
+  "ObserveTokenStats": [
+    {
+      "label": "official defaults",
+      "variables": {}
+    }
+  ],
+  "ObserveFastestChannels": [
+    {
+      "label": "day",
+      "variables": {
+        "input": {
+          "timeWindow": "day",
+          "limit": 5
+        }
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "input": {
+          "timeWindow": "week",
+          "limit": 5
+        }
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "input": {
+          "timeWindow": "month",
+          "limit": 5
+        }
+      }
+    }
+  ],
+  "ObserveFastestModels": [
+    {
+      "label": "day",
+      "variables": {
+        "input": {
+          "timeWindow": "day",
+          "limit": 5
+        }
+      }
+    },
+    {
+      "label": "week",
+      "variables": {
+        "input": {
+          "timeWindow": "week",
+          "limit": 5
+        }
+      }
+    },
+    {
+      "label": "month",
+      "variables": {
+        "input": {
+          "timeWindow": "month",
+          "limit": 5
+        }
+      }
+    }
+  ],
+  "ObserveRequestUsage": [
+    {
+      "label": "all request usage",
+      "variables": {
+        "id": "1",
+        "first": 25
+      }
+    },
+    {
+      "label": "usage cursor",
+      "variables": {
+        "id": "1",
+        "first": 25,
+        "after": "fixture-cursor"
+      }
+    }
+  ]
+}

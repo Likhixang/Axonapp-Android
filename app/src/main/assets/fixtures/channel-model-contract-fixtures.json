@@ -1,0 +1,1583 @@
+{
+  "AxonOverview": [
+    {
+      "label": "no variables",
+      "variables": {}
+    }
+  ],
+  "ChannelDetail": [
+    {
+      "label": "exact id",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ModelDetail": [
+    {
+      "label": "exact id",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "DeleteChannel": [
+    {
+      "label": "exact id",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "DeleteModel": [
+    {
+      "label": "exact id",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "UpdateChannelStatus": [
+    {
+      "label": "enabled",
+      "variables": {
+        "id": "1",
+        "status": "enabled"
+      }
+    },
+    {
+      "label": "disabled",
+      "variables": {
+        "id": "1",
+        "status": "disabled"
+      }
+    }
+  ],
+  "UpdateModelStatus": [
+    {
+      "label": "enabled",
+      "variables": {
+        "id": "1",
+        "status": "enabled"
+      }
+    },
+    {
+      "label": "disabled",
+      "variables": {
+        "id": "1",
+        "status": "disabled"
+      }
+    }
+  ],
+  "TestChannel": [
+    {
+      "label": "default test model",
+      "variables": {
+        "input": {
+          "channelID": "1"
+        }
+      }
+    },
+    {
+      "label": "explicit model",
+      "variables": {
+        "input": {
+          "channelID": "1",
+          "modelID": "upstream-chat"
+        }
+      }
+    }
+  ],
+  "CheckModelRoute": [
+    {
+      "label": "upstream model routing",
+      "variables": {
+        "associations": [
+          {
+            "type": "model",
+            "priority": 0,
+            "disabled": false,
+            "modelId": {
+              "modelId": "upstream-chat"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "CreateChannel": [
+    {
+      "label": "openai",
+      "variables": {
+        "input": {
+          "type": "openai",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "openai_responses",
+      "variables": {
+        "input": {
+          "type": "openai_responses",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "anthropic",
+      "variables": {
+        "input": {
+          "type": "anthropic",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "deepseek",
+      "variables": {
+        "input": {
+          "type": "deepseek",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "openrouter",
+      "variables": {
+        "input": {
+          "type": "openrouter",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "gemini",
+      "variables": {
+        "input": {
+          "type": "gemini",
+          "name": "New channel",
+          "credentials": {
+            "apiKey": "fixture-not-a-real-secret"
+          },
+          "supportedModels": [
+            "upstream-chat"
+          ],
+          "defaultTestModel": "upstream-chat",
+          "tags": [],
+          "orderingWeight": 0,
+          "remark": "",
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "credential openai",
+      "variables": {
+        "input": {
+          "type": "openai",
+          "name": "fixture-only",
+          "credentials": {
+            "apiKeys": [
+              "key-a-fixture",
+              "key-b-fixture"
+            ]
+          },
+          "supportedModels": [
+            "chat"
+          ],
+          "defaultTestModel": "chat",
+          "settings": {},
+          "policies": {
+            "stream": "unlimited"
+          },
+          "endpoints": [],
+          "manualModels": [],
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "credential zenmux",
+      "variables": {
+        "input": {
+          "type": "zenmux",
+          "name": "fixture-only",
+          "credentials": {
+            "apiKeys": [
+              "key-fixture"
+            ],
+            "managementApiKey": "management-fixture"
+          },
+          "supportedModels": [
+            "chat"
+          ],
+          "defaultTestModel": "chat",
+          "settings": {},
+          "policies": {
+            "stream": "unlimited"
+          },
+          "endpoints": [],
+          "manualModels": [],
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "credential anthropic_gcp",
+      "variables": {
+        "input": {
+          "type": "anthropic_gcp",
+          "name": "fixture-only",
+          "credentials": {
+            "gcp": {
+              "region": "us-east5",
+              "projectID": "fixture-project",
+              "jsonData": "{\"type\":\"service_account\"}"
+            }
+          },
+          "supportedModels": [
+            "chat"
+          ],
+          "defaultTestModel": "chat",
+          "settings": {},
+          "policies": {
+            "stream": "unlimited"
+          },
+          "endpoints": [],
+          "manualModels": [],
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "credential gemini_vertex",
+      "variables": {
+        "input": {
+          "type": "gemini_vertex",
+          "name": "fixture-only",
+          "credentials": {
+            "gcp": {
+              "region": "us-central1",
+              "projectID": "fixture-project",
+              "jsonData": "{}"
+            }
+          },
+          "supportedModels": [
+            "chat"
+          ],
+          "defaultTestModel": "chat",
+          "settings": {},
+          "policies": {
+            "stream": "unlimited"
+          },
+          "endpoints": [],
+          "manualModels": [],
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "credential anthropic_aws",
+      "variables": {
+        "input": {
+          "type": "anthropic_aws",
+          "name": "fixture-only",
+          "credentials": {},
+          "supportedModels": [
+            "chat"
+          ],
+          "defaultTestModel": "chat",
+          "settings": {},
+          "policies": {
+            "stream": "unlimited"
+          },
+          "endpoints": [],
+          "manualModels": [],
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "credential codex",
+      "variables": {
+        "input": {
+          "type": "codex",
+          "name": "fixture-only",
+          "credentials": {
+            "apiKey": "{\"access_token\":\"fixture\",\"refresh_token\":\"fixture\"}"
+          },
+          "supportedModels": [
+            "chat"
+          ],
+          "defaultTestModel": "chat",
+          "settings": {},
+          "policies": {
+            "stream": "unlimited"
+          },
+          "endpoints": [],
+          "manualModels": [],
+          "autoSyncSupportedModels": false
+        }
+      }
+    },
+    {
+      "label": "credential github_copilot",
+      "variables": {
+        "input": {
+          "type": "github_copilot",
+          "name": "fixture-only",
+          "credentials": {
+            "oauth": {
+              "accessToken": "fixture",
+              "scopes": [
+                "read:user"
+              ]
+            }
+          },
+          "supportedModels": [
+            "chat"
+          ],
+          "defaultTestModel": "chat",
+          "settings": {},
+          "policies": {
+            "stream": "unlimited"
+          },
+          "endpoints": [],
+          "manualModels": [],
+          "autoSyncSupportedModels": false
+        }
+      }
+    }
+  ],
+  "EditChannel": [
+    {
+      "label": "name only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "Renamed"
+        }
+      }
+    },
+    {
+      "label": "baseURL only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "baseURL": "https://upstream.example/v1"
+        }
+      }
+    },
+    {
+      "label": "clearBaseURL only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "baseURL": ""
+        }
+      }
+    },
+    {
+      "label": "supportedModels only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "supportedModels": [
+            "upstream-chat"
+          ]
+        }
+      }
+    },
+    {
+      "label": "defaultTestModel only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "defaultTestModel": "upstream-chat"
+        }
+      }
+    },
+    {
+      "label": "tags only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "label": "orderingWeight only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "orderingWeight": -1
+        }
+      }
+    },
+    {
+      "label": "remark only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "remark": ""
+        }
+      }
+    },
+    {
+      "label": "full settings/policies/endpoints/sync",
+      "variables": {
+        "id": "1",
+        "input": {
+          "settings": {
+            "extraModelPrefix": "prefix",
+            "modelMappings": [
+              {
+                "from": "alias",
+                "to": "chat"
+              }
+            ],
+            "autoTrimedModelPrefixes": [
+              "provider"
+            ],
+            "hideOriginalModels": false,
+            "hideMappedModels": true,
+            "lowercaseModelId": true,
+            "proxy": {
+              "type": "URL",
+              "url": "https://proxy.invalid",
+              "username": "fixture",
+              "password": "fixture"
+            },
+            "transformOptions": {
+              "forceArrayInstructions": true,
+              "forceArrayInputs": false,
+              "replaceDeveloperRoleWithSystem": true,
+              "reasoningEffortMapping": [
+                {
+                  "from": "xhigh",
+                  "to": "high"
+                }
+              ]
+            },
+            "headerOverrideOperations": [
+              {
+                "op": "set",
+                "path": "X-Client",
+                "value": "fixture"
+              }
+            ],
+            "bodyOverrideOperations": [
+              {
+                "op": "array_insert",
+                "path": "messages",
+                "value": "{\"role\":\"system\",\"content\":\"fixture\"}",
+                "index": 0,
+                "splat": false
+              }
+            ],
+            "passThroughUserAgent": true,
+            "passThroughBody": false,
+            "rateLimit": {
+              "rpm": 100,
+              "tpm": 1000,
+              "maxConcurrent": 4,
+              "queueSize": 8,
+              "queueTimeoutMs": 1000
+            },
+            "retryableStatusCodes": [
+              429,
+              503
+            ],
+            "retryableErrorPatterns": [
+              {
+                "pattern": "rate limit",
+                "regex": false
+              }
+            ],
+            "modelProtocols": [
+              {
+                "model": "chat",
+                "apiFormats": [
+                  "openai/chat_completions"
+                ],
+                "enabled": true
+              }
+            ],
+            "providerQuota": null
+          },
+          "policies": {
+            "stream": "require",
+            "apiKeyAutoDisableRules": [
+              {
+                "statusCodes": [
+                  429
+                ],
+                "keywordPatterns": [
+                  "rate"
+                ],
+                "times": 2,
+                "action": "disable_until_cron",
+                "disableUntilCron": "0 0 * * *",
+                "disableUntilTimezone": "UTC"
+              }
+            ]
+          },
+          "endpoints": [
+            {
+              "apiFormat": "openai/chat_completions",
+              "path": "/chat/completions",
+              "baseURL": "https://upstream.invalid",
+              "transport": "http"
+            }
+          ],
+          "autoSyncSupportedModels": true,
+          "autoSyncModelPattern": "^chat",
+          "manualModels": [
+            "chat"
+          ]
+        }
+      }
+    }
+  ],
+  "CreateModel": [
+    {
+      "label": "chat",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "chat"
+        }
+      }
+    },
+    {
+      "label": "embedding",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "embedding"
+        }
+      }
+    },
+    {
+      "label": "rerank",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "rerank"
+        }
+      }
+    },
+    {
+      "label": "image_generation",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "image_generation"
+        }
+      }
+    },
+    {
+      "label": "video_generation",
+      "variables": {
+        "input": {
+          "developer": "developer",
+          "modelID": "model-alias",
+          "name": "Model alias",
+          "icon": "OpenAI",
+          "group": "default",
+          "modelCard": {},
+          "settings": {
+            "associations": [
+              {
+                "type": "model",
+                "priority": 0,
+                "disabled": false,
+                "modelId": {
+                  "modelId": "upstream-chat"
+                }
+              }
+            ],
+            "disableDeveloperSettingsInheritance": false,
+            "loadBalancerStrategy": "default",
+            "traceStickyMode": "default"
+          },
+          "remark": "",
+          "type": "video_generation"
+        }
+      }
+    }
+  ],
+  "EditModel": [
+    {
+      "label": "name only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "Renamed"
+        }
+      }
+    },
+    {
+      "label": "modelID only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "modelID": "new-id"
+        }
+      }
+    },
+    {
+      "label": "developer only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "developer": "new-developer"
+        }
+      }
+    },
+    {
+      "label": "type only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "type": "embedding"
+        }
+      }
+    },
+    {
+      "label": "group only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "group": "new-group"
+        }
+      }
+    },
+    {
+      "label": "icon only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "icon": "DeepSeek"
+        }
+      }
+    },
+    {
+      "label": "remark only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "remark": ""
+        }
+      }
+    },
+    {
+      "label": "modelCard only",
+      "variables": {
+        "id": "1",
+        "input": {
+          "modelCard": {
+            "reasoning": {
+              "supported": true,
+              "default": false
+            },
+            "toolCall": true,
+            "temperature": true,
+            "modalities": {
+              "input": [
+                "text"
+              ],
+              "output": [
+                "text"
+              ]
+            },
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "limit": {
+              "context": 128000,
+              "output": 8192
+            },
+            "vision": false,
+            "knowledge": "2026",
+            "releaseDate": "2026-01-01",
+            "lastUpdated": "2026-01-01"
+          }
+        }
+      }
+    },
+    {
+      "label": "all association types and three nested groups",
+      "variables": {
+        "id": "1",
+        "input": {
+          "settings": {
+            "associations": [
+              {
+                "type": "channel_model",
+                "channelModel": {
+                  "channelId": 1,
+                  "modelId": "chat"
+                },
+                "priority": 1,
+                "disabled": false,
+                "when": {
+                  "enabled": true,
+                  "condition": {
+                    "type": "group",
+                    "logic": "and",
+                    "conditions": [
+                      {
+                        "type": "group",
+                        "logic": "or",
+                        "conditions": [
+                          {
+                            "type": "group",
+                            "logic": "and",
+                            "conditions": [
+                              {
+                                "type": "condition",
+                                "field": "prompt_tokens",
+                                "operator": "gte",
+                                "value": 1000
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "channel_regex",
+                "channelRegex": {
+                  "channelId": 1,
+                  "pattern": "^chat"
+                },
+                "priority": 1,
+                "disabled": false,
+                "when": {
+                  "enabled": true,
+                  "condition": {
+                    "type": "group",
+                    "logic": "and",
+                    "conditions": [
+                      {
+                        "type": "group",
+                        "logic": "or",
+                        "conditions": [
+                          {
+                            "type": "group",
+                            "logic": "and",
+                            "conditions": [
+                              {
+                                "type": "condition",
+                                "field": "prompt_tokens",
+                                "operator": "gte",
+                                "value": 1000
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "model",
+                "modelId": {
+                  "modelId": "chat",
+                  "exclude": [
+                    {
+                      "channelIds": [
+                        2
+                      ],
+                      "channelTags": [
+                        "excluded"
+                      ],
+                      "channelNamePattern": "^private"
+                    }
+                  ]
+                },
+                "priority": 1,
+                "disabled": false,
+                "when": {
+                  "enabled": true,
+                  "condition": {
+                    "type": "group",
+                    "logic": "and",
+                    "conditions": [
+                      {
+                        "type": "group",
+                        "logic": "or",
+                        "conditions": [
+                          {
+                            "type": "group",
+                            "logic": "and",
+                            "conditions": [
+                              {
+                                "type": "condition",
+                                "field": "prompt_tokens",
+                                "operator": "gte",
+                                "value": 1000
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "regex",
+                "regex": {
+                  "pattern": "^chat",
+                  "exclude": []
+                },
+                "priority": 1,
+                "disabled": false,
+                "when": {
+                  "enabled": true,
+                  "condition": {
+                    "type": "group",
+                    "logic": "and",
+                    "conditions": [
+                      {
+                        "type": "group",
+                        "logic": "or",
+                        "conditions": [
+                          {
+                            "type": "group",
+                            "logic": "and",
+                            "conditions": [
+                              {
+                                "type": "condition",
+                                "field": "prompt_tokens",
+                                "operator": "gte",
+                                "value": 1000
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "channel_tags_model",
+                "channelTagsModel": {
+                  "channelTags": [
+                    "public"
+                  ],
+                  "modelId": "chat"
+                },
+                "priority": 1,
+                "disabled": false,
+                "when": {
+                  "enabled": true,
+                  "condition": {
+                    "type": "group",
+                    "logic": "and",
+                    "conditions": [
+                      {
+                        "type": "group",
+                        "logic": "or",
+                        "conditions": [
+                          {
+                            "type": "group",
+                            "logic": "and",
+                            "conditions": [
+                              {
+                                "type": "condition",
+                                "field": "prompt_tokens",
+                                "operator": "gte",
+                                "value": 1000
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "channel_tags_regex",
+                "channelTagsRegex": {
+                  "channelTags": [
+                    "public"
+                  ],
+                  "pattern": "^chat"
+                },
+                "priority": 1,
+                "disabled": false,
+                "when": {
+                  "enabled": true,
+                  "condition": {
+                    "type": "group",
+                    "logic": "and",
+                    "conditions": [
+                      {
+                        "type": "group",
+                        "logic": "or",
+                        "conditions": [
+                          {
+                            "type": "group",
+                            "logic": "and",
+                            "conditions": [
+                              {
+                                "type": "condition",
+                                "field": "prompt_tokens",
+                                "operator": "gte",
+                                "value": 1000
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "loadBalancerStrategy": "adaptive",
+            "traceStickyMode": "prefer_previous_channel",
+            "disableDeveloperSettingsInheritance": true
+          }
+        }
+      }
+    }
+  ],
+  "ChannelSecrets": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ChannelDuplicate": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "sourceID": "1",
+        "input": {
+          "type": "openai",
+          "name": "fixture-only",
+          "credentials": {
+            "apiKeys": [
+              "contract-not-a-real-key"
+            ]
+          },
+          "supportedModels": [
+            "chat"
+          ],
+          "defaultTestModel": "chat",
+          "settings": {},
+          "policies": {
+            "stream": "unlimited"
+          },
+          "endpoints": [],
+          "manualModels": [],
+          "autoSyncSupportedModels": false
+        }
+      }
+    }
+  ],
+  "ChannelFetchModels": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "input": {
+          "channelType": "openai",
+          "baseURL": "https://upstream.invalid/v1",
+          "apiKey": "contract-not-a-real-key",
+          "channelID": "1"
+        }
+      }
+    }
+  ],
+  "ChannelSyncModels": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1",
+        "pattern": "^chat"
+      }
+    }
+  ],
+  "ChannelTestKeys": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1",
+        "model": "chat"
+      }
+    }
+  ],
+  "ModelRouteConnections": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "associations": [
+          {
+            "type": "model",
+            "modelId": {
+              "modelId": "chat"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "ModelUnassociatedChannels": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {}
+    }
+  ],
+  "ModelProvidersCatalog": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {}
+    }
+  ],
+  "ModelRefreshProvidersCatalog": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {}
+    }
+  ],
+  "ModelBulkCreate": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "inputs": [
+          {
+            "developer": "fixture",
+            "modelID": "alias",
+            "name": "Alias",
+            "icon": "OpenAI",
+            "group": "fixture",
+            "type": "chat",
+            "modelCard": {},
+            "settings": {
+              "associations": [],
+              "loadBalancerStrategy": "default",
+              "traceStickyMode": "default",
+              "disableDeveloperSettingsInheritance": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "ChannelBulkEnable": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "ids": [
+          "1",
+          "2"
+        ]
+      }
+    }
+  ],
+  "ChannelBulkDisable": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "ids": [
+          "1",
+          "2"
+        ]
+      }
+    }
+  ],
+  "ChannelBulkArchive": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "ids": [
+          "1",
+          "2"
+        ]
+      }
+    }
+  ],
+  "ChannelBulkDelete": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "ids": [
+          "1",
+          "2"
+        ]
+      }
+    }
+  ],
+  "ChannelBulkRecover": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "ids": [
+          "1",
+          "2"
+        ]
+      }
+    }
+  ],
+  "ModelBulkEnable": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "ids": [
+          "1",
+          "2"
+        ]
+      }
+    }
+  ],
+  "ModelBulkDisable": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "ids": [
+          "1",
+          "2"
+        ]
+      }
+    }
+  ],
+  "ModelBulkArchive": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "ids": [
+          "1",
+          "2"
+        ]
+      }
+    }
+  ],
+  "ModelBulkDelete": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "ids": [
+          "1",
+          "2"
+        ]
+      }
+    }
+  ],
+  "ChannelDisableKey": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1",
+        "key": "contract-not-a-real-key"
+      }
+    }
+  ],
+  "ChannelEnableKey": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1",
+        "key": "contract-not-a-real-key"
+      }
+    }
+  ],
+  "ChannelEnableAllKeys": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ChannelEnableSelectedKeys": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1",
+        "keys": [
+          "contract-not-a-real-key"
+        ]
+      }
+    }
+  ],
+  "ChannelDeleteDisabledKeys": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1",
+        "keys": [
+          "contract-not-a-real-key"
+        ]
+      }
+    }
+  ],
+  "ChannelTestKey": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1",
+        "key": "contract-not-a-real-key",
+        "model": "chat"
+      }
+    }
+  ],
+  "ChannelBulkCreate": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "input": {
+          "type": "openai",
+          "name": "fixture",
+          "apiKeys": [
+            "contract-not-a-real-key"
+          ],
+          "supportedModels": [
+            "chat"
+          ],
+          "defaultTestModel": "chat"
+        }
+      }
+    }
+  ],
+  "ChannelBulkImport": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "input": {
+          "channels": [
+            {
+              "type": "openai",
+              "name": "fixture",
+              "apiKey": "contract-not-a-real-key",
+              "supportedModels": [
+                "chat"
+              ],
+              "defaultTestModel": "chat"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "ChannelBulkOrdering": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "input": {
+          "channels": [
+            {
+              "id": "1",
+              "orderingWeight": 10
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "ChannelSavePrices": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1",
+        "input": [
+          {
+            "modelId": "chat",
+            "price": {
+              "items": [
+                {
+                  "itemCode": "prompt_tokens",
+                  "pricing": {
+                    "mode": "usage_per_unit",
+                    "usagePerUnit": "0.001"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "ChannelPrices": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ChannelClearError": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ModelAllPages": [
+    {
+      "label": "offline coercion fixture",
+      "variables": {
+        "after": null
+      }
+    },
+    {
+      "label": "continuation",
+      "variables": {
+        "after": "cursor-fixture"
+      }
+    }
+  ],
+  "ChannelTemplates": [
+    {
+      "label": "offline contract coercion",
+      "variables": {
+        "after": null
+      }
+    }
+  ],
+  "ChannelTemplateCreate": [
+    {
+      "label": "offline contract coercion",
+      "variables": {
+        "input": {
+          "name": "fixture",
+          "headerOverrideOperations": [
+            {
+              "op": "set",
+              "path": "X-Client",
+              "value": "fixture"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "ChannelTemplateEdit": [
+    {
+      "label": "offline contract coercion",
+      "variables": {
+        "id": "1",
+        "input": {
+          "name": "fixture",
+          "bodyOverrideOperations": []
+        }
+      }
+    }
+  ],
+  "ChannelTemplateDelete": [
+    {
+      "label": "offline contract coercion",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ChannelTemplateApply": [
+    {
+      "label": "offline contract coercion",
+      "variables": {
+        "input": {
+          "templateID": "1",
+          "channelIDs": [
+            "1"
+          ],
+          "mode": "MERGE"
+        }
+      }
+    }
+  ],
+  "ChannelTemplateClear": [
+    {
+      "label": "offline contract coercion",
+      "variables": {
+        "input": {
+          "channelIDs": [
+            "1"
+          ]
+        }
+      }
+    }
+  ],
+  "ChannelDiagnostics": [
+    {
+      "label": "offline contract coercion",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ChannelQuotaReset": [
+    {
+      "label": "offline contract coercion",
+      "variables": {
+        "id": "1"
+      }
+    }
+  ],
+  "ChannelTestHistory": [
+    {
+      "label": "offline contract coercion",
+      "variables": {
+        "id": "1",
+        "after": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AxonHub</string><string name="dashboard">仪表盘</string><string name="gateway">网关</string><string name="keys">密钥</string><string name="management">管理</string><string name="models">模型</string><string name="playground">调试台</string><string name="settings">设置</string><string name="add_instance">添加实例</string><string name="retry">重试</string>
+</resources>

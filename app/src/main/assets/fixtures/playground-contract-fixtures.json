@@ -1,0 +1,49 @@
+{
+  "provenance": {
+    "repository": "looplj/axonhub",
+    "ref": "939b2bc07cc05bdf7750d7ec872290d67784d13d",
+    "kind": "Synthetic offline contract requests, not production responses",
+    "sources": [
+      "frontend/src/features/playground/index.tsx",
+      "frontend/src/components/ai-elements/prompt-input.tsx",
+      "internal/server/routes.go",
+      "internal/server/api/playground.go",
+      "llm/transformer/aisdk/model.go",
+      "llm/transformer/aisdk/convert_request.go",
+      "llm/transformer/aisdk/convert_stream.go",
+      "llm/transformer/openai/model.go",
+      "docs/en/api-reference/openai-api.md"
+    ]
+  },
+  "admin_payload": {
+    "model": "contract-model",
+    "temperature": 0.6,
+    "max_tokens": 4096,
+    "stream": true,
+    "system": "system",
+    "messages": [
+      {
+        "id": "fixture-message",
+        "role": "user",
+        "parts": [
+          {"type": "text", "text": "describe"},
+          {"type": "file", "mediaType": "image/png", "filename": "fixture.png", "url": "data:image/png;base64,AQID"}
+        ]
+      }
+    ]
+  },
+  "api_key_payload": {
+    "model": "contract-model",
+    "temperature": 0.6,
+    "max_tokens": 4096,
+    "stream": true,
+    "messages": [
+      {"role": "system", "content": "system"},
+      {"role": "user", "content": [
+        {"type": "text", "text": "describe"},
+        {"type": "image_url", "image_url": {"url": "data:image/png;base64,AQID"}}
+      ]}
+    ]
+  },
+  "unsupported_by_official_playground": ["audio input", "video input", "document input", "standalone file upload", "saved chat history", "non-streaming admin response"]
+}
