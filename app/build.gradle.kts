@@ -13,8 +13,8 @@ android {
         applicationId = "cc.khixang.axonhub"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.2.0"
+        versionCode = 4
+        versionName = "1.2.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -31,6 +31,10 @@ android {
             keyPassword = signingKeyPassword
         }
     } else null
+
+    System.getenv("AXONAPP_DEBUG_STORE_FILE")?.takeIf { it.isNotBlank() }?.let { path ->
+        signingConfigs.getByName("debug") { storeFile = file(path) }
+    }
 
     buildTypes {
         release {

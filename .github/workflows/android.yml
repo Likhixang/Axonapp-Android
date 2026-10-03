@@ -38,6 +38,10 @@ jobs:
             mkdir -p "$HOME/.android"
             printf '%s' "${DEBUG_KEYSTORE_BASE64}" | base64 --decode > "$HOME/.android/debug.keystore"
             chmod 600 "$HOME/.android/debug.keystore"
+            printf 'AXONAPP_DEBUG_STORE_FILE=%s\n' "$HOME/.android/debug.keystore" >> "$GITHUB_ENV"
+          else
+            printf 'Missing stable debug keystore secret; refusing an incompatible APK.\n' >&2
+            exit 1
           fi
       - name: Test, lint, and assemble
         run: ./gradlew testDebugUnitTest lintDebug assembleDebug --no-daemon --console=plain
@@ -45,6 +49,9 @@ jobs:
         run: |
           "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -P 16 -v 4 app/build/outputs/apk/debug/app-debug.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs app/build/outputs/apk/debug/app-debug.apk
+          expected=$(keytool -J-Duser.language=en -list -v -keystore "$AXONAPP_DEBUG_STORE_FILE" -storepass android -alias androiddebugkey | python -c 'import sys,re; s=sys.stdin.read(); m=re.search(r"SHA-?256:\s*([A-Fa-f0-9:]+)",s); assert m, "Missing keystore fingerprint"; print(m.group(1).replace(":", "").lower())')
+          actual=$("$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --print-certs app/build/outputs/apk/debug/app-debug.apk | python -c 'import sys,re; s=sys.stdin.read(); m=re.search(r"certificate SHA-256 digest: ([a-f0-9]+)",s); assert m; print(m.group(1))')
+          test "$actual" = "$expected"
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
