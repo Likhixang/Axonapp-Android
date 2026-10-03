@@ -9,10 +9,16 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.json.*
 
 class GatewayService(private val repository: AxonRepository) {
+    private suspend fun <T> fencedMutation(block: suspend (cc.khixang.axonhub.network.AxonSession, String?) -> T): T {
+        val fence = repository.currentFence()
+        return repository.fencedMutation { session, project -> repository.verify(fence); block(session, project) }
+    }
     suspend fun channelDetail(id: String): JsonElement = repository.fenced { session, project -> channelDetail(session, project, id) }
     suspend fun channelSecrets(id: String): JsonElement = repository.fenced { session, project ->
         val data = repository.api.graphQl(session, CHANNEL_SECRETS, buildJsonObject { put("id", id) }, project)
-        data["channels"]["edges"].arr.firstOrNull()?.get("node")?.takeIf { it["id"].text == id } ?: throw AxonException.InvalidResponse
+        val node = data["channels"]["edges"].arr.firstOrNull()?.get("node")?.takeIf { it["id"].text == id } ?: throw AxonException.InvalidResponse
+        if (node["credentials"] !is JsonObject || node["disabledAPIKeys"] !is JsonArray) throw AxonException.Forbidden
+        node
     }
     suspend fun modelDetail(id: String): JsonElement = repository.fenced { session, project ->
         modelDetail(session, project, id)
@@ -28,7 +34,8 @@ class GatewayService(private val repository: AxonRepository) {
         throw AxonException.InvalidResponse
     }
 
-    suspend fun saveChannel(id: String?, draft: JsonObject, baseline: JsonElement = JsonNull, credentialsAuthorized: Boolean = false): String = repository.fencedMutation { session, project ->
+    suspend fun saveChannel(id: String?, draft: JsonObject, baseline: JsonElement = JsonNull, credentialsAuthorized: Boolean = false): String = fencedMutation { session, project ->
+        rejectGatewayMasked(draft)
         if (id != null) ensureFreshChannel(session, project, id, baseline)
         val input = if (id == null) draft else dirtyPatch(draft, baseline.obj).toMutableMap().also { patch ->
             if (("credentials" in patch || "settings" in patch) && !credentialsAuthorized) throw IllegalArgumentException("Authorize a full configuration read before replacing credentials or settings")
@@ -43,15 +50,17 @@ class GatewayService(private val repository: AxonRepository) {
         if (id != null && resultId != id) throw AxonException.VerificationFailed
         val actual = channelDetail(session, project, resultId)
         if (actual["id"].text != resultId) throw AxonException.VerificationFailed
-        verifySubset(actual, input)
-        input["credentials"]?.let { expected ->
+        verifySubset(actual, JsonObject(input.filterKeys { it != "settings" && it != "credentials" }))
+        if ("settings" in input || "credentials" in input) {
             val secrets = repository.api.graphQl(session, CHANNEL_SECRETS, buildJsonObject { put("id", resultId) }, project)["channels"]["edges"].arr.firstOrNull()?.get("node") ?: throw AxonException.VerificationFailed
-            if (!credentialMatches(secrets["credentials"], expected)) throw AxonException.VerificationFailed
+            if (secrets["id"].text != resultId || secrets["credentials"] !is JsonObject) throw AxonException.VerificationFailed
+            input["credentials"]?.let { if (!credentialMatches(secrets["credentials"], it)) throw AxonException.VerificationFailed }
+            input["settings"]?.let { if (!matches(secrets["settings"], it)) throw AxonException.VerificationFailed }
         }
         resultId
     }
 
-    suspend fun saveModel(id: String?, draft: JsonObject, baseline: JsonElement = JsonNull): String = repository.fencedMutation { session, project ->
+    suspend fun saveModel(id: String?, draft: JsonObject, baseline: JsonElement = JsonNull): String = fencedMutation { session, project ->
         if (id != null) ensureFreshModel(session, project, id, baseline)
         val input = (if (id == null) draft else dirtyPatch(draft, baseline.obj)).toMutableMap().also { fields ->
             fields["modelCard"]?.let { fields["modelCard"] = normalizeModelCard(it.obj) }
@@ -70,7 +79,7 @@ class GatewayService(private val repository: AxonRepository) {
 
     suspend fun deleteChannel(id: String) = delete(id, true)
     suspend fun deleteModel(id: String) = delete(id, false)
-    private suspend fun delete(id: String, channel: Boolean) = repository.fencedMutation { session, project ->
+    private suspend fun delete(id: String, channel: Boolean) = fencedMutation { session, project ->
         val before = if (channel) channelDetail(session, project, id) else modelDetail(session, project, id)
         if (before["id"].text != id) throw AxonException.InvalidResponse
         val doc = if (channel) DELETE_CHANNEL else DELETE_MODEL; val root = if (channel) "deleteChannel" else "deleteModel"
@@ -81,7 +90,7 @@ class GatewayService(private val repository: AxonRepository) {
 
     suspend fun setChannelEnabled(id: String, enabled: Boolean) = status(id, enabled, true)
     suspend fun setModelEnabled(id: String, enabled: Boolean) = status(id, enabled, false)
-    private suspend fun status(id: String, enabled: Boolean, channel: Boolean) = repository.fencedMutation { session, project ->
+    private suspend fun status(id: String, enabled: Boolean, channel: Boolean) = fencedMutation { session, project ->
         updateStatus(session, project, id, enabled, channel)
     }
 
@@ -92,7 +101,7 @@ class GatewayService(private val repository: AxonRepository) {
     private suspend fun batchStatus(ids: List<String>, enabled: Boolean, channel: Boolean): GatewayBatchResult {
         // Capture before waiting for the mutation mutex: a queued batch must not silently retarget.
         val fence = repository.currentFence()
-        return repository.fencedMutation { session, project ->
+        return fencedMutation { session, project ->
             repository.verify(fence)
             runGatewayBatch(ids) { id ->
                 repository.verify(fence)
@@ -112,10 +121,12 @@ class GatewayService(private val repository: AxonRepository) {
         if (actual["id"].text != id || actual["status"].text != expected) throw AxonException.VerificationFailed
     }
 
-    suspend fun testChannel(id: String, model: String?): Pair<Boolean, Int> = repository.fencedMutation { session, project ->
+    suspend fun testChannel(id: String, model: String?): Pair<Boolean, Int> = fencedMutation { session, project ->
         val input = buildJsonObject { put("channelID", id); model?.takeIf(String::isNotBlank)?.let { put("modelID", it) } }
         val result = repository.api.graphQl(session, TEST_CHANNEL, buildJsonObject { put("input", input) }, project)["testChannel"]
-        (result["success"].boolOrNull ?: false) to (((result["latency"].doubleOrNull ?: 0.0) * 1000).toInt())
+        val success = result["success"].boolOrNull ?: throw AxonException.InvalidResponse
+        val latency = result["latency"].doubleOrNull?.takeIf { it.isFinite() && it >= 0 } ?: throw AxonException.InvalidResponse
+        success to (latency * 1000).coerceAtMost(Int.MAX_VALUE.toDouble()).toInt()
     }
 
     suspend fun fetchUpstreamModels(input: JsonObject): List<String> = repository.fenced { session, project ->
@@ -124,7 +135,7 @@ class GatewayService(private val repository: AxonRepository) {
         result["models"].arr.map { it["id"].text }.filter(String::isNotBlank)
     }
 
-    suspend fun syncModels(id: String, pattern: String?): List<String> = repository.fencedMutation { session, project ->
+    suspend fun syncModels(id: String, pattern: String?): List<String> = fencedMutation { session, project ->
         val vars = buildJsonObject { put("id", id); pattern?.let { put("pattern", it) } }
         val result = repository.api.graphQl(session, SYNC_MODELS, vars, project)["syncChannelModels"]
         if (result["channelID"].text != id) throw AxonException.VerificationFailed
@@ -155,7 +166,7 @@ class GatewayService(private val repository: AxonRepository) {
     private fun matches(actual: JsonElement, expected: JsonElement): Boolean = when (expected) {
         is JsonObject -> expected.all { matches(actual[it.key], it.value) }
         is JsonArray -> actual.arr.size == expected.size && actual.arr.zip(expected).all { matches(it.first, it.second) }
-        else -> actual == expected
+        else -> gatewayMatches(actual, expected)
     }
     private fun hasTruncatedCondition(value: JsonElement): Boolean = when (value) {
         is JsonObject -> (value.size == 1 && "type" in value) || value.values.any(::hasTruncatedCondition)
@@ -170,7 +181,7 @@ class GatewayService(private val repository: AxonRepository) {
 
     private suspend fun ensureFreshModel(session: cc.khixang.axonhub.network.AxonSession, project: String?, id: String, baseline: JsonElement) {
         val current = repository.api.graphQl(session, MODEL_DETAIL, buildJsonObject { put("id", id) }, project)["models"]["edges"].arr.firstOrNull()?.get("node") ?: throw AxonException.InvalidResponse
-        if (baseline["updatedAt"].text.isBlank() || current["updatedAt"].text != baseline["updatedAt"].text) throw AxonException.TargetChanged
+        if (current["id"].text != id || baseline["updatedAt"].text.isBlank() || current["updatedAt"].text != baseline["updatedAt"].text) throw AxonException.TargetChanged
     }
 
     private fun credentialMatches(actual: JsonElement, expected: JsonElement): Boolean {

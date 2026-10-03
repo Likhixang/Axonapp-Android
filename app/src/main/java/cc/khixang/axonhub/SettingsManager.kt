@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
-data class AppSettings(val theme: ThemeMode = ThemeMode.SYSTEM, val accent: Long = 0xff4f46e5, val locale: String = "")
+data class AppSettings(val theme: ThemeMode = ThemeMode.SYSTEM, val accent: Long = 0xff6366f1, val locale: String = "")
 
 class SettingsManager(context: Context) {
     private val prefs = context.getSharedPreferences("axonhub_settings", Context.MODE_PRIVATE)
     private val _state = MutableStateFlow(AppSettings(
         runCatching { ThemeMode.valueOf(prefs.getString("theme", "SYSTEM")!!) }.getOrDefault(ThemeMode.SYSTEM),
-        prefs.getLong("accent", 0xff4f46e5), prefs.getString("locale", "").orEmpty(),
+        prefs.getLong("accent", 0xff6366f1), prefs.getString("locale", "").orEmpty(),
     ))
     val state = _state.asStateFlow()
     init { applyLocale(_state.value.locale) }

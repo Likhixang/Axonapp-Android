@@ -1,6 +1,6 @@
-# AxonHub Android
+# Axonapp Android
 
-AxonHub Android is a native Android port of the AxonHub administration client. It is built with Kotlin and custom Apple-style Jetpack Compose Foundation controls; it is not a WebView wrapper.
+Axonapp Android is an independent third-party AxonHub administration client, ported from [Axonapp-iOS](https://github.com/Likhixang/Axonapp-iOS) with closely aligned functionality and UX. It is not affiliated with or endorsed by AxonHub. It is built with Kotlin and custom Apple-style Jetpack Compose Foundation controls; it is not a WebView wrapper.
 
 ## Highlights
 
@@ -16,7 +16,7 @@ See [docs/PARITY.md](docs/PARITY.md) for the detailed mapping and [SECURITY.md](
 
 ## Build and install
 
-Delivery builds run exclusively in GitHub Actions (unit tests, lint, APK assembly and signature/alignment checks), without an emulator. Download the `axonhub-debug-apk` artifact after a successful run. Stable debug signing is restored from the `ANDROID_DEBUG_KEYSTORE_BASE64` GitHub Secret. The following commands are reference instructions, not locally executed validation.
+Delivery builds run exclusively in GitHub Actions (unit tests, lint, APK assembly and signature/alignment checks), without an emulator. Download the `axonapp-debug-apk` artifact after a successful run. Stable debug signing is restored from the `ANDROID_DEBUG_KEYSTORE_BASE64` GitHub Secret. The commands below document the Actions build; no local build or emulator execution is required.
 
 Install JDK 17, Android SDK Platform 35, and Build Tools 35.x, then run:
 
@@ -31,4 +31,4 @@ No production signing key is embedded. Release signing is enabled only when all 
 
 ## Provenance
 
-The port tracks iOS reference revision `db811721692275273387c5999d790a7d50c3820c`. Imported contracts and asset provenance are recorded under `app/src/main/assets/`; third-party icon licenses are preserved there. No new repository-wide license is asserted.
+The port tracks iOS reference revision `42e262e3448aa63ca7c18aec12ad65c27d62c11f`. Imported contracts and asset provenance are recorded under `app/src/main/assets/`; third-party icon licenses are preserved there. No new repository-wide license is asserted.

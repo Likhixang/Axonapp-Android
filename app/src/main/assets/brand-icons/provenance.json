@@ -312,5 +312,11 @@
     "zenmux_video": "zenmux",
     "commandcode": "commandcode",
     "commandcode_anthropic": "commandcode"
+  },
+  "androidImport": {
+    "source": "https://github.com/Likhixang/Axonapp-iOS",
+    "commit": "42e262e3448aa63ca7c18aec12ad65c27d62c11f",
+    "assetCount": 344,
+    "note": "Exact iOS imagesets; explicit model icon and exact channel type mappings only."
   }
 }

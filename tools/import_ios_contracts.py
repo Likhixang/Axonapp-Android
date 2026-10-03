@@ -8,6 +8,7 @@ import hashlib
 import json
 import re
 import shutil
+import subprocess
 from pathlib import Path
 
 
@@ -48,8 +49,8 @@ def main() -> None:
     shutil.copyfile(args.ios_root / "AxonhubTests" / "playground-contract-fixtures.json", fixture_dir / "playground-contract-fixtures.json")
 
     provenance = {
-        "upstream": "Axonhub-App-iOS",
-        "upstreamCommit": "db811721692275273387c5999d790a7d50c3820c",
+        "upstream": "https://github.com/Likhixang/Axonapp-iOS",
+        "upstreamCommit": subprocess.check_output(["git", "-C", str(args.ios_root), "rev-parse", "HEAD"], text=True).strip(),
         "schemaRevision": json.loads((source / "AdminSchema.json").read_text())["revision"],
         "documentCount": len(documents),
         "documentsSha256": hashlib.sha256((output / "admin_documents.json").read_bytes()).hexdigest(),

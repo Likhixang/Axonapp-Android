@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AxonHub"
+rootProject.name = "Axonapp"
 include(":app")

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AxonHub</string><string name="dashboard">儀表板</string><string name="gateway">閘道</string><string name="keys">金鑰</string><string name="management">管理</string><string name="models">模型</string><string name="playground">測試台</string><string name="settings">設定</string><string name="add_instance">新增執行個體</string><string name="retry">重試</string>
+    <string name="app_name">Axonapp</string><string name="dashboard">儀表板</string><string name="gateway">閘道</string><string name="keys">金鑰</string><string name="management">管理</string><string name="models">模型</string><string name="playground">測試台</string><string name="settings">設定</string><string name="add_instance">新增執行個體</string><string name="retry">重試</string>
 </resources>

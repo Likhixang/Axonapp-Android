@@ -2,7 +2,7 @@
 <resources>
     <string name="ios_clear">クリア</string>
     <string name="ios_loading">読み込み中</string>
-    <string name="ios_welcome_title">AxonHub へようこそ</string>
+    <string name="ios_welcome_title">Axonapp へようこそ</string>
     <string name="ios_welcome_subtitle">自分のサーバーに接続し、ゲートウェイ、モデル、会話を一か所で管理。</string>
     <string name="ios_welcome_manage">ゲートウェイとアクセスを管理</string>
     <string name="ios_welcome_playground">Playground でモデルを試す</string>

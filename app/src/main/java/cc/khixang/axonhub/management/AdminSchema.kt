@@ -84,8 +84,8 @@ import kotlinx.serialization.json.*
         when (base(type)) {
             "Boolean" -> require(value is JsonPrimitive && value.booleanOrNull != null) { "Expected boolean: $path" }
             "Int" -> require(value is JsonPrimitive && value.intOrNull != null) { "Expected integer: $path" }
-            "Float" -> require(value is JsonPrimitive && value.doubleOrNull != null) { "Expected number: $path" }
-            "Decimal", "DecimalInput" -> require(value.text.toBigDecimalOrNull() != null) { "Expected decimal: $path" }
+            "Float" -> require(value is JsonPrimitive && !value.isString && value.doubleOrNull?.isFinite() == true) { "Expected finite number: $path" }
+            "Decimal", "DecimalInput" -> require(ManagementFormat.parse(value.text) != null) { "Expected decimal: $path" }
             "JSONRawMessage", "JSONRawMessageInput" -> require(!value.text.startsWith("__AXONHUB_INVALID__")) { "Expected valid JSON: $path" }
             else -> require(value is JsonPrimitive && value.isString) { "Expected text: $path" }
         }

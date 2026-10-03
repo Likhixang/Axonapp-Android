@@ -8,30 +8,37 @@ import kotlinx.serialization.json.*
 enum class ObserveKind(val root: String) { REQUESTS("requests"), TRACES("traces"), THREADS("threads"), USAGE("usageLogs") }
 
 class ObservabilityService(private val repository: AxonRepository) {
-    suspend fun page(kind: ObserveKind, first: Int = 25, after: String? = null, where: JsonObject = buildJsonObject {}): Page<JsonObject> = repository.fenced { session, project ->
+    suspend fun page(kind: ObserveKind, first: Int = 25, after: String? = null, where: JsonObject = buildJsonObject {}, ascending: Boolean = false, fence: TargetFence = repository.currentFence()): Page<JsonObject> = repository.fenced { session, project ->
+        repository.verify(fence)
         val vars = buildJsonObject {
             put("first", first.coerceIn(1, 100)); after?.let { put("after", it) }; put("where", where)
-            put("order", buildJsonObject { put("field", "CREATED_AT"); put("direction", "DESC") })
+            put("order", buildJsonObject { put("field", "CREATED_AT"); put("direction", if (ascending) "ASC" else "DESC") })
         }
         val data = repository.api.graphQl(session, listDocument(kind), vars, project)[kind.root]
-        Page(data["edges"].arr.map { sanitize(it["node"], session.token).obj }, data["pageInfo"]["endCursor"].text.takeIf { data["pageInfo"]["hasNextPage"].boolOrNull == true }, data["totalCount"].intOrNull)
+        repository.verify(fence)
+        parseAuditPage(data, session.token)
     }
 
-    suspend fun detail(kind: ObserveKind, id: String): JsonElement = repository.fenced { session, project ->
+    suspend fun detail(kind: ObserveKind, id: String, fence: TargetFence = repository.currentFence()): JsonElement = repository.fenced { session, project ->
+        repository.verify(fence)
         val data = repository.api.graphQl(session, detailDocument(kind), buildJsonObject { put("id", id) }, project)["node"]
+        repository.verify(fence)
         if (data["id"].text != id) throw AxonException.InvalidResponse
         sanitize(data ?: JsonNull, session.token)
     }
 
-    suspend fun content(kind: ObserveKind, id: String): JsonElement = repository.fenced { session, project ->
+    suspend fun content(kind: ObserveKind, id: String, fence: TargetFence = repository.currentFence()): JsonElement = repository.fenced { session, project ->
+        repository.verify(fence)
         if (kind !in setOf(ObserveKind.REQUESTS, ObserveKind.TRACES)) throw IllegalArgumentException("No content for this kind")
         val doc = if (kind == ObserveKind.REQUESTS) REQUEST_CONTENT else TRACE_CONTENT
         val data = repository.api.graphQl(session, doc, buildJsonObject { put("id", id) }, project)["node"]
+        repository.verify(fence)
         if (data["id"].text != id) throw AxonException.InvalidResponse
         sanitize(data ?: JsonNull, session.token)
     }
 
-    suspend fun related(parent: ObserveKind, id: String, relation: String, first: Int = 25, after: String? = null): Page<JsonObject> = repository.fenced { session, project ->
+    suspend fun related(parent: ObserveKind, id: String, relation: String, first: Int = 25, after: String? = null, fence: TargetFence = repository.currentFence()): Page<JsonObject> = repository.fenced { session, project ->
+        repository.verify(fence)
         val document = when (parent to relation) {
             ObserveKind.REQUESTS to "executions" -> EXECUTIONS
             ObserveKind.REQUESTS to "usageLogs" -> REQUEST_USAGE
@@ -41,15 +48,23 @@ class ObservabilityService(private val repository: AxonRepository) {
         }
         val vars = buildJsonObject { put("id", id); put("first", first); after?.let { put("after", it) }; put("where", buildJsonObject {}) }
         val node = repository.api.graphQl(session, document, vars, project)["node"]
+        repository.verify(fence)
+        if (node["id"].text != id) throw AxonException.InvalidResponse
         val data = node[relation]
-        Page(data["edges"].arr.map { sanitize(it["node"], session.token).obj }, data["pageInfo"]["endCursor"].text.takeIf { data["pageInfo"]["hasNextPage"].boolOrNull == true }, data["totalCount"].intOrNull)
+        repository.verify(fence)
+        parseAuditPage(data, session.token)
     }
 
-    suspend fun executionContent(id: String): JsonElement = repository.fenced { session, project ->
-        sanitize(repository.api.graphQl(session, EXECUTION_CONTENT, buildJsonObject { put("id", id) }, project)["node"] ?: JsonNull, session.token)
+    suspend fun executionContent(id: String, fence: TargetFence = repository.currentFence()): JsonElement = repository.fenced { session, project ->
+        repository.verify(fence)
+        val node = repository.api.graphQl(session, EXECUTION_CONTENT, buildJsonObject { put("id", id) }, project)["node"]
+        repository.verify(fence)
+        if (node["id"].text != id) throw AxonException.InvalidResponse
+        sanitize(node ?: JsonNull, session.token)
     }
 
-    suspend fun changeRetention(kind: ObserveKind, id: String, action: String): JsonElement = repository.fencedMutation { session, project ->
+    suspend fun changeRetention(kind: ObserveKind, id: String, action: String, fence: TargetFence = repository.currentFence()): JsonElement = repository.fencedMutation { session, project ->
+        repository.verify(fence)
         if (kind !in setOf(ObserveKind.TRACES, ObserveKind.THREADS) || action !in setOf("archive", "unarchive", "retain", "unretain")) throw IllegalArgumentException("Unsupported action")
         val (root, document) = when (kind to action) {
             ObserveKind.TRACES to "archive" -> "archiveTrace" to ARCHIVE_TRACE
@@ -63,7 +78,9 @@ class ObservabilityService(private val repository: AxonRepository) {
             else -> throw IllegalArgumentException("Unsupported action")
         }
         if (repository.api.graphQl(session, document, buildJsonObject { put("id", id) }, project)[root].boolOrNull != true) throw AxonException.VerificationFailed
+        repository.verify(fence)
         val actual = repository.api.graphQl(session, detailDocument(kind), buildJsonObject { put("id", id) }, project)["node"]
+        repository.verify(fence)
         val expected = when (action) { "archive" -> "archived"; "retain" -> "retained"; else -> "active" }
         if (actual["id"].text != id || actual["status"].text != expected) throw AxonException.VerificationFailed
         sanitize(actual ?: JsonNull, session.token)

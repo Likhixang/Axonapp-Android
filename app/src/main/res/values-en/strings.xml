@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AxonHub</string>
+    <string name="app_name">Axonapp</string>
     <string name="dashboard">Dashboard</string>
     <string name="gateway">Gateway</string>
     <string name="keys">Keys</string>

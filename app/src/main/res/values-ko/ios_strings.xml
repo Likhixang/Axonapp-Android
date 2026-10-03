@@ -2,7 +2,7 @@
 <resources>
     <string name="ios_clear">지우기</string>
     <string name="ios_loading">로딩 중</string>
-    <string name="ios_welcome_title">AxonHub에 오신 것을 환영합니다</string>
+    <string name="ios_welcome_title">Axonapp에 오신 것을 환영합니다</string>
     <string name="ios_welcome_subtitle">내 서버에 연결하여 게이트웨이, 모델, 대화를 한곳에서 관리하세요.</string>
     <string name="ios_welcome_manage">게이트웨이 및 접근 권한 관리</string>
     <string name="ios_welcome_playground">Playground에서 모델 탐색</string>

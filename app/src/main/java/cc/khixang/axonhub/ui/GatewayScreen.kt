@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import cc.khixang.axonhub.AxonHubApplication
 import cc.khixang.axonhub.core.*
 import cc.khixang.axonhub.gateway.ChannelTypes
-import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.*
 
@@ -43,6 +42,7 @@ import kotlinx.serialization.json.*
     val instanceId by app.repository.selectedId.collectAsState()
     val projectId by app.repository.projectId.collectAsState()
     var models by remember { mutableStateOf(false) }
+    var operationCenter by remember { mutableStateOf<Boolean?>(null) }
     var search by remember { mutableStateOf("") }
     var status by remember { mutableStateOf(GatewayStatusFilter.ALL) }
     var selecting by remember { mutableStateOf(false) }
@@ -59,7 +59,7 @@ import kotlinx.serialization.json.*
     val scope = rememberCoroutineScope()
     LaunchedEffect(instanceId, projectId) {
         selection = emptySet(); selecting = false; detail = null; channelEditor = null; modelEditor = null
-        batchResult = null; confirmBatch = null; error = null
+        batchResult = null; confirmBatch = null; error = null; operationCenter = null
     }
     fun refresh() {
         if (busy) return
@@ -72,6 +72,7 @@ import kotlinx.serialization.json.*
     Column(Modifier.fillMaxSize().padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         IosPageHeader(if (models) "模型" else "渠道", "Gateway · 服务器实时配置") {
             GatewayTextButton(onClick = { selecting = !selecting; selection = emptySet() }, enabled = !busy) { Text(if (selecting) "完成" else "选择") }
+            GatewayTextButton(onClick = { operationCenter = !models }, enabled = !busy) { Text(gt("工具", "Tools")) }
             GatewayIconAction(Icons.Default.Add, "新增", !busy && !selecting) { if (models) modelEditor = JsonNull else channelEditor = JsonNull }
             GatewayIconAction(Icons.Default.Refresh, "刷新", !busy) { refresh() }
         }
@@ -110,9 +111,9 @@ import kotlinx.serialization.json.*
                 if (count == 0) GatewayEmpty(if (names.isEmpty()) "暂无${if (models) "模型" else "渠道"}" else "没有匹配结果", if (names.isEmpty()) "点击右上角 + 新增配置。" else "尝试其他关键词或状态筛选。")
                 LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     if (models) items(modelRows, key = { it.id }) { item ->
-                        GatewayListCard(item.name, item.icon?.takeIf { it.isNotBlank() } ?: item.developer,
+                        GatewayListCard(item.name, item.icon.orEmpty(),
                             "${item.developer} · ${item.type}", item.modelId, item.status,
-                            selecting, item.id in selection, enabled = !busy,
+                            selecting, item.id in selection, enabled = !busy, channelBrand = false,
                             onClick = { if (selecting) select(item.id) else detail = false to item.id })
                     } else items(channelRows, key = { it.id }) { item ->
                         GatewayListCard(item.name, item.type, item.type, item.baseUrl.orEmpty(), item.status,
@@ -123,6 +124,7 @@ import kotlinx.serialization.json.*
             }
         }
     }
+    operationCenter?.let { channel -> ChannelModelToolsDialog(app, channel, dismiss = { operationCenter = null }) }
     detail?.let { (channel, id) -> GatewayDetailDialog(app, channel, id, onDismiss = { detail = null }, onEdit = { value -> if (channel) channelEditor = value else modelEditor = value }) }
     channelEditor?.let { ChannelEditorDialog(app, it.takeUnless { value -> value is JsonNull }) { channelEditor = null } }
     modelEditor?.let { ModelEditorDialog(app, it.takeUnless { value -> value is JsonNull }) { modelEditor = null } }
@@ -163,11 +165,11 @@ import kotlinx.serialization.json.*
 
 @Composable private fun GatewayListCard(name: String, brand: String, subtitle: String, detail: String, status: String,
     selecting: Boolean, selected: Boolean, footnote: String = "", tags: String = "", serverError: Boolean = false,
-    enabled: Boolean = true, onClick: () -> Unit) {
+    enabled: Boolean = true, channelBrand: Boolean = true, onClick: () -> Unit) {
     GatewayGroupedCard(onClick = if (enabled) onClick else null) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             if (selecting) Icon(if (selected) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked, if (selected) "已选择" else "未选择", tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(24.dp))
-            ProviderBrand(brand)
+            BrandMark(name = name, icon = if (channelBrand) null else brand.takeIf(String::isNotBlank), channelType = if (channelBrand) brand else null, size = 36.dp)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(name, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
@@ -191,17 +193,14 @@ import kotlinx.serialization.json.*
     }
 }
 
-@Composable private fun ProviderBrand(raw: String) {
-    val key = raw.lowercase().let { value -> when { "anthropic" in value || "claude" in value -> "anthropic"; "gemini" in value || "google" in value -> "gemini"; "deepseek" in value -> "deepseek"; "openrouter" in value -> "openrouter"; "xai" in value || "grok" in value -> "xai"; "github" in value || "copilot" in value -> "github"; "ollama" in value -> "ollama"; "openai" in value || "codex" in value -> "openai"; else -> "" } }
-    if (key.isNotEmpty()) AsyncImage(model = "file:///android_asset/brand-icons/$key.png", contentDescription = null, modifier = Modifier.size(36.dp))
-    else Icon(Icons.Default.Hub, null, modifier = Modifier.size(36.dp))
-}
-
 @Composable private fun GatewayDetailDialog(app: AxonHubApplication, channel: Boolean, id: String, onDismiss: () -> Unit, onEdit: (JsonElement) -> Unit) {
     var value by remember(id) { mutableStateOf<JsonElement>(JsonNull) }
     var error by remember { mutableStateOf<String?>(null) }
     var busy by remember { mutableStateOf(true) }
     var confirmDelete by remember { mutableStateOf(false) }
+    var nativeTool by remember { mutableStateOf<String?>(null) }
+    var confirmSync by remember { mutableStateOf(false) }
+    var confirmDisable by remember { mutableStateOf(false) }
     var test by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
     val fence = remember { app.repository.currentFence() }
@@ -226,7 +225,7 @@ import kotlinx.serialization.json.*
             error?.let { item { GatewayNotice(it, true); GatewayTextButton(onClick = { run { read() } }, enabled = !busy) { Text("重新读取") } } }
             if (value !is JsonNull) {
                 item { GatewayGroupedCard { Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    ProviderBrand(if (channel) value["type"].text else value["developer"].text)
+                    BrandMark(name = value["name"].text, icon = if (channel) null else value["icon"].text.takeIf(String::isNotBlank), channelType = if (channel) value["type"].text else null, size = 36.dp)
                     Text(value["name"].text, Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
                     StatusDot(value["status"].text)
                 } } }
@@ -235,24 +234,30 @@ import kotlinx.serialization.json.*
                 item { GatewayGroupedCard {
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         GatewayButton(onClick = { onEdit(value); onDismiss() }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("编辑") }
-                        GatewayOutlineButton(onClick = { run {
-                            val enable = value["status"].text != "enabled"
-                            if (channel) app.gateway.setChannelEnabled(id, enable) else app.gateway.setModelEnabled(id, enable)
-                            read(); app.repository.refresh()
-                        } }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(if (value["status"].text == "enabled") "禁用" else "启用") }
+                        GatewayOutlineButton(onClick = {
+                            if (value["status"].text == "enabled") confirmDisable = true else run {
+                                if (channel) app.gateway.setChannelEnabled(id, true) else app.gateway.setModelEnabled(id, true)
+                                read(); app.repository.refresh()
+                            }
+                        }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(gt(if (value["status"].text == "enabled") "禁用" else "启用", if (value["status"].text == "enabled") "Disable" else "Enable")) }
                     }
                     if (channel) {
                         GatewayOutlineButton(onClick = { run {
                             val result = app.gateway.testChannel(id, value["defaultTestModel"].text)
                             test = if (result.first) "连接成功 · ${result.second} ms" else "连接测试失败（上游错误已隐藏）。"
                         } }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text("测试连通性") }
-                        GatewayOutlineButton(onClick = { run {
-                            val list = app.gateway.syncModels(id, value["autoSyncModelPattern"].text.takeIf(String::isNotBlank))
-                            test = "已同步并验证 ${list.size} 个模型"; read(); app.repository.refresh()
-                        } }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text("同步模型") }
+                        GatewayOutlineButton(onClick = { confirmSync = true }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(gt("同步模型", "Sync models")) }
                         test?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
                     }
                     GatewayTextButton(onClick = { confirmDelete = true }, enabled = !busy, destructive = true) { Text("永久删除") }
+                } }
+                item { IosSectionTitle(gt("专用工具", "Dedicated tools")); GatewayGroupedCard {
+                    if (channel) {
+                        GatewayOutlineButton(onClick = { nativeTool = "keys" }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(gt("密钥管理", "Channel keys")) }
+                        GatewayOutlineButton(onClick = { nativeTool = "details" }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(gt("模型、价格与诊断", "Models, prices and diagnostics")) }
+                        GatewayOutlineButton(onClick = { nativeTool = "templates" }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(gt("渠道覆盖模板", "Channel override templates")) }
+                    } else GatewayOutlineButton(onClick = { nativeTool = "route" }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(gt("路由预览", "Routing preview")) }
+                    GatewayOutlineButton(onClick = { nativeTool = "operations" }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(gt("批量与导入工具", "Batch and import tools")) }
                 } }
                 item { IosSectionTitle("高级配置", "凭据与未授权秘密不会显示"); GatewayGroupedCard {
                     DetailFields(value, value.obj.keys.filterNot { it in setOf("id", "name", "type", "status", "baseURL", "modelID", "developer", "group", "remark", "errorMessage") || SensitiveFields.matches(it) }.sorted())
@@ -260,6 +265,27 @@ import kotlinx.serialization.json.*
             }
         }
     }, confirmButton = { GatewayTextButton(onClick = onDismiss, enabled = !busy) { Text("完成") } })
+    if (confirmDisable || confirmSync) GatewaySheet(onDismissRequest = { if (!busy) { confirmDisable = false; confirmSync = false } }, title = { Text(gt("确认配置变更", "Confirm configuration change")) }, text = {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(value["name"].text)
+            Text(if (confirmSync) gt("同步会更新渠道支持模型并可能改变路由。", "Sync updates supported models and may change routing.") else gt("禁用会中断此配置的路由。", "Disabling interrupts routing for this configuration."))
+            if (busy) GatewayBusy(gt("正在写入并验证…", "Writing and verifying…"))
+            error?.let { GatewayNotice(it, true) }
+        }
+    }, confirmButton = { GatewayButton(onClick = { run {
+        if (confirmSync) {
+            val list = app.gateway.syncModels(id, value["autoSyncModelPattern"].text.takeIf(String::isNotBlank))
+            test = "${list.size} · OK"
+        } else if (channel) app.gateway.setChannelEnabled(id, false) else app.gateway.setModelEnabled(id, false)
+        read(); confirmDisable = false; confirmSync = false; app.repository.refresh()
+    } }, enabled = !busy, destructive = confirmDisable) { Text(gt("确认执行", "Confirm")) } }, dismissButton = { GatewayTextButton(onClick = { confirmDisable = false; confirmSync = false }, enabled = !busy) { Text(gt("取消", "Cancel")) } })
+    when (nativeTool) {
+        "keys" -> ChannelKeysDialog(app, id) { nativeTool = null }
+        "details" -> ChannelDetailToolsDialog(app, value) { nativeTool = null }
+        "templates" -> ChannelTemplatesDialog(app, id) { nativeTool = null }
+        "route" -> ModelRouteDialog(app, value) { nativeTool = null }
+        "operations" -> ChannelModelToolsDialog(app, channel, id) { nativeTool = null }
+    }
     if (confirmDelete) GatewaySheet(onDismissRequest = { if (!busy) confirmDelete = false }, title = { Text("确认永久删除") }, text = {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(value["name"].text)
@@ -282,7 +308,7 @@ import kotlinx.serialization.json.*
         Text("设置", style = MaterialTheme.typography.titleMedium); if (initial == null || authorized) SchemaValueEditor(schema, "ChannelSettingsInput", settings, { if (!busy) settings = it }, "设置")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { GatewayOutlineButton({ busy = true; scope.launch { error = null; try { app.repository.verify(fence); val input = buildJsonObject { put("channelType", type); put("baseURL", baseUrl.trim()); apiKey.takeIf(String::isNotBlank)?.let { put("apiKey", it) }; initial?.get("id")?.text?.takeIf(String::isNotBlank)?.let { put("channelID", it) } }; val found = app.gateway.fetchUpstreamModels(input); models = found.joinToString("\n") } catch (cancelled: CancellationException) { throw cancelled } catch (t: Exception) { error = gatewayErrorMessage(t) } finally { busy = false } } }, enabled = !busy && baseUrl.isNotBlank()) { Text("获取上游模型") }; if (type in setOf("codex", "claudecode", "antigravity", "xai_subscription", "github_copilot")) GatewayOutlineButton({ oauth = true }, enabled = !busy && (initial == null || authorized)) { Text("OAuth") } }
         if (initial != null && !authorized) Text("修改凭据、完整设置或 OAuth 前，必须明确授权读取原配置。", style = MaterialTheme.typography.bodySmall)
-        if (initial != null && !authorized) GatewayOutlineButton({ busy = true; scope.launch { try { app.repository.verify(fence); val secret = app.gateway.channelSecrets(initial["id"].text); credentials = secret["credentials"]; apiKey = secret["credentials"]["apiKey"].text; settings = secret["settings"]; authorized = true } catch (cancelled: CancellationException) { throw cancelled } catch (t: Exception) { error = gatewayErrorMessage(t) } finally { busy = false } } }) { Text("授权读取完整配置与凭据") }
+        if (initial != null && !authorized) GatewayOutlineButton({ busy = true; scope.launch { try { app.repository.verify(fence); val secret = app.gateway.channelSecrets(initial["id"].text); if (secret["updatedAt"].text.isBlank() || secret["updatedAt"] != initial["updatedAt"]) throw cc.khixang.axonhub.network.AxonException.TargetChanged; credentials = secret["credentials"]; apiKey = secret["credentials"]["apiKey"].text; settings = secret["settings"]; authorized = true } catch (cancelled: CancellationException) { throw cancelled } catch (t: Exception) { error = gatewayErrorMessage(t) } finally { busy = false } } }) { Text("授权读取完整配置与凭据") }
         GatewayField(apiKey, { apiKey = it }, label = { Text(if (initial == null) "API key" else "API key（需先授权读取）") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
         error?.let { Text(it, color = MaterialTheme.colorScheme.error) }; if (busy) GatewayBusy("正在处理…")
     } } }, confirmButton = { GatewayTextButton(enabled = !busy, onClick = { busy = true; scope.launch { error = null; try { app.repository.verify(fence); require(name.isNotBlank() && weight.toIntOrNull() != null); val line = { s: String -> s.lines().map(String::trim).filter(String::isNotEmpty).distinct() }; val draft = buildJsonObject { put("name", name.trim()); if (baseUrl.isNotBlank()) put("baseURL", baseUrl.trim()); put("type", type); put("supportedModels", JsonArray(line(models).map(::JsonPrimitive))); put("defaultTestModel", defaultModel.trim()); put("tags", JsonArray(line(tags).map(::JsonPrimitive))); put("orderingWeight", weight.toIntOrNull() ?: 0); put("remark", remark); put("policies", policies); put("settings", settings); if (apiKey.isNotBlank() || credentials.obj.isNotEmpty()) put("credentials", JsonObject(credentials.obj.toMutableMap().also { if (apiKey.isNotBlank()) it["apiKey"] = JsonPrimitive(apiKey.trim()) })) }; app.gateway.saveChannel(initial["id"].text.takeIf(String::isNotBlank), draft, initial ?: JsonNull, authorized || initial == null); app.repository.refresh(); onDismiss() } catch (cancelled: CancellationException) { throw cancelled } catch (t: Exception) { error = gatewayErrorMessage(t) } finally { busy = false } } }) { Text("完成") } }, dismissButton = { GatewayTextButton(enabled = !busy, onClick = onDismiss) { Text("取消") } })
@@ -317,7 +343,7 @@ import kotlinx.serialization.json.*
 
 private val LocalGatewayEnabled = staticCompositionLocalOf { true }
 
-@Composable private fun GatewayButton(onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, destructive: Boolean = false, content: @Composable RowScope.() -> Unit) {
+@Composable internal fun GatewayButton(onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, destructive: Boolean = false, content: @Composable RowScope.() -> Unit) {
     val active = enabled && LocalGatewayEnabled.current
     val color = if (destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
     Row(modifier.heightIn(min = 44.dp).clip(RoundedCornerShape(13.dp)).background(color.copy(alpha = if (active) 1f else .35f))
@@ -327,7 +353,7 @@ private val LocalGatewayEnabled = staticCompositionLocalOf { true }
     }
 }
 
-@Composable private fun GatewayOutlineButton(onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, content: @Composable RowScope.() -> Unit) {
+@Composable internal fun GatewayOutlineButton(onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, content: @Composable RowScope.() -> Unit) {
     val active = enabled && LocalGatewayEnabled.current
     Row(modifier.heightIn(min = 44.dp).clip(RoundedCornerShape(13.dp)).background(MaterialTheme.colorScheme.surfaceVariant)
         .clickable(interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }, indication = null, role = Role.Button, enabled = active, onClick = onClick).padding(horizontal = 14.dp, vertical = 10.dp),
@@ -336,7 +362,7 @@ private val LocalGatewayEnabled = staticCompositionLocalOf { true }
     }
 }
 
-@Composable private fun GatewayTextButton(onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, destructive: Boolean = false, content: @Composable RowScope.() -> Unit) {
+@Composable internal fun GatewayTextButton(onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, destructive: Boolean = false, content: @Composable RowScope.() -> Unit) {
     val active = enabled && LocalGatewayEnabled.current
     Row(modifier.heightIn(min = 44.dp).clip(RoundedCornerShape(10.dp))
         .clickable(interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }, indication = null, role = Role.Button, enabled = active, onClick = onClick).padding(horizontal = 10.dp),
@@ -352,7 +378,7 @@ private val LocalGatewayEnabled = staticCompositionLocalOf { true }
     }
 }
 
-@Composable private fun GatewayField(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier, label: @Composable () -> Unit = {}, minLines: Int = 1, visualTransformation: VisualTransformation = VisualTransformation.None) {
+@Composable internal fun GatewayField(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier, label: @Composable () -> Unit = {}, minLines: Int = 1, visualTransformation: VisualTransformation = VisualTransformation.None) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.labelMedium, LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) { label() }
         BasicTextField(value, onValueChange, enabled = LocalGatewayEnabled.current, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surface).padding(13.dp),
@@ -361,7 +387,7 @@ private val LocalGatewayEnabled = staticCompositionLocalOf { true }
     }
 }
 
-@Composable private fun GatewaySheet(onDismissRequest: () -> Unit, title: @Composable () -> Unit, text: @Composable () -> Unit, confirmButton: @Composable () -> Unit, dismissButton: @Composable () -> Unit = {}) {
+@Composable internal fun GatewaySheet(onDismissRequest: () -> Unit, title: @Composable () -> Unit, text: @Composable () -> Unit, confirmButton: @Composable () -> Unit, dismissButton: @Composable () -> Unit = {}) {
     Dialog(onDismissRequest = onDismissRequest, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
         Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).windowInsetsPadding(WindowInsets.safeDrawing).imePadding()) {
             Row(Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
@@ -375,14 +401,14 @@ private val LocalGatewayEnabled = staticCompositionLocalOf { true }
     }
 }
 
-@Composable private fun GatewayBusy(message: String) {
+@Composable internal fun GatewayBusy(message: String) {
     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Icon(Icons.Default.HourglassEmpty, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
-@Composable private fun GatewayNotice(message: String, error: Boolean = false) {
+@Composable internal fun GatewayNotice(message: String, error: Boolean = false) {
     Text(message, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(12.dp),
         style = MaterialTheme.typography.bodySmall, color = if (error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
 }
@@ -396,7 +422,7 @@ private val LocalGatewayEnabled = staticCompositionLocalOf { true }
     }
 }
 
-@Composable private fun GatewayEnum(label: String, value: String, options: List<String>, onSelect: (String) -> Unit) {
+@Composable internal fun GatewayEnum(label: String, value: String, options: List<String>, onSelect: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -410,10 +436,10 @@ private val LocalGatewayEnabled = staticCompositionLocalOf { true }
                 }
             }
         }
-    }, confirmButton = { GatewayTextButton(onClick = { expanded = false }) { Text("完成") } })
+    }, confirmButton = { GatewayTextButton(onClick = { expanded = false }) { Text(gt("完成", "Done")) } })
 }
 
-@Composable private fun GatewayGroupedCard(onClick: (() -> Unit)? = null, content: @Composable ColumnScope.() -> Unit) {
+@Composable internal fun GatewayGroupedCard(onClick: (() -> Unit)? = null, content: @Composable ColumnScope.() -> Unit) {
     IosCard(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
         Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
     }

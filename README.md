@@ -1,8 +1,8 @@
-# AxonHub Android
+# Axonapp Android
 
 [English](README.en.md)
 
-AxonHub Android 是 AxonHub 管理客户端的原生 Android 移植版。应用使用 Kotlin、Jetpack Compose Foundation 自绘苹果风格控件和原生网络/安全存储实现，不包含 WebView 包装层。
+Axonapp Android 是独立的第三方 AxonHub 管理客户端，以 [Axonapp-iOS](https://github.com/Likhixang/Axonapp-iOS) 为功能和 UX 参考。项目不隶属于 AxonHub，也未获 AxonHub 官方背书。应用使用 Kotlin、Jetpack Compose Foundation 自绘苹果风格控件和原生网络/安全存储实现，不包含 WebView 包装层。
 
 ## 功能
 
@@ -13,15 +13,17 @@ AxonHub Android 是 AxonHub 管理客户端的原生 Android 移植版。应用�
 - Playground：管理员通道以及 OpenAI Chat Completions、OpenAI Responses、Anthropic Messages、Gemini 流式协议。
 - 备份：原生 JSON 导出和 GraphQL multipart 恢复，恢复前验证文件结构并要求二次确认。
 - 外观：苹果风格大标题、分组卡片、悬浮四标签底栏、自绘输入/开关/分段控件/弹层，浅色/深色/跟随系统、自定义强调色和应用语言选择。
-- 渠道/模型多选：状态筛选与批量启用/禁用，串行调用真实 API 并逐项读回，明确反馈部分失败，不宣称原子操作。
+- 渠道/模型多选：状态筛选与批量启用/禁用、归档、删除/渠道恢复、导入、排序；串行写入并逐项读回，明确反馈部分失败，不宣称原子操作。
+- 专用工具：渠道密钥、价格、诊断/配额、覆盖模板、复制与模型路由预览；API Key 使用原生简化编辑、Profile/额度/策略模板和用量页面。
+- 图标：白底真实 iOS AH 图标；应用显示名 Axonapp，保留 `cc.khixang.axonhub` 以兼容原安装和本地数据。
 
 详细映射和已知差异见 [docs/PARITY.md](docs/PARITY.md)。安全模型见 [SECURITY.md](SECURITY.md)。
 
 ## 构建
 
-本项目的交付构建统一由 [GitHub Actions](https://github.com/Likhixang/Axonhub-App-Android/actions) 执行：单元测试、lint、Debug APK 打包及签名/对齐检查。不运行模拟器；成功后下载 `axonhub-debug-apk` artifact。Debug 签名通过 `ANDROID_DEBUG_KEYSTORE_BASE64` GitHub Secret 复用，源码不包含签名文件。
+本项目的交付构建统一由 [GitHub Actions](https://github.com/Likhixang/Axonapp-Android/actions) 执行：单元测试、lint、Debug APK 打包及签名/对齐检查。不运行模拟器；成功后下载 `axonapp-debug-apk` artifact。Debug 签名通过 `ANDROID_DEBUG_KEYSTORE_BASE64` GitHub Secret 复用，源码不包含签名文件。
 
-以下命令仅为构建说明，本轮没有在本地执行。要求：
+不进行本地编译，也不启动模拟器。以下命令说明 Actions 验证所需环境：
 
 - JDK 17
 - Android SDK Platform 35
@@ -58,4 +60,4 @@ GitHub tag 工作流对应使用 `ANDROID_KEYSTORE_BASE64`、`ANDROID_KEYSTORE_P
 
 ## 上游与资源
 
-本移植基于 iOS 参考版本 `db811721692275273387c5999d790a7d50c3820c`。GraphQL 文档、schema、测试夹具和资源来源记录在 `app/src/main/assets/UPSTREAM_PROVENANCE.json`，品牌图标许可位于 `app/src/main/assets/licenses/`。本仓库不额外声明上游未提供的通用许可证。
+本移植基于 iOS 参考版本 `42e262e3448aa63ca7c18aec12ad65c27d62c11f`。GraphQL 文档、schema、测试夹具和资源来源记录在 `app/src/main/assets/UPSTREAM_PROVENANCE.json`，品牌图标许可位于 `app/src/main/assets/licenses/`。本仓库不额外声明上游未提供的通用许可证。

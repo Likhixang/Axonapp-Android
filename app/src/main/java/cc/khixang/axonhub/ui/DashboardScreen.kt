@@ -33,6 +33,10 @@ import java.util.Date
     val instance by app.repository.selected.collectAsState()
     val scope = rememberCoroutineScope()
     var analytics by remember { mutableStateOf(false) }
+    var health by remember { mutableStateOf(false) }
+    var audit by remember { mutableStateOf(false) }
+    if (health) { AnalyticsScreen(app, initialMode = 1) { health = false }; return }
+    if (audit) { ObservabilityScreen(app) { audit = false }; return }
     if (analytics) {
         AnalyticsScreen(app) { analytics = false }
         return
@@ -40,7 +44,7 @@ import java.util.Date
     val busy = state is LoadState.Loading
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item {
-            IosPageHeader(stringResource(R.string.ws_dashboard), instance?.name ?: "AxonHub") {
+            IosPageHeader(stringResource(R.string.ws_dashboard), instance?.name ?: "Axonapp") {
                 IconButton(onClick = { scope.launch { app.repository.refresh() } }, enabled = !busy && instance != null) {
                     Icon(Icons.Default.Refresh, stringResource(R.string.ws_refresh))
                 }
@@ -59,13 +63,13 @@ import java.util.Date
                 item {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         MetricCard(stringResource(R.string.ws_requests), format(d.totalRequests), stringResource(R.string.ws_all_time), Icons.Default.SwapVert, Modifier.weight(1f))
-                        MetricCard(stringResource(R.string.ws_success), if (d.totalRequests != null && d.totalRequests > 0 && d.failedRequests != null) "%.1f%%".format(100.0 * (d.totalRequests - d.failedRequests) / d.totalRequests) else "—", stringResource(R.string.ws_all_time), Icons.Default.VerifiedUser, Modifier.weight(1f))
+                        MetricCard(stringResource(R.string.ws_success), if (d.totalRequests != null && d.totalRequests > 0 && d.failedRequests != null) DisplayFormat.percentage(100.0 * (d.totalRequests - d.failedRequests) / d.totalRequests) else "—", stringResource(R.string.ws_all_time), Icons.Default.VerifiedUser, Modifier.weight(1f))
                     }
                 }
                 item {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         MetricCard(stringResource(R.string.ws_tokens), if (d.inputTokensToday != null && d.outputTokensToday != null) format(d.inputTokensToday + d.outputTokensToday) else "—", stringResource(R.string.ws_today), Icons.Default.AutoAwesome, Modifier.weight(1f))
-                        MetricCard(stringResource(R.string.ws_cost), d.totalCost?.let { "$%.4f".format(it) } ?: "—", stringResource(R.string.ws_all_time), Icons.Default.Paid, Modifier.weight(1f))
+                        MetricCard(stringResource(R.string.ws_cost), DisplayFormat.money(d.totalCost), stringResource(R.string.ws_all_time), Icons.Default.Paid, Modifier.weight(1f))
                     }
                 }
                 item {
@@ -79,22 +83,28 @@ import java.util.Date
                         HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
                         Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                             Text(stringResource(R.string.ws_latency), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text(d.averageResponseTime?.let { "%.0f ms".format(it) } ?: "—", fontWeight = FontWeight.SemiBold)
+                            Text(d.averageResponseTime?.let { DisplayFormat.number(it) + " ms" } ?: "—", fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
                 item { DailyActivityCard(current.value.daily) }
-                item { IosSectionTitle(stringResource(R.string.ws_channel_health), stringResource(R.string.ws_channel_health_help)) }
+                item {
+                    IosSectionTitle(stringResource(R.string.ws_channel_health), stringResource(R.string.ws_channel_health_help))
+                    TextButton({ health = true }) { Text(stringResource(R.string.ws_channel_health)) ; Icon(Icons.Default.ChevronRight, null) }
+                    TextButton({ audit = true }) { Text(stringResource(R.string.ws_observability)) ; Icon(Icons.Default.ChevronRight, null) }
+                }
                 if (current.value.channelPerformance.isEmpty()) item { WorkspaceEmpty(stringResource(R.string.ws_no_channel_data), stringResource(R.string.ws_missing_help), Icons.Default.MonitorHeart) }
                 else items(current.value.channelPerformance, key = { it.channelId.ifBlank { it.name } }) { channel ->
                     IosCard(Modifier.fillMaxWidth()) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                                BrandMark(channel.name, channelType = channel.type)
+                                Spacer(Modifier.width(10.dp))
                                 Column(Modifier.weight(1f)) {
                                     Text(channel.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                                     if (channel.type.isNotBlank()) Text(channel.type, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
-                                Text(channel.successRate?.let { "%.2f%%".format(it) } ?: "—", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                                Text(DisplayFormat.percentage(if (channel.success != null && channel.failed != null && channel.success + channel.failed > 0) 100.0 * channel.success / (channel.success + channel.failed) else null), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                             }
                             channel.successRate?.takeIf(Double::isFinite)?.let { rate ->
                                 LinearProgressIndicator(progress = { (rate / 100.0).toFloat().coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth())
@@ -156,14 +166,14 @@ import java.util.Date
             } else {
                 DailyChart(samples, sorted.map { it.date }, labels[metric], Modifier.fillMaxWidth().height(180.dp))
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(sorted.firstOrNull()?.date.orEmpty(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text(sorted.lastOrNull()?.date.orEmpty(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(DisplayFormat.date(sorted.firstOrNull()?.date.orEmpty()), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(DisplayFormat.date(sorted.lastOrNull()?.date.orEmpty()), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 TextButton({ expanded = !expanded }) { Text(stringResource(if (expanded) R.string.ws_hide_values else R.string.ws_show_values)) }
                 if (expanded) sorted.forEachIndexed { index, day ->
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(day.date, style = MaterialTheme.typography.bodySmall)
-                        Text(samples[index]?.let { if (metric == 2) "$%.4f".format(it) else NumberFormat.getIntegerInstance().format(it) } ?: "—", style = MaterialTheme.typography.bodySmall)
+                        Text(DisplayFormat.date(day.date), style = MaterialTheme.typography.bodySmall)
+                        Text(samples[index]?.let { if (metric == 2) DisplayFormat.money(it) else if (metric == 1) DisplayFormat.compact(it) else DisplayFormat.number(it) } ?: "—", style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }
@@ -221,6 +231,7 @@ private fun format(value: Long?): String = value?.let { NumberFormat.getIntegerI
                     items(models, key = { it.id }) { model ->
                         IosCard(Modifier.fillMaxWidth()) {
                             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                BrandMark(model.name.ifBlank { model.modelId }, icon = model.icon)
                                 Text(model.name.ifBlank { model.modelId }, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                                 Text(model.modelId, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 if (model.developer.isNotBlank()) Text(model.developer, style = MaterialTheme.typography.labelMedium)

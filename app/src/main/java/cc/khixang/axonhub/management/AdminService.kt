@@ -10,8 +10,14 @@ class AdminService(private val repository: AxonRepository, val catalog: AdminCat
     data class Invitation(val token: String, val metadata: JsonObject)
     suspend fun read(id: String, variables: JsonObject = buildJsonObject {}): JsonElement = repository.fenced { session, project ->
         val op = catalog.operation(id)
+        require(!op.mutation) { "Use the verified mutation path" }
+        catalog.schema.validate(variables, op.variables, mutation = false)
         repository.api.graphQl(session, catalog.document(op), variables, project)[op.root] ?: JsonNull
     }
+
+    suspend fun revealKey(id: String): String = KeyEditorPolicy.revealedKey(
+        read("revealAPIKey", buildJsonObject { put("id", id) }), id,
+    )
 
     suspend fun page(id: String, variables: JsonObject): Page<JsonObject> {
         val root = read(id, variables)
@@ -61,7 +67,8 @@ class AdminService(private val repository: AxonRepository, val catalog: AdminCat
         response
     }
 
-    suspend fun execute(id: String, originalVariables: JsonObject, baseline: JsonElement = JsonNull): JsonElement = repository.fencedMutation { session, project ->
+    suspend fun execute(id: String, originalVariables: JsonObject, baseline: JsonElement = JsonNull, expectedFence: TargetFence? = null): JsonElement = repository.fencedMutation { session, project ->
+        expectedFence?.let(repository::verify)
         val operation = catalog.operation(id)
         require(operation.mutation) { "Not a mutation" }
         var effectiveBaseline = baseline
@@ -77,6 +84,7 @@ class AdminService(private val repository: AxonRepository, val catalog: AdminCat
         if (operation.entity.isNotBlank() && operation.entity != "ProjectUser" && !operation.root.startsWith("create")) {
             targetIds.forEach { if (detailWith(session, project, operation.entity, it) is JsonNull) throw AxonException.InvalidResponse }
         }
+        expectedFence?.let(repository::verify)
         val data = repository.api.graphQl(
             session,
             catalog.document(operation),
@@ -123,10 +131,7 @@ class AdminService(private val repository: AxonRepository, val catalog: AdminCat
                 }
             }
             if (op.root == "updateAPIKey") {
-                listOf("scopes" to "clearScopes", "allowedIps" to "clearAllowedIps").forEach { (key, clear) ->
-                    if (input[key] is JsonArray && input[key].arr.isEmpty()) { input.remove(key); input[clear] = JsonPrimitive(true) }
-                }
-                if (baseline["type"].text != "service_account" && input.keys.any { it.contains("scopes", ignoreCase = true) }) throw IllegalArgumentException("Scopes can only be changed for service-account keys")
+                input = KeyEditorPolicy.prepareKeyPatch(JsonObject(input), baseline["type"].text).toMutableMap()
             }
             if (op.root == "createAPIKey" && input["type"].text != "service_account" && "scopes" in input) throw IllegalArgumentException("Scopes are only valid for service-account keys")
             if (op.root == "updateSecuritySettings") input["blockedIPs"]?.let { value ->
@@ -151,8 +156,10 @@ class AdminService(private val repository: AxonRepository, val catalog: AdminCat
                     input["upstreamErrorPolicy"] = JsonObject(policy + ("mode" to JsonPrimitive("hidden")))
                 }
             }
-            if (op.root in setOf("updateAPIKeyProfiles", "updateProjectProfiles")) input["profiles"]?.let { profiles ->
-                input["profiles"] = JsonArray(profiles.arr.map(::normalizeProfile))
+            if (op.root in setOf("updateAPIKeyProfiles", "updateProjectProfiles")) {
+                val isKey = op.root == "updateAPIKeyProfiles"
+                KeyEditorPolicy.validateProfiles(JsonObject(input), isKey)
+                input["profiles"] = JsonArray(input["profiles"].arr.map { KeyEditorPolicy.normalizeProfile(it, isKey) })
             }
             output["input"] = JsonObject(input)
             rejectMaskedSecrets(output["input"] ?: JsonNull)
@@ -162,19 +169,7 @@ class AdminService(private val repository: AxonRepository, val catalog: AdminCat
         return JsonObject(output.filterValues { it !is JsonNull })
     }
 
-    private fun normalizeProfile(value: JsonElement): JsonObject {
-        val profile = value.obj.toMutableMap()
-        listOf(
-            "loadBalanceStrategy" to setOf("default", "adaptive", "failover", "circuit-breaker", "round-robin"),
-            "traceStickyMode" to setOf("default", "disabled", "prefer_previous_channel"),
-        ).forEach { (key, allowed) ->
-            val raw = profile[key]?.text.orEmpty()
-            val normalized = if (raw.isBlank() || raw == "system_default") "default" else raw
-            require(normalized in allowed) { "Invalid $key" }
-            profile[key] = JsonPrimitive(normalized)
-        }
-        return JsonObject(profile)
-    }
+    private fun normalizeProfile(value: JsonElement): JsonObject = KeyEditorPolicy.normalizeProfile(value, true)
 
     private fun containsTruncatedObject(value: JsonElement): Boolean = when (value) {
         is JsonObject -> (value.size == 1 && "__typename" in value) || value.values.any(::containsTruncatedObject)
@@ -255,8 +250,9 @@ class AdminService(private val repository: AxonRepository, val catalog: AdminCat
                     } else if (op.root == "updateAPIKeyProfiles" || op.root == "updateProjectProfiles") {
                         val normalized = expected.toMutableMap()
                         normalized["profiles"] = JsonArray(expected["profiles"].arr.map { JsonObject(it.obj.filterKeys { key -> key !in setOf("templateID", "templateName") }) })
-                        verifySubset(actual, mapOf("profiles" to JsonObject(normalized)), baseline)
-                        if (actual["profiles"]["activeProfile"] != variables["input"]["activeProfile"]) throw AxonException.VerificationFailed
+                        val inputType = op.variables.firstOrNull { it.name == "input" }?.type ?: throw AxonException.VerificationFailed
+                        val observed = catalog.schema.project(actual["profiles"], inputType)
+                        if (!KeyEditorPolicy.profilesReadbackMatches(observed, JsonObject(normalized))) throw AxonException.VerificationFailed
                     } else verifySubset(actual, expected, baseline)
                 }
             }

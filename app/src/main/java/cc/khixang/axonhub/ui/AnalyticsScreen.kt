@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -26,8 +25,8 @@ import java.time.LocalDate
 
 /** Parent owns navigation. No gateway mutations or inference requests are issued here. */
 @Composable
-fun AnalyticsScreen(app: AxonHubApplication, back: () -> Unit) {
-    BackHandler(onBack = back)
+fun AnalyticsScreen(app: AxonHubApplication, initialMode: Int = 0, embedded: Boolean = false, back: () -> Unit) {
+    if (!embedded) BackHandler(onBack = back)
     val instanceId by app.repository.selectedId.collectAsState()
     val projectId by app.repository.projectId.collectAsState()
     val instances by app.repository.instances.collectAsState()
@@ -35,14 +34,14 @@ fun AnalyticsScreen(app: AxonHubApplication, back: () -> Unit) {
     // Observe the selected object as well as ID: edits/relogin can advance the generation.
     val fence = remember(instanceId, projectId, instances, snapshot) { runCatching { app.repository.currentFence() }.getOrNull() }
     if (fence == null) {
-        Column(Modifier.padding(16.dp)) { TextButton(back) { Text(stringResource(R.string.ax_analytics_back)) }; Text(stringResource(R.string.ax_analytics_no_instance)) }
-    } else key(fence) { AnalyticsBoundScreen(app, fence, back) }
+        Column(Modifier.padding(16.dp)) { if (!embedded) TextButton(back) { Text(stringResource(R.string.ax_analytics_back)) }; Text(stringResource(R.string.ax_analytics_no_instance)) }
+    } else key(fence) { AnalyticsBoundScreen(app, fence, back, initialMode, embedded) }
 }
 
 @Composable
-private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, back: () -> Unit) {
+private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, back: () -> Unit, initialMode: Int, embedded: Boolean) {
     val service = remember(app) { app.analytics }
-    var mode by remember { mutableStateOf(0) }
+    var mode by remember { mutableStateOf(initialMode) }
     var dimension by remember { mutableStateOf(AnalyticsDimension.CHANNEL) }
     var metric by remember { mutableStateOf(AnalyticsMetric.CHANNEL_SUCCESS) }
     var window by remember { mutableStateOf(AnalyticsWindow.DAY) }
@@ -51,7 +50,7 @@ private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, ba
     var start by remember { mutableStateOf(LocalDate.now().minusDays(7).toString()) }
     var end by remember { mutableStateOf(LocalDate.now().toString()) }
     var filters by remember { mutableStateOf(AnalyticsResource.entries.associateWith { "" }) }
-    var filterOpen by remember { mutableStateOf(true) }
+    var filterOpen by remember { mutableStateOf(initialMode == 0) }
     var selectedResource by remember { mutableStateOf<AnalyticsResource?>(null) }
     var bundle by remember { mutableStateOf<AnalyticsBundle?>(null) }
     var dashboard by remember { mutableStateOf<AnalyticsDashboard?>(null) }
@@ -60,7 +59,8 @@ private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, ba
     var refresh by remember { mutableIntStateOf(0) }
     var appliedFilter by remember { mutableStateOf(AnalyticsFilter(startTime = start, endTime = end)) }
     var search by remember { mutableStateOf("") }
-    var descending by remember { mutableStateOf(true) }
+    var descending by remember { mutableStateOf(initialMode == 0) }
+    var healthSortField by remember { mutableStateOf("successRate") }
     var channelType by remember { mutableStateOf("") }
     var warningOnly by remember { mutableStateOf(false) }
     var page by remember { mutableIntStateOf(0) }
@@ -69,48 +69,40 @@ private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, ba
     val requestFailed = stringResource(R.string.ax_analytics_failed)
 
     LaunchedEffect(mode, metric, window, dimension, appliedFilter, refresh) {
-        busy = true; error = null; bundle = null; dashboard = null; page = 0
+        busy = true; error = null; bundle = null; dashboard = null; page = 0; channelType = ""
         try {
             app.repository.verify(fence)
             if (mode == 0) {
                 val result = service.analytics(appliedFilter, dimension, fence)
                 app.repository.verify(fence); bundle = result
             } else {
-                val requestedLimit = if (metric.supportsLimit) limit.toIntOrNull()?.takeIf { it in 1..100 }
+                val requestedLimit = if (metric.arguments == AnalyticsArguments.FASTEST) limit.toIntOrNull()?.takeIf { it in 1..100 }
                     ?: throw IllegalArgumentException(invalidFilter) else null
                 val result = service.dashboard(metric, window, requestedLimit, fence)
                 app.repository.verify(fence); dashboard = result
             }
             filterOpen = false
-        } catch (cancelled: CancellationException) { throw cancelled }
-        catch (failure: Exception) { if (runCatching { app.repository.verify(fence) }.isSuccess) error = requestFailed }
-        finally { busy = false }
+        } catch (cancelled: CancellationException) { throw cancelled } catch (failure: Exception) { if (runCatching { app.repository.verify(fence) }.isSuccess) error = requestFailed } finally { busy = false }
     }
     val rows = if (mode == 0) bundle?.breakdown.orEmpty() else dashboard?.rows.orEmpty()
-    val sortField = if (mode == 0) chartField else metric.chartField
-    val visible = rows.filter { row ->
-        val searchMatches = search.isBlank() || analyticsRowName(row).contains(search, ignoreCase = true)
-        val typeMatches = mode == 0 || metric != AnalyticsMetric.CHANNEL_SUCCESS || channelType.isBlank() || row["channelType"].text == channelType
-        val warningMatches = mode == 0 || metric != AnalyticsMetric.CHANNEL_SUCCESS || !warningOnly || row["channelDisabled"].boolOrNull == true || (row["failedCount"].longOrNull?.let { it > 0 } == true)
-        searchMatches && typeMatches && warningMatches
-    }.sortedWith { left, right ->
-        val a = left[sortField].doubleOrNull; val b = right[sortField].doubleOrNull
-        when { a == null && b == null -> 0; a == null -> 1; b == null -> -1; descending -> b.compareTo(a); else -> a.compareTo(b) }
-    }
-    LaunchedEffect(search, descending, chartField, channelType, warningOnly) { page = 0 }
+    val health = mode == 1 && metric == AnalyticsMetric.CHANNEL_SUCCESS
+    val sortField = if (mode == 0) "totalTokens" else if (health) healthSortField else metric.chartField
+    val visible = visibleDashboardRows(rows, search, if (health) channelType else "", health && warningOnly, sortField, descending)
+    LaunchedEffect(search, descending, healthSortField, channelType, warningOnly) { page = 0 }
     val safePage = page.coerceAtMost(((visible.size - 1).coerceAtLeast(0)) / 25)
 
     Column(Modifier.fillMaxSize()) {
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             item {
-                WorkspaceBack(back)
-                IosPageHeader(stringResource(R.string.ax_analytics_title)) {
+                if (!embedded) WorkspaceBack(back)
+                IosPageHeader(stringResource(if (mode == 1) R.string.ws_channel_health else R.string.ws_analytics)) {
                     TextButton({ refresh++ }, enabled = !busy) { Text(stringResource(R.string.ax_analytics_refresh)) }
                 }
             }
             item {
-                IosSegmentedControl(listOf(stringResource(R.string.ax_analytics_analysis), stringResource(R.string.ax_analytics_statistics)), mode, { mode = it })
-                Text(stringResource(R.string.ax_analytics_scope, fence.instanceId, fence.projectId ?: "—"), style = MaterialTheme.typography.bodySmall)
+                if (!embedded) IosSegmentedControl(listOf(stringResource(R.string.ax_analytics_analysis), stringResource(R.string.ax_analytics_statistics)), mode, { mode = it; descending = it == 0 })
+                val selectedInstance = instancesName(app, fence.instanceId)
+                Text(selectedInstance, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 TextButton({ filterOpen = !filterOpen }) { Text(stringResource(R.string.ax_analytics_filters)) }
             }
             if (filterOpen) item {
@@ -142,17 +134,22 @@ private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, ba
                         if (metric.supportsWindow) AnalyticsChoice(stringResource(R.string.ax_analytics_window), window, AnalyticsWindow.entries, { stringResource(windowLabel(it)) }) { window = it }
                         else Text(stringResource(R.string.ax_analytics_fixed_range))
                         Text(stringResource(R.string.ax_analytics_stats_scope), style = MaterialTheme.typography.bodySmall)
-                        if (metric.supportsLimit) OutlinedTextField(limit, { limit = it }, label = { Text(stringResource(R.string.ax_analytics_limit)) }, singleLine = true)
+                        if (metric.arguments == AnalyticsArguments.FASTEST) OutlinedTextField(limit, { limit = it }, label = { Text(stringResource(R.string.ax_analytics_limit)) }, singleLine = true)
                         Button({ refresh++ }, enabled = !busy) { Text(stringResource(R.string.ax_analytics_apply)) }
                     }
                 }
             }
             }
+            if (mode == 1) item {
+                AnalyticsChoice(stringResource(R.string.ax_analytics_metric), metric, AnalyticsMetric.entries, { stringResource(metricLabel(it)) }) { metric = it }
+                if (metric.supportsWindow) IosSegmentedControl(AnalyticsWindow.entries.map { stringResource(windowLabel(it)) }, window.ordinal, { window = AnalyticsWindow.entries[it] })
+                else Text(stringResource(R.string.ax_analytics_fixed_range), style = MaterialTheme.typography.bodySmall)
+            }
             if (busy) item { WorkspaceLoading() }
             error?.let { message -> item { ErrorState(message) { refresh++ } } }
             bundle?.let { data ->
                 item {
-                    Text(stringResource(R.string.ax_analytics_earliest, data.metadata["earliestDate"].text.ifBlank { "—" }))
+                    Text(stringResource(R.string.ax_analytics_earliest, observabilityScalar(data.metadata["earliestDate"], "earliestDate")))
                     AnalyticsFields(stringResource(R.string.ax_analytics_overview), data.overview)
                 }
                 item {
@@ -172,13 +169,17 @@ private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, ba
                     if (mode == 1 && metric == AnalyticsMetric.CHANNEL_SUCCESS) {
                         AnalyticsChoice(stringResource(R.string.ax_analytics_channel_type), channelType, listOf("") + rows.map { it["channelType"].text }.filter(String::isNotBlank).distinct().sorted(), { it.ifBlank { stringResource(R.string.ax_analytics_all) } }) { channelType = it }
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(stringResource(R.string.ax_analytics_warnings)); Switch(warningOnly, { warningOnly = it }) }
+                        AnalyticsChoice(stringResource(R.string.ax_analytics_chart_metric), healthSortField, listOf("successRate", "failedCount", "successCount", "totalCount", "inputTokens", "outputTokens", "totalTokens"), { analyticsFieldLabel(it) }) { healthSortField = it }
                     }
-                    Text(stringResource(R.string.ax_analytics_breakdown), style = MaterialTheme.typography.titleMedium)
-                    AnalyticsChart(visible.take(15), sortField, false)
+                    Text(if (mode == 1) stringResource(metricLabel(metric)) else stringResource(R.string.ax_analytics_dimension), style = MaterialTheme.typography.titleMedium)
+                    if (health && rows.isNotEmpty()) ChannelHealthSummary(rows)
+                    if (!health) AnalyticsChart(visible.take(if (mode == 0) 10 else 15), sortField, false)
                     Text(stringResource(R.string.ax_analytics_page_count, visible.size, safePage + 1))
                     if (visible.isEmpty()) Text(stringResource(R.string.ax_analytics_empty))
                 }
-                itemsIndexed(visible.drop(safePage * 25).take(25)) { _, row -> AnalyticsFields(analyticsRowName(row), row) }
+                itemsIndexed(visible.drop(safePage * 25).take(25)) { _, row ->
+                    if (health) ChannelHealthCard(row) else AnalyticsFields(analyticsRowName(row), row)
+                }
                 item { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     OutlinedButton({ page = safePage - 1 }, enabled = safePage > 0) { Text(stringResource(R.string.ax_analytics_previous)) }
                     OutlinedButton({ page = safePage + 1 }, enabled = (safePage + 1) * 25 < visible.size) { Text(stringResource(R.string.ax_analytics_next)) }
@@ -191,6 +192,43 @@ private fun AnalyticsBoundScreen(app: AxonHubApplication, fence: TargetFence, ba
             filters = filters + (resource to ids.joinToString(", ")); selectedResource = null
         }
     }
+}
+
+@Composable
+private fun ChannelHealthCard(row: JsonObject) {
+    val rate = channelHealthRate(row["successCount"].longOrNull, row["failedCount"].longOrNull)
+    IosCard(Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Column(Modifier.weight(1f)) {
+                    Text(analyticsRowName(row), style = MaterialTheme.typography.titleMedium)
+                    Text(row["channelType"].text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Text(DisplayFormat.percentage(rate), style = MaterialTheme.typography.titleMedium.copy(fontFeatureSettings = "tnum"))
+            }
+            if (rate != null) LinearProgressIndicator(progress = { (rate / 100).toFloat().coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth())
+            Text(stringResource(R.string.ws_health_counts, observabilityScalar(row["successCount"], "successCount"), observabilityScalar(row["failedCount"], "failedCount")), style = MaterialTheme.typography.bodySmall)
+            if (row["channelDisabled"].boolOrNull == true) Text(stringResource(R.string.ws_disabled), color = MaterialTheme.colorScheme.error)
+            AnalyticsFields(stringResource(R.string.ax_analytics_token_overview), row)
+        }
+    }
+}
+
+@Composable
+private fun ChannelHealthSummary(rows: List<JsonObject>) {
+    // Unknown counts never become synthetic zeroes, even in the summary.
+    val known = rows.all { it["successCount"].longOrNull != null && it["failedCount"].longOrNull != null }
+    val success = if (known) rows.sumOf { it["successCount"].longOrNull!!.coerceAtLeast(0).toDouble() } else null
+    val failed = if (known) rows.sumOf { it["failedCount"].longOrNull!!.coerceAtLeast(0).toDouble() } else null
+    val rate = if (success != null && failed != null && success + failed > 0) success / (success + failed) * 100 else null
+    Text(stringResource(R.string.ax_analytics_metric_channel_success) + ": " + DisplayFormat.percentage(rate), style = MaterialTheme.typography.titleLarge)
+    Text(stringResource(R.string.ws_health_counts, success?.let { DisplayFormat.number(it) } ?: "—", failed?.let { DisplayFormat.number(it) } ?: "—"), style = MaterialTheme.typography.bodySmall)
+}
+
+@Composable
+private fun instancesName(app: AxonHubApplication, id: String): String {
+    val instances by app.repository.instances.collectAsState()
+    return instances.firstOrNull { it.id == id }?.name ?: "—"
 }
 
 @Composable
@@ -214,11 +252,14 @@ private fun AnalyticsFields(title: String, value: JsonElement) {
 }
 
 @Composable
-private fun AnalyticsValue(value: JsonElement) {
+internal fun AnalyticsValue(value: JsonElement) {
     when (value) {
-        is JsonObject -> value.forEach { (key, item) ->
-            Text(analyticsFieldLabel(key), style = MaterialTheme.typography.labelMedium)
-            if (item is JsonObject || item is JsonArray) AnalyticsValue(item) else Text(if (item is JsonNull) "—" else item.text)
+        is JsonObject -> value.keys.filterNot(::observabilityIdentifier).sorted().forEach { key ->
+            val item = value[key] ?: JsonNull
+            if (item is JsonObject || item is JsonArray) AnalyticsFields(analyticsFieldLabel(key), item) else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text(analyticsFieldLabel(key), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(observabilityScalar(item, key), style = MaterialTheme.typography.bodySmall.copy(fontFeatureSettings = "tnum"))
+            }
         }
         is JsonArray -> if (value.isEmpty()) Text(stringResource(R.string.ax_analytics_empty)) else value.forEachIndexed { index, item -> Text("${index + 1}", style = MaterialTheme.typography.labelMedium); AnalyticsValue(item); HorizontalDivider() }
         is JsonNull -> Text("—")
@@ -232,11 +273,11 @@ private fun AnalyticsChart(rows: List<JsonObject>, field: String, line: Boolean)
     val samples = rows.map { it[field].doubleOrNull?.takeIf(Double::isFinite) }
     val values = samples.filterNotNull()
     if (values.isEmpty()) { Text(stringResource(R.string.ax_analytics_no_numeric)); return }
-    val description = stringResource(R.string.ax_analytics_chart_description, analyticsFieldLabel(field))
+    val description = stringResource(R.string.ax_analytics_chart_description, analyticsFieldLabel(field)) + ". " + rows.joinToString("; ") { "${analyticsRowName(it)}: ${observabilityScalar(it[field], field)}" }
     val color = MaterialTheme.colorScheme.primary
     val low = minOf(0.0, values.min()); val high = maxOf(0.0, values.max())
     val range = (high - low).takeIf { it > 0.0 } ?: 1.0
-    Text(stringResource(R.string.ax_analytics_chart_range, values.min().toString(), values.max().toString()), style = MaterialTheme.typography.bodySmall)
+    Text(stringResource(R.string.ax_analytics_chart_range, observabilityScalar(JsonPrimitive(values.min()), field), observabilityScalar(JsonPrimitive(values.max()), field)), style = MaterialTheme.typography.bodySmall)
     Canvas(Modifier.fillMaxWidth().height(180.dp).semantics { contentDescription = description }) {
         val yZero = size.height * (1.0 - (0.0 - low) / range).toFloat()
         drawLine(color.copy(alpha = 0.25f), Offset(0f, yZero), Offset(size.width, yZero))
@@ -257,7 +298,7 @@ private fun AnalyticsChart(rows: List<JsonObject>, field: String, line: Boolean)
             } }
         }
     }
-    rows.take(15).forEach { row -> Text("${analyticsRowName(row)} · ${analyticsFieldLabel(field)}：${row[field].text.ifBlank { "—" }}", style = MaterialTheme.typography.bodySmall) }
+    rows.take(15).forEach { row -> Text("${analyticsRowName(row)} · ${analyticsFieldLabel(field)}：${observabilityScalar(row[field], field)}", style = MaterialTheme.typography.bodySmall) }
 }
 
 @Composable
@@ -278,9 +319,7 @@ private fun AnalyticsResourceDialog(service: AnalyticsService, kind: AnalyticsRe
             if (next && result.endCursor != null && result.endCursor == cursor) throw IllegalStateException("Repeated pagination cursor")
             rows = (if (next) rows + result.items else result.items).distinctBy { it["id"].text }
             cursor = result.endCursor; total = result.total; loaded = true
-        } catch (cancelled: CancellationException) { throw cancelled }
-        catch (_: Exception) { error = true }
-        finally { busy = false }
+        } catch (cancelled: CancellationException) { throw cancelled } catch (_: Exception) { error = true } finally { busy = false }
     }
     LaunchedEffect(kind, fence) { load(false) }
     AlertDialog(onDismissRequest = dismiss, title = { Text(stringResource(resourceLabel(kind))) }, text = {
@@ -306,9 +345,7 @@ private fun AnalyticsResourceDialog(service: AnalyticsService, kind: AnalyticsRe
 }
 
 internal fun analyticsRowName(row: JsonObject): String {
-    val name = listOf("name", "channelName", "modelName", "modelId", "apiKeyName", "userName", "projectName").firstNotNullOfOrNull { row[it].text.takeIf(String::isNotBlank) }
-    val date = row["date"].text.takeIf(String::isNotBlank)
-    return listOfNotNull(name, date).joinToString(" · ").ifBlank { row["id"].text.ifBlank { "—" } }
+    return observabilityRowName(row)
 }
 
 private fun dimensionLabel(value: AnalyticsDimension): Int = when (value) {
@@ -349,11 +386,11 @@ private fun analyticsFieldLabel(field: String): String {
         "uncachedInputTokens", "totalUncachedInputTokens" -> R.string.ax_analytics_field_uncached
         "outputTokens", "totalOutputTokens" -> R.string.ax_analytics_field_output
         "count", "requestCount", "totalRequests" -> R.string.ax_analytics_field_requests
-        "cost", "totalCost" -> R.string.ax_analytics_field_cost
+        "cost", "totalCost" -> R.string.ws_cost
         "throughput" -> R.string.ax_analytics_field_throughput
         "ttftMs" -> R.string.ax_analytics_field_ttft
         "latencyMs", "averageResponseTime" -> R.string.ax_analytics_field_latency
-        "successRate" -> R.string.ax_analytics_field_success_rate
+        "successRate" -> R.string.ws_success
         "failedCount", "failedRequests" -> R.string.ax_analytics_field_failed
         "successCount" -> R.string.ax_analytics_field_success
         "date", "earliestDate" -> R.string.ax_analytics_field_date

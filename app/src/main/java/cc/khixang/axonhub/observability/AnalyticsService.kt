@@ -120,8 +120,12 @@ class AnalyticsService(private val repository: AxonRepository) {
         }
         val overview = read(AnalyticsDocuments.DASHBOARD_STATS, "dashboardOverview")
         val tokens = read(AnalyticsDocuments.TOKEN_STATS, "tokenStats")
-        val rows = read(metric.document, metric.root, metric.variables(window, limit))
-        AnalyticsDashboard(overview, tokens, rowsOrEmpty(rows))
+        val rows = rowsOrEmpty(read(metric.document, metric.root, metric.variables(window, limit)))
+        val metricRows = if (metric == AnalyticsMetric.CHANNEL_SUCCESS) {
+            val channelTokens = rowsOrEmpty(read(AnalyticsDocuments.TOKENS_BY_CHANNEL, "tokenStatsByChannel", AnalyticsMetric.TOKEN_CHANNEL.variables(window)))
+            mergeChannelHealthTokens(rows, channelTokens)
+        } else rows
+        AnalyticsDashboard(overview, tokens, metricRows)
     }
     suspend fun resources(kind: AnalyticsResource, first: Int = 25, after: String? = null, fence: TargetFence = repository.currentFence()): Page<JsonObject> = repository.fenced { session, project ->
         repository.verify(fence)

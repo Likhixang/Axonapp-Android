@@ -1,6 +1,6 @@
 # iOS 功能对照
 
-参考基线：AxonHub iOS `db811721692275273387c5999d790a7d50c3820c`。Android 使用由 `tools/import_ios_contracts.py` 确定性导入的 126 个管理操作和 schema revision `939b2bc07cc05bdf7750d7ec872290d67784d13d`。
+参考基线：Axonapp-iOS `42e262e3448aa63ca7c18aec12ad65c27d62c11f`。Android 使用由 `tools/import_ios_contracts.py` 确定性导入的 126 个管理操作和 schema revision `939b2bc07cc05bdf7750d7ec872290d67784d13d`。
 
 | iOS 区域 | Android 状态 | Android 实现 |
 |---|---|---|
@@ -22,9 +22,9 @@
 - Android 已提供简体中文、繁体中文、英文、日文和韩文的应用级 locale 选择，但目前完整翻译覆盖主要导航与应用资源；部分管理 schema 字段和运行时说明仍显示英文。字段结构和 API 行为不受影响。
 - Android 的“全部 schema 操作”以递归原生表单呈现，而不是逐个复制 iOS 页面布局。它使用相同文档、类型、可选/必填语义、破坏性标记和读回规则。
 - 广域 restore 在服务端没有统一事务 revision。与 iOS 一致，Android 只确认服务端 success 并读取同一实例的 version，不声称每个跨实体对象都已逐条验证。
-- Provider 图标和许可已随包保留；当前紧凑列表以文字 provider/type 为主，并非所有位置都展示品牌图标。
-- 渠道/模型已提供状态筛选、多选与批量启用/禁用，串行写入、逐项读回并显示部分失败。其他高级批量工具、健康诊断和专用渠道密钥管理仍未全部复制 iOS 专用页面；不能视为完整功能对等。API Key、Prompt、Protection 和 Role 的部分批量操作可从“全部 schema 操作”运行。
-- Android 已有 Analytics 入口与服务，但分析展示、高级渠道工具和技术表单的交互布局仍与 iOS 有差异。部分旧技术文案及 Gateway 文案仍未完整本地化。
-- 本轮按要求仅通过 GitHub Actions 编译/单元测试/lint/签名检查，不执行模拟器或真机测试；真实服务登录、权限与所有写操作的端到端行为未在设备验收。苹果风格 UX 是 Compose 实现，不包含 Apple 专有字体或实时 Liquid Glass 模糊。
+- Provider 图标和许可已随包保留；已导入 iOS 的全部 344 个品牌图片；渠道按真实 type、模型按显式 icon 展示，未知元数据用纯文字首字母，不推测品牌。
+- 渠道/模型已提供状态筛选、多选与批量启用/禁用，串行写入、逐项读回并显示部分失败。已补原生渠道密钥测试/状态/删除、渠道诊断/价格/模板/复制、模型路由预览、归档/删除/恢复及导入工具。跨渠道批量测试/同步仍未移植；不能视为完整功能对等。API Key、Prompt、Protection 和 Role 的部分批量操作可从“全部 schema 操作”运行。
+- Android 保留概览指标和趋势，新增完整渠道健康筛选及审计筛选。API Key 默认使用原生简化编辑、Profile/Quota/Template/Usage 页面，技术 schema 表单保留在高级入口。USD 固定一位小数，其他 Decimal 最多两位小数，编辑/API 值保持原始精度。日期仍为文本输入，审计为追加分页，图表和模态容器仍非像素级一致；部分技术文案未完整本地化。
+- 构建和交付按要求仅通过 GitHub Actions 编译/单元测试/lint/签名检查，不执行模拟器或真机测试；真实服务登录、权限与所有写操作的端到端行为未在设备验收。苹果风格 UX 是 Compose 实现，不包含 Apple 专有字体或实时 Liquid Glass 模糊。
 
 不包含假数据、GraphQL 文本控制台、WebView 页面或静态 TODO 占位功能。

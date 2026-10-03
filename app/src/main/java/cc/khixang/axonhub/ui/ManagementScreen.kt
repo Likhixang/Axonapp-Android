@@ -97,9 +97,13 @@ private fun moduleIcon(module: AdminModule): androidx.compose.ui.graphics.vector
 
 @Composable private fun AdminModuleScreen(app: AxonHubApplication, module: AdminModule, back: () -> Unit) {
     var rows by remember(module.id) { mutableStateOf<List<JsonObject>>(emptyList()) }; var cursor by remember(module.id) { mutableStateOf<String?>(null) }; var total by remember { mutableStateOf<Int?>(null) }; var search by remember { mutableStateOf("") }; var project by remember { mutableStateOf<String?>(null) }; var projects by remember { mutableStateOf<List<JsonObject>>(emptyList()) }; var busy by remember { mutableStateOf(false) }; var error by remember { mutableStateOf<String?>(null) }; var selected by remember { mutableStateOf<JsonElement?>(null) }; var operation by remember { mutableStateOf<Pair<AdminOperation, JsonElement>?>(null) }; var invitation by remember { mutableStateOf(false) }; val scope = rememberCoroutineScope()
+    var selecting by remember(module.id) { mutableStateOf(false) }
+    var selection by remember(module.id) { mutableStateOf<Set<String>>(emptySet()) }
+    var bulkAction by remember(module.id) { mutableStateOf<String?>(null) }
+    var bulkUncertain by remember(module.id) { mutableStateOf(false) }
     suspend fun load(append: Boolean = false) {
         if (module.project && project.isNullOrBlank()) return
-        if (!append) { rows = emptyList(); cursor = null; total = null; selected = null }
+        if (!append) { rows = emptyList(); cursor = null; total = null; selected = null; selection = emptySet(); selecting = false }
         busy = true; error = null
         try {
             app.repository.selectProject(project)
@@ -114,16 +118,20 @@ private fun moduleIcon(module: AdminModule): androidx.compose.ui.graphics.vector
                     if (search.isNotBlank()) put(if (module.id == "users") "emailContainsFold" else "nameContainsFold", search.trim())
                 }
                 val vars = buildJsonObject { put("first", 25); if (where.isNotEmpty()) put("where", where); if (append) cursor?.let { put("after", it) } }
-                val page = app.admin.page(module.list, vars); rows = if (append) rows + page.items else page.items; cursor = page.endCursor; total = page.total
+                val page = app.admin.page(module.list, vars); rows = if (append) (rows + page.items).distinctBy { it["id"].text } else page.items; cursor = page.endCursor; total = page.total
+                if (!append) bulkUncertain = false
             }
         } catch (t: Throwable) { error = t.message } finally { busy = false }
     }
     suspend fun loadProjects() {
         if (busy) return
         busy = true; error = null
-        try { projects = app.admin.read("myProjects").arr.map(JsonElement::obj); project = projects.firstOrNull()?.get("id")?.text; app.repository.selectProject(project) }
-        catch (t: Throwable) { error = t.message ?: "Unable to load projects" }
-        finally { busy = false }
+        try {
+            projects = app.admin.read("myProjects").arr.map(JsonElement::obj)
+            val current = app.repository.projectId.value
+            project = current?.takeIf { id -> projects.any { it["id"].text == id } } ?: projects.firstOrNull()?.get("id")?.text
+            app.repository.selectProject(project)
+        } catch (t: Throwable) { error = t.message ?: "Unable to load projects" } finally { busy = false }
     }
     LaunchedEffect(module.id) {
         if (module.project) loadProjects()
@@ -133,6 +141,7 @@ private fun moduleIcon(module: AdminModule): androidx.compose.ui.graphics.vector
     Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         WorkspaceBack(back)
         IosPageHeader(moduleTitle(module)) {
+            if (module.id == "apiKeys") IconButton(enabled = !busy, onClick = { selecting = !selecting; selection = emptySet() }) { Icon(if (selecting) Icons.Default.Close else Icons.Default.Checklist, if (selecting) "Cancel selection" else "Select keys") }
             if (module.id == "projectUsers") IconButton(enabled = !project.isNullOrBlank() && !busy, onClick = { invitation = true }) { Icon(Icons.Default.Link, stringResource(R.string.ws_invitation)) }
             module.create?.let { create -> IconButton(enabled = !busy && (!module.project || !project.isNullOrBlank()), onClick = { operation = app.adminCatalog.operation(create) to JsonNull }) { Icon(Icons.Default.Add, stringResource(R.string.ws_create)) } }
             IconButton(onClick = { scope.launch { load() } }, enabled = !busy) { Icon(Icons.Default.Refresh, stringResource(R.string.ws_refresh)) }
@@ -143,6 +152,15 @@ private fun moduleIcon(module: AdminModule): androidx.compose.ui.graphics.vector
             IconButton(onClick = { scope.launch { load() } }, enabled = !busy) { Icon(Icons.Default.Search, stringResource(R.string.ws_search)) }
         }
         total?.let { Text(stringResource(R.string.ws_count, rows.size, it), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+        if (selecting && module.id == "apiKeys") {
+            Text("${selection.size} selected", style = MaterialTheme.typography.bodySmall)
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                listOf("bulkEnableAPIKeys" to "Enable", "bulkDisableAPIKeys" to "Disable", "bulkArchiveAPIKeys" to "Archive").forEach { (id, label) ->
+                    OutlinedButton({ bulkAction = id }, Modifier.weight(1f), enabled = selection.isNotEmpty() && !busy && !bulkUncertain) { Text(label) }
+                }
+            }
+        }
+        if (bulkUncertain) Text("The bulk write may have completed. Refresh to verify before retrying.", color = MaterialTheme.colorScheme.error)
         if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
         error?.let { ErrorState(it) { scope.launch { if (module.project && project == null) loadProjects(); load() } } }
         if (!busy && error == null && rows.isEmpty()) WorkspaceEmpty(
@@ -150,15 +168,24 @@ private fun moduleIcon(module: AdminModule): androidx.compose.ui.graphics.vector
             stringResource(if (module.project && project == null) R.string.ws_project_help else R.string.ws_no_records_help))
         LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             items(rows, key = { it["id"].text.ifBlank { it.toString() } }) { row ->
-                IosCard(Modifier.fillMaxWidth(), onClick = { selected = row }) {
+                IosCard(Modifier.fillMaxWidth(), onClick = {
+                    if (!busy && !bulkUncertain) {
+                        if (selecting) { val id = row["id"].text; selection = if (id in selection) selection - id else selection + id } else selected = row
+                    }
+                }) {
                     Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        if (selecting) {
+                            val id = row["id"].text
+                            Checkbox(id in selection, { checked -> selection = if (checked) selection + id else selection - id }, enabled = !busy && !bulkUncertain)
+                            Spacer(Modifier.width(8.dp))
+                        }
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             Text(recordLabel(row), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                             val metadata = listOf("status", "type").mapNotNull { row[it].text.takeIf(String::isNotBlank) }
                             if (metadata.isNotEmpty()) Text(metadata.joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             row["description"].text.takeIf(String::isNotBlank)?.let { Text(it, maxLines = 2, style = MaterialTheme.typography.bodySmall) }
                         }
-                        Icon(Icons.Default.ChevronRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        if (module.id != "apiKeys") Icon(Icons.Default.ChevronRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -168,26 +195,155 @@ private fun moduleIcon(module: AdminModule): androidx.compose.ui.graphics.vector
     selected?.let { summary -> AdminDetailDialog(app, module, summary, { selected = null }, { op, baseline -> operation = op to baseline; selected = null }, { scope.launch { load() } }) }
     operation?.let { (op, baseline) -> OperationDialog(app, op, baseline, project, { operation = null }, { scope.launch { load() } }) }
     if (invitation && project != null) InvitationDialog(app, project!!, { invitation = false })
+    bulkAction?.let { action ->
+        val ids = remember(action) { selection.toList() }
+        val fence = remember(action) { app.repository.currentFence() }
+        AlertDialog(onDismissRequest = { if (!busy) bulkAction = null }, title = { Text(managementLabel(action)) }, text = { Text("${ids.size} selected keys") },
+            confirmButton = { Button(enabled = !busy && !bulkUncertain, onClick = {
+                scope.launch {
+                    busy = true; error = null
+                    try {
+                        app.repository.verify(fence); bulkUncertain = true
+                        app.admin.execute(action, buildJsonObject { put("ids", JsonArray(ids.map(::JsonPrimitive))) }, expectedFence = fence)
+                        app.repository.verify(fence); bulkUncertain = false; load()
+                    } catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled } catch (t: Exception) { error = t.message } finally { busy = false; bulkAction = null }
+                }
+            }) { Text("Confirm") } }, dismissButton = { TextButton({ bulkAction = null }, enabled = !busy) { Text("Cancel") } })
+    }
 }
 
 private fun recordLabel(value: JsonElement): String = listOf("name", "email", "title", "modelID", "id").firstNotNullOfOrNull { value[it].text.takeIf(String::isNotBlank) } ?: "Record"
 
 @Composable private fun AdminDetailDialog(app: AxonHubApplication, module: AdminModule, summary: JsonElement, dismiss: () -> Unit, edit: (AdminOperation, JsonElement) -> Unit, changed: () -> Unit) {
-    var value by remember { mutableStateOf(summary) }; var busy by remember { mutableStateOf(false) }; var error by remember { mutableStateOf<String?>(null) }; var confirm by remember { mutableStateOf<AdminOperation?>(null) }; var secret by remember { mutableStateOf("") }; val scope = rememberCoroutineScope(); val id = summary["id"].text
-    LaunchedEffect(id) { if (module.entity != "ProjectUser") { busy = true; try { value = app.admin.detail(module.entity, id) } catch (t: Throwable) { error = t.message } finally { busy = false } } }
+    var value by remember { mutableStateOf<JsonElement>(JsonNull) }
+    var busy by remember { mutableStateOf(false) }
+    var loaded by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    var uncertain by remember { mutableStateOf(false) }
+    var confirm by remember { mutableStateOf<AdminOperation?>(null) }
+    var advanced by remember { mutableStateOf(false) }
+    var details by remember { mutableStateOf(false) }
+    var usage by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val id = summary["id"].text
+    val fence = remember(id) { app.repository.currentFence() }
+    val selectedInstance by app.repository.selectedId.collectAsState()
+    val selectedProject by app.repository.projectId.collectAsState()
+    LaunchedEffect(selectedInstance, selectedProject) {
+        if (selectedInstance != fence.instanceId || selectedProject != fence.projectId) { loaded = false; value = JsonNull; error = "The target changed. Close this editor and reopen it." }
+    }
+    suspend fun load() {
+        busy = true; error = null
+        try {
+            app.repository.verify(fence)
+            value = if (module.entity == "ProjectUser") summary else app.admin.detail(module.entity, id)
+            app.repository.verify(fence)
+            require(value !is JsonNull && value["id"].text == id) { "The record is no longer available" }
+            loaded = true
+        } catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled } catch (t: Exception) { error = t.message; loaded = false } finally { busy = false }
+    }
+    LaunchedEffect(id) { load() }
     val actions = app.adminCatalog.schema.operations.filter { it.entity == module.entity && it.mutation && !it.root.startsWith("create") && !it.root.startsWith("bulk") }
-    AlertDialog(onDismissRequest = dismiss, title = { Text(recordLabel(value)) }, text = { LazyColumn(Modifier.heightIn(max = 620.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { if (busy) item { LinearProgressIndicator(Modifier.fillMaxWidth()) }; error?.let { item { Text(it, color = MaterialTheme.colorScheme.error) } }; item { DetailFields(value, value.obj.keys.filterNot { SensitiveFields.matches(it) }.sorted()) }; if (module.id == "apiKeys") item { if (secret.isBlank()) OutlinedButton({ scope.launch { busy = true; try { secret = app.admin.read("revealAPIKey", buildJsonObject { put("id", id) })["key"].text } catch (t: Throwable) { error = t.message } finally { busy = false } } }) { Text("Reveal API key") } else Column { Text(secret, style = MaterialTheme.typography.bodySmall); TextButton({ secret = "" }) { Text("Hide") } } }; item { Text("Actions", style = MaterialTheme.typography.titleMedium) }; items(actions.distinctBy { it.id }) { op -> OutlinedButton({ if (op.destructive || op.variables.none { it.name == "input" || it.name == "status" || it.name == "profile" }) confirm = op else edit(op, value) }, Modifier.fillMaxWidth(), colors = if (op.destructive) ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error) else ButtonDefaults.outlinedButtonColors()) { Text(op.id) } } } }, confirmButton = { TextButton(dismiss) { Text("Close") } })
-    confirm?.let { op -> AlertDialog(onDismissRequest = { confirm = null }, title = { Text("Confirm ${op.id}") }, text = { Text("Target: ${recordLabel(value)}") }, confirmButton = { Button(onClick = { scope.launch { busy = true; try { val vars = operationVariables(app.adminCatalog.schema, op, value, null); app.admin.execute(op.id, vars, value); changed(); dismiss() } catch (t: Throwable) { error = t.message } finally { busy = false; confirm = null } } }, colors = if (op.destructive) ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error) else ButtonDefaults.buttonColors()) { Text("Confirm") } }, dismissButton = { TextButton({ confirm = null }) { Text("Cancel") } }) }
+    val primary = if (module.id == "apiKeys") actions.filter { it.id in setOf("updateAPIKey", "rotateAPIKey") } else actions.filter { it.id == "update${module.entity}" }
+    fun action(op: AdminOperation) {
+        if (op.destructive || op.variables.none { it.name in setOf("input", "status", "profile") }) confirm = op else edit(op, value)
+    }
+    AlertDialog(onDismissRequest = { if (!busy) dismiss() }, title = { Text(recordLabel(if (loaded) value else summary)) }, text = {
+        LazyColumn(Modifier.heightIn(max = 620.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            if (busy) item { LinearProgressIndicator(Modifier.fillMaxWidth()) }
+            error?.let { item { Text(it, color = MaterialTheme.colorScheme.error); TextButton({ scope.launch { load() } }, enabled = !busy) { Text("Reload") } } }
+            if (uncertain) item { Text("The write may have completed. Close and refresh before making another change.", color = MaterialTheme.colorScheme.error) }
+            if (loaded) {
+                item { Text(listOf("status", "type").mapNotNull { value[it].text.takeIf(String::isNotBlank) }.joinToString(" · "), style = MaterialTheme.typography.bodySmall) }
+                if (module.id == "apiKeys") {
+                    item { IosSectionTitle("API key"); KeyValueRow(enabled = !busy && !uncertain) { app.repository.verify(fence); app.admin.revealKey(id).also { app.repository.verify(fence) } } }
+                    item {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Text("Enable key", Modifier.weight(1f))
+                            Switch(value["status"].text == "enabled", { enabled ->
+                                scope.launch {
+                                    busy = true; error = null
+                                    try {
+                                        app.repository.verify(fence); uncertain = true
+                                        app.admin.execute("updateAPIKeyStatus", buildJsonObject { put("id", id); put("status", if (enabled) "enabled" else "disabled") }, value, expectedFence = fence)
+                                        app.repository.verify(fence); uncertain = false; load(); changed()
+                                    } catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled } catch (t: Exception) { error = t.message } finally { busy = false }
+                                }
+                            }, enabled = !busy && !uncertain && value["status"].text != "archived")
+                        }
+                    }
+                }
+                if (module.id in setOf("apiKeys", "projects")) item {
+                    OutlinedButton({ edit(app.adminCatalog.operation(if (module.id == "apiKeys") "updateAPIKeyProfiles" else "updateProjectProfiles"), value) }, Modifier.fillMaxWidth(), enabled = !busy && !uncertain) { Text("Configure Profiles") }
+                    if (module.id == "apiKeys") {
+                        OutlinedButton({ edit(app.adminCatalog.operation("loadApiKeyProfileTemplate"), value) }, Modifier.fillMaxWidth(), enabled = !busy && !uncertain) { Text("Load policy template") }
+                        TextButton({ usage = !usage }, enabled = !busy) { Text("Token and quota usage") }
+                        if (usage) KeyUsage(app, id)
+                    }
+                }
+                items(primary) { op -> OutlinedButton({ action(op) }, Modifier.fillMaxWidth(), enabled = !busy && !uncertain) { Text(managementLabel(op.id)) } }
+                item {
+                    TextButton({ details = !details }) { Text("Details"); Icon(if (details) Icons.Default.ExpandLess else Icons.Default.ExpandMore, null) }
+                    if (details) ManagementDetails(value)
+                }
+                item { TextButton({ advanced = !advanced }) { Text("Advanced actions"); Icon(if (advanced) Icons.Default.ExpandLess else Icons.Default.ExpandMore, null) } }
+                if (advanced) items(actions.filter { it !in primary }) { op -> OutlinedButton({ action(op) }, Modifier.fillMaxWidth(), enabled = !busy && !uncertain) { Text(managementLabel(op.id)) } }
+            }
+        }
+    }, confirmButton = { TextButton(dismiss, enabled = !busy) { Text("Close") } })
+    confirm?.let { op -> AlertDialog(onDismissRequest = { if (!busy) confirm = null }, title = { Text(managementLabel(op.id)) }, text = { Text("Target: ${recordLabel(value)}") },
+        confirmButton = { Button(enabled = !busy && !uncertain, onClick = {
+            scope.launch {
+                busy = true; error = null
+                try {
+                    app.repository.verify(fence)
+                    val vars = operationVariables(app.adminCatalog.schema, op, value, fence.projectId)
+                    uncertain = true
+                    app.admin.execute(op.id, vars, value, expectedFence = fence)
+                    app.repository.verify(fence); uncertain = false; changed(); dismiss()
+                } catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled } catch (t: Exception) { error = t.message } finally { busy = false; confirm = null }
+            }
+        }, colors = if (op.destructive) ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error) else ButtonDefaults.buttonColors()) { Text("Confirm") } },
+        dismissButton = { TextButton({ confirm = null }, enabled = !busy) { Text("Cancel") } }) }
 }
 
 @Composable private fun OperationDialog(app: AxonHubApplication, operation: AdminOperation, baseline: JsonElement, project: String?, dismiss: () -> Unit, completed: () -> Unit) {
-    val schema = app.adminCatalog.schema; var effectiveBaseline by remember(operation.id, baseline) { mutableStateOf(baseline) }; var variables by remember(operation.id, baseline) { mutableStateOf(operationVariables(schema, operation, baseline, project)) }; var result by remember { mutableStateOf<JsonElement>(JsonNull) }; var busy by remember { mutableStateOf(false) }; var loadingBaseline by remember { mutableStateOf(false) }; var error by remember { mutableStateOf<String?>(null) }; var confirm by remember { mutableStateOf(false) }; val scope = rememberCoroutineScope(); val context = LocalContext.current; val openedFence = remember(operation.id) { app.repository.currentFence() }
+    val schema = app.adminCatalog.schema
+    var effectiveBaseline by remember(operation.id, baseline) { mutableStateOf(baseline) }
+    var variables by remember(operation.id, baseline) { mutableStateOf(operationVariables(schema, operation, baseline, project)) }
+    var result by remember { mutableStateOf<JsonElement>(JsonNull) }
+    var busy by remember { mutableStateOf(false) }
+    var loadingBaseline by remember { mutableStateOf(false) }
+    var baselineFailed by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    var confirm by remember { mutableStateOf(false) }
+    var uncertain by remember { mutableStateOf(false) }
+    var advanced by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val openedFence = remember(operation.id) { app.repository.currentFence() }
+    val keyInput = operation.id in setOf("createAPIKey", "updateAPIKey")
+    val profilesInput = operation.id in setOf("updateAPIKeyProfiles", "updateProjectProfiles")
+    val templateInput = operation.id == "loadApiKeyProfileTemplate"
+    val selectedInstance by app.repository.selectedId.collectAsState()
+    val selectedProject by app.repository.projectId.collectAsState()
+    LaunchedEffect(selectedInstance, selectedProject) {
+        if (selectedInstance != openedFence.instanceId || selectedProject != openedFence.projectId) {
+            variables = buildJsonObject {}; result = JsonNull; effectiveBaseline = JsonNull; baselineFailed = true
+            error = "The target changed. Close this editor and reopen it."
+        }
+    }
     LaunchedEffect(operation.id) {
-        if (operation.replacement && effectiveBaseline is JsonNull && operation.verification.isNotBlank()) {
+        val entityId = variables["id"].text.ifBlank { if (templateInput) variables["input"]["apiKeyID"].text else "" }
+        if (operation.mutation && !operation.root.startsWith("create") && operation.entity.isNotBlank() && operation.entity != "ProjectUser" && entityId.isNotBlank() || operation.replacement && effectiveBaseline is JsonNull && operation.verification.isNotBlank()) {
             loadingBaseline = true
-            try { app.repository.verify(openedFence); effectiveBaseline = app.admin.read(operation.verification); variables = operationVariables(schema, operation, effectiveBaseline, project) }
-            catch (t: Throwable) { error = t.message }
-            finally { loadingBaseline = false }
+            try {
+                app.repository.verify(openedFence)
+                effectiveBaseline = if (entityId.isNotBlank()) app.admin.detail(operation.entity, entityId) else app.admin.read(operation.verification)
+                app.repository.verify(openedFence)
+                require(effectiveBaseline !is JsonNull) { "Reload the server record before editing" }
+                variables = operationVariables(schema, operation, effectiveBaseline, project)
+            } catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled } catch (t: Exception) { error = t.message; baselineFailed = true } finally { loadingBaseline = false }
         }
     }
     val export = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
@@ -197,11 +353,67 @@ private fun recordLabel(value: JsonElement): String = listOf("name", "email", "t
                 .onFailure { error = "Could not save the backup file." }
         }
     }
-    AlertDialog(onDismissRequest = { if (!busy) dismiss() }, title = { Text(operation.id) }, text = { Column(Modifier.heightIn(max = 650.dp).verticalScroll(androidx.compose.foundation.rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) { Text("Bound target: ${openedFence.instanceId}${openedFence.projectId?.let { " · $it" }.orEmpty()}", style = MaterialTheme.typography.bodySmall); operation.variables.forEach { field -> val boundId = effectiveBaseline["id"].text.takeIf { field.name == "id" && it.isNotBlank() }; if (boundId != null) { Text(field.name, style = MaterialTheme.typography.labelMedium); Text(boundId) } else SchemaValueEditor(schema, field.type, variables[field.name] ?: field.default ?: schema.defaultValue(field.type), { next -> variables = JsonObject(variables.toMutableMap().also { it[field.name] = next }) }, field.name, SensitiveFields.matches(field.name)) }; if (result !is JsonNull) { Text(if (operation.asyncEffect) "Server accepted the operation; asynchronous effects may still be pending" else "Verified server response", style = MaterialTheme.typography.titleMedium); if (result is JsonPrimitive) Text(result.text.ifBlank { result.toString() }) else DetailFields(result, result.obj.keys.filterNot { SensitiveFields.matches(it) || operation.root == "backup" && it == "data" }.sorted()); if (operation.root == "backup" && result["data"].text.isNotBlank()) { Text("Backup content can include credentials and is intentionally not displayed.", style = MaterialTheme.typography.bodySmall); OutlinedButton({ export.launch("axonhub-backup-${System.currentTimeMillis()}.json") }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Save, null); Spacer(Modifier.width(8.dp)); Text("Export backup JSON") } } }; error?.let { Text(it, color = MaterialTheme.colorScheme.error) }; if (busy || loadingBaseline) LinearProgressIndicator(Modifier.fillMaxWidth()) } }, confirmButton = { Button(enabled = !busy && !loadingBaseline, onClick = { if (operation.destructive) confirm = true else scope.launch { try { app.repository.verify(openedFence); runOperation(app, operation, variables, effectiveBaseline, { busy = it }, { result = it; completed() }, { error = it }) } catch (t: Throwable) { error = t.message } } }) { Text(if (operation.mutation) "Save" else "Run") } }, dismissButton = { TextButton(dismiss) { Text("Close") } })
-    if (confirm) AlertDialog(onDismissRequest = { confirm = false }, title = { Text("Confirm destructive operation") }, confirmButton = { Button(colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error), onClick = { confirm = false; scope.launch { try { app.repository.verify(openedFence); runOperation(app, operation, variables, effectiveBaseline, { busy = it }, { result = it; completed() }, { error = it }) } catch (t: Throwable) { error = t.message } } }) { Text("Execute") } }, dismissButton = { TextButton({ confirm = false }) { Text("Cancel") } })
+    suspend fun submit() {
+        if (busy || uncertain || baselineFailed || loadingBaseline) return
+        busy = true; error = null
+        try {
+            app.repository.verify(openedFence)
+            schema.validate(variables, operation.variables, operation.mutation)
+            if (profilesInput) KeyEditorPolicy.validateProfiles(variables["input"] ?: JsonNull, operation.entity == "APIKey")
+            if (operation.mutation) uncertain = true
+            val response = if (operation.mutation) app.admin.execute(operation.id, variables, effectiveBaseline, expectedFence = openedFence) else app.admin.read(operation.id, variables)
+            app.repository.verify(openedFence)
+            result = response; uncertain = false; completed()
+        } catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled } catch (t: Exception) { error = t.message } finally { busy = false }
+    }
+    fun setInput(value: JsonObject) { if (!busy && !uncertain && !baselineFailed) variables = JsonObject(variables + ("input" to value)) }
+    DisposableEffect(Unit) { onDispose { result = JsonNull; variables = buildJsonObject {}; effectiveBaseline = JsonNull } }
+    AlertDialog(onDismissRequest = { if (!busy) dismiss() }, title = { Text(managementLabel(operation.id)) }, text = {
+        Column(Modifier.heightIn(max = 650.dp).verticalScroll(androidx.compose.foundation.rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("${openedFence.instanceId}${openedFence.projectId?.let { " · $it" }.orEmpty()}", style = MaterialTheme.typography.bodySmall)
+            if (busy || loadingBaseline) LinearProgressIndicator(Modifier.fillMaxWidth())
+            if (result !is JsonNull) {
+                Text(if (operation.asyncEffect) "Server accepted the operation; asynchronous effects may still be pending" else "Saved and verified", style = MaterialTheme.typography.titleMedium)
+                if (operation.id == "createAPIKey" && result["key"].text.isNotBlank()) {
+                    KeyValueRow(initialValue = result["key"].text, initiallyVisible = true) { result["key"].text }
+                } else if (result is JsonPrimitive) Text(result.text.ifBlank { result.toString() })
+                else ManagementDetails(if (operation.root == "backup") JsonObject(result.obj.filterKeys { it != "data" }) else result)
+                if (operation.root == "backup" && result["data"].text.isNotBlank()) {
+                    OutlinedButton({ export.launch("axonhub-backup-${System.currentTimeMillis()}.json") }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Save, null); Text("Export backup JSON") }
+                }
+            } else if (!loadingBaseline) {
+                when {
+                    keyInput -> KeyInputFields(operation, effectiveBaseline, variables["input"].obj, ::setInput)
+                    profilesInput -> KeyProfileFields(app, variables["input"].obj, operation.entity == "APIKey", ::setInput)
+                    templateInput -> KeyTemplateFields(app, effectiveBaseline, variables["input"].obj, ::setInput)
+                    else -> operation.variables.forEach { field ->
+                        val boundId = effectiveBaseline["id"].text.takeIf { field.name == "id" && it.isNotBlank() }
+                        if (boundId != null) { Text(managementLabel(field.name), style = MaterialTheme.typography.labelMedium); Text(boundId) }
+                        else SchemaValueEditor(schema, field.type, variables[field.name] ?: field.default ?: schema.defaultValue(field.type), { next -> if (!busy && !uncertain && !baselineFailed) variables = JsonObject(variables + (field.name to next)) }, managementLabel(field.name), SensitiveFields.matches(field.name))
+                    }
+                }
+                if (keyInput || profilesInput || templateInput) {
+                    TextButton({ advanced = !advanced }) { Text("Advanced configuration"); Icon(if (advanced) Icons.Default.ExpandLess else Icons.Default.ExpandMore, null) }
+                    if (advanced) {
+                        val field = operation.variables.first { it.name == "input" }
+                        val inputSchema = if (keyInput && !KeyEditorPolicy.canEditScopes(if (operation.id == "createAPIKey") variables["input"]["type"].text else effectiveBaseline["type"].text)) {
+                            val type = schema.base(field.type)
+                            schema.copy(types = schema.types + (type to schema.types.getValue(type).copy(fields = schema.types.getValue(type).fields.filterNot { it.name.contains("scopes", true) })))
+                        } else schema
+                        SchemaValueEditor(inputSchema, field.type, variables["input"] ?: JsonNull, { setInput(it.obj) }, "Advanced configuration")
+                    }
+                }
+            }
+            error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+            if (uncertain) Text("The write may have completed. Close and refresh to verify; do not resubmit.", color = MaterialTheme.colorScheme.error)
+        }
+    }, confirmButton = {
+        if (result is JsonNull) Button(enabled = !busy && !loadingBaseline && !baselineFailed && !uncertain && (!templateInput || variables["input"]["templateID"].text.isNotBlank()), onClick = { if (operation.destructive) confirm = true else scope.launch { submit() } }) { Text(if (operation.mutation) "Save" else "Read") }
+    }, dismissButton = { TextButton(enabled = !busy, onClick = dismiss) { Text(if (result is JsonNull) "Cancel" else "Done") } })
+    if (confirm) AlertDialog(onDismissRequest = { confirm = false }, title = { Text("Confirm destructive operation") },
+        confirmButton = { Button(enabled = !busy && !uncertain, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error), onClick = { confirm = false; scope.launch { submit() } }) { Text("Confirm") } },
+        dismissButton = { TextButton({ confirm = false }) { Text("Cancel") } })
 }
-
-private suspend fun runOperation(app: AxonHubApplication, op: AdminOperation, vars: JsonObject, baseline: JsonElement, busy: (Boolean) -> Unit, success: (JsonElement) -> Unit, error: (String?) -> Unit) { busy(true); error(null); try { app.adminCatalog.schema.validate(vars, op.variables, op.mutation); success(if (op.mutation) app.admin.execute(op.id, vars, baseline) else app.admin.read(op.id, vars)) } catch (t: Throwable) { error(t.message) } finally { busy(false) } }
 
 private fun operationVariables(schema: AdminSchema, op: AdminOperation, baseline: JsonElement, project: String?): JsonObject {
     val seed = operationSeed(schema, op.variables).toMutableMap()
@@ -212,7 +424,8 @@ private fun operationVariables(schema: AdminSchema, op: AdminOperation, baseline
             val source = if (op.root in setOf("updateAPIKeyProfiles", "updateProjectProfiles")) baseline["profiles"] else baseline
             val projected = if (source !is JsonNull) schema.project(source, field.type).obj.toMutableMap() else seed["input"].obj.toMutableMap()
             val info = schema.types[schema.base(field.type)]; project?.let { id -> listOf("projectID", "projectId").firstOrNull { name -> info?.fields?.any { it.name == name } == true }?.let { projected[it] = JsonPrimitive(id) } }
-            if (op.id == "createAPIKey") projected["type"] = JsonPrimitive("user")
+            if (op.id == "createAPIKey") { projected["type"] = JsonPrimitive("user"); projected["allowedIps"] = JsonArray(emptyList()) }
+            if (op.id == "updateAPIKey" && !KeyEditorPolicy.canEditScopes(baseline["type"].text)) projected.keys.filter { it.contains("scopes", true) }.toList().forEach(projected::remove)
             if (op.root == "loadApiKeyProfileTemplate" && baseline["id"].text.isNotBlank()) projected["apiKeyID"] = JsonPrimitive(baseline["id"].text)
             if (op.entity == "ProjectUser" && baseline !is JsonNull) {
                 val membership = baseline["membership"]

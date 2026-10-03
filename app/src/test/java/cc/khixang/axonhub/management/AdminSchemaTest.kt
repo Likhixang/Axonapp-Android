@@ -25,6 +25,21 @@ class AdminSchemaTest {
         assertTrue(catalog.schema.defaultValue("[APIKeyProfileInput!]") is JsonArray)
         assertTrue(catalog.schema.defaultValue("APIKeyStatus!").text.isNotBlank())
     }
+    @Test fun `project profiles stay valid after native normalization`() {
+        val original = buildJsonObject { put("name", "Default"); put("channelIDs", JsonArray(listOf(JsonPrimitive(42)))) }
+        val normalized = KeyEditorPolicy.normalizeProfile(original, false)
+        catalog.schema.validate(normalized, catalog.schema.types.getValue("ProjectProfileInput").fields, true)
+        assertEquals(original, normalized)
+    }
+    @Test fun `numeric schema rejects nonfinite float and accepts exact decimal strings`() {
+        val floating = listOf(AdminField("value", "Float!"))
+        for (value in listOf(JsonPrimitive(Double.NaN), JsonPrimitive(Double.POSITIVE_INFINITY), JsonPrimitive("1.25"))) {
+            assertThrows(IllegalArgumentException::class.java) { catalog.schema.validate(buildJsonObject { put("value", value) }, floating, true) }
+        }
+        val decimal = buildJsonObject { put("value", "9007199254740993.123456789") }
+        catalog.schema.validate(decimal, listOf(AdminField("value", "DecimalInput!")), true)
+        assertEquals("9007199254740993.123456789", decimal["value"].text)
+    }
     @Test fun `mutation validation rejects null and undeclared keys`() {
         val operation = catalog.operation("createAPIKey")
         assertThrows(IllegalArgumentException::class.java) { catalog.schema.validate(buildJsonObject { put("unknown", true) }, operation.variables, true) }

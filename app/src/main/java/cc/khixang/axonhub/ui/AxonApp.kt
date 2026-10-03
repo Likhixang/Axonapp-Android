@@ -35,6 +35,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -104,8 +106,8 @@ fun AxonApp(app: AxonHubApplication) {
 private fun WelcomeScreen(onConnect: () -> Unit) {
     Column(Modifier.testTag("axon_onboarding").fillMaxSize()) {
         Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 24.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            Box(Modifier.size(76.dp).clip(RoundedCornerShape(22.dp)).background(MaterialTheme.colorScheme.onSurface), contentAlignment = Alignment.Center) {
-                Icon(Icons.Default.Hub, null, Modifier.size(38.dp), tint = MaterialTheme.colorScheme.surface)
+            Box(Modifier.size(76.dp).clip(RoundedCornerShape(22.dp)).background(Color.White), contentAlignment = Alignment.Center) {
+                Image(painterResource(R.drawable.axonhub_logo), null, Modifier.size(64.dp))
             }
             IosPageHeader(stringResource(R.string.ios_welcome_title), stringResource(R.string.ios_welcome_subtitle))
             IosCard(Modifier.fillMaxWidth()) {
@@ -135,7 +137,7 @@ private fun WelcomeFeature(icon: ImageVector, title: String) {
 private fun MainWorkspace(app: AxonHubApplication, instance: AxonInstance, onAdd: () -> Unit, onEdit: () -> Unit) {
     val admin = instance.authType == AuthType.ADMIN
     val destinations = if (admin) listOf(Destination.DASHBOARD, Destination.GATEWAY, Destination.KEYS, Destination.MANAGEMENT)
-        else listOf(Destination.MODELS, Destination.PLAYGROUND, Destination.SETTINGS)
+        else listOf(Destination.MODELS, Destination.SETTINGS)
     var routeNames by rememberSaveable(instance.id, instance.authType) { mutableStateOf(listOf(destinations.first().name)) }
     val destination = Destination.valueOf(routeNames.last())
     val wide = LocalConfiguration.current.screenWidthDp >= 840
@@ -216,6 +218,8 @@ private fun InstanceEditorDialog(app: AxonHubApplication, existing: AxonInstance
     var error by remember { mutableStateOf<String?>(null) }
     val fallback = stringResource(R.string.ios_connection_error)
     val scope = rememberCoroutineScope()
+    val requiresNewSecret = existing == null || existing.address != address.trim() || existing.authType != auth || existing.adminEmail != email.trim()
+    val canSubmit = !busy && name.isNotBlank() && address.isNotBlank() && (auth != AuthType.ADMIN || email.isNotBlank()) && (!requiresNewSecret || secret.isNotBlank())
     AlertDialog(onDismissRequest = { if (!busy) onDismiss() }, modifier = Modifier.testTag("axon_instance_editor"),
         title = { Text(stringResource(if (existing == null) R.string.ios_new_connection else R.string.ios_edit_instance)) },
         text = {
@@ -249,7 +253,7 @@ private fun InstanceEditorDialog(app: AxonHubApplication, existing: AxonInstance
             }
         },
         confirmButton = {
-            TextButton(modifier = Modifier.testTag("instance_save"), enabled = !busy && name.isNotBlank() && address.isNotBlank() && (existing != null || secret.isNotBlank()), onClick = {
+            TextButton(modifier = Modifier.testTag("instance_save"), enabled = canSubmit, onClick = {
                 scope.launch {
                     busy = true; error = null
                     try {
@@ -314,7 +318,7 @@ fun SettingsScreen(app: AxonHubApplication, onPlayground: () -> Unit) {
                 HorizontalDivider()
                 Text(stringResource(R.string.ios_accent), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(Modifier.fillMaxWidth().selectableGroup(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    listOf(0xff4f46e5, 0xff2563eb, 0xff0f766e, 0xffbe123c, 0xff7c3aed).forEachIndexed { index, color ->
+                    listOf(0xff6366f1, 0xff2563eb, 0xff0f766e, 0xffbe123c, 0xff7c3aed).forEachIndexed { index, color ->
                         val selected = settings.accent == color
                         val source = remember { MutableInteractionSource() }
                         val title = stringResource(R.string.ios_accent_option, index + 1)

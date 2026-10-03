@@ -15,11 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import cc.khixang.axonhub.core.*
 import cc.khixang.axonhub.management.AdminField
 import cc.khixang.axonhub.management.AdminSchema
+import cc.khixang.axonhub.management.ManagementFormat
 import kotlinx.serialization.json.*
 
 const val INVALID_SCHEMA_VALUE_PREFIX = "__AXONHUB_INVALID__"
@@ -55,10 +55,17 @@ const val INVALID_SCHEMA_VALUE_PREFIX = "__AXONHUB_INVALID__"
         }
         "Int", "Float" -> {
             var text by remember(type, label) { mutableStateOf(value.text) }
-            val number = if (schema.base(type) == "Int") text.toIntOrNull() else text.toDoubleOrNull()
-            OutlinedTextField(text, { next -> text = next; val parsed = if (schema.base(type) == "Int") next.toIntOrNull() else next.toDoubleOrNull(); onChange(parsed?.let(::JsonPrimitive) ?: JsonPrimitive(INVALID_SCHEMA_VALUE_PREFIX + next)) }, label = { Text(label + if (type.endsWith("!")) " *" else "") }, supportingText = { if (number == null) Text("Enter a valid number") }, isError = number == null, singleLine = true, keyboardOptions = KeyboardOptions(keyboardType = if (schema.base(type) == "Int") KeyboardType.Number else KeyboardType.Decimal), modifier = Modifier.fillMaxWidth())
+            val number = if (schema.base(type) == "Int") text.toIntOrNull() else text.toDoubleOrNull()?.takeIf(Double::isFinite)
+            OutlinedTextField(text, { next -> text = next; val parsed = if (schema.base(type) == "Int") next.toIntOrNull() else next.toDoubleOrNull()?.takeIf(Double::isFinite); onChange(parsed?.let(::JsonPrimitive) ?: JsonPrimitive(INVALID_SCHEMA_VALUE_PREFIX + next)) }, label = { Text(label + if (type.endsWith("!")) " *" else "") }, supportingText = { if (number == null) Text("Enter a valid number") }, isError = number == null, singleLine = true, keyboardOptions = KeyboardOptions(keyboardType = if (schema.base(type) == "Int") KeyboardType.Number else KeyboardType.Decimal), modifier = Modifier.fillMaxWidth())
         }
-        else -> OutlinedTextField(value.text, { onChange(JsonPrimitive(it)) }, label = { Text(label + if (type.endsWith("!")) " *" else "") }, visualTransformation = if (sensitive || SensitiveFields.matches(label)) PasswordVisualTransformation() else androidx.compose.ui.text.input.VisualTransformation.None, modifier = Modifier.fillMaxWidth())
+        "Decimal", "DecimalInput" -> {
+            val valid = ManagementFormat.parse(value.text) != null
+            OutlinedTextField(value.text, { onChange(JsonPrimitive(it)) }, label = { Text(label) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), isError = !valid,
+                supportingText = { if (!valid) Text("Enter a valid decimal amount") }, modifier = Modifier.fillMaxWidth())
+        }
+        else -> if (sensitive || SensitiveFields.matches(label)) KeyEditorField(label, value.text, { onChange(JsonPrimitive(it)) })
+            else OutlinedTextField(value.text, { onChange(JsonPrimitive(it)) }, label = { Text(label + if (type.endsWith("!")) " *" else "") }, modifier = Modifier.fillMaxWidth())
     }
 }
 
