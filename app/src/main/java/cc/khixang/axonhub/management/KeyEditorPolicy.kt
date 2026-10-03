@@ -8,9 +8,12 @@ import java.util.Locale
 object KeyEditorPolicy {
     fun canEditScopes(type: String) = type == "service_account"
     fun channelNumericId(id: String): Int? {
-        id.toIntOrNull()?.let { return it }
+        val guid = Regex("^gid://axonhub/Channel/([1-9][0-9]*)$").matchEntire(id)
+        if (guid != null) return guid.groupValues[1].toIntOrNull()
+        if (Regex("^[1-9][0-9]*$").matches(id)) return id.toIntOrNull()
         val decoded = runCatching { String(java.util.Base64.getDecoder().decode(id), Charsets.UTF_8) }.getOrNull() ?: return null
-        return decoded.substringAfterLast(':').toIntOrNull()
+        val legacy = Regex("^Channel:([1-9][0-9]*)$").matchEntire(decoded) ?: return null
+        return legacy.groupValues[1].toIntOrNull()
     }
     fun editableKeyInput(input: JsonObject, type: String): JsonObject = JsonObject(input.filterKeys { canEditScopes(type) || !it.contains("scopes", true) })
     fun prepareKeyPatch(input: JsonObject, type: String): JsonObject {

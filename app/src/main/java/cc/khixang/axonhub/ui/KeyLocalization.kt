@@ -66,6 +66,7 @@ private val keyFieldLabels = mapOf(
     "bulkDisableAPIKeys" to "Disable selected keys",
     "bulkArchiveAPIKeys" to "Archive selected keys",
     "loadApiKeyProfileTemplate" to "Load policy template",
+    "key" to "API key",
     "name" to "Name",
     "type" to "Type",
     "status" to "Status",
@@ -136,6 +137,8 @@ private val keyOptionLabels = mapOf(
 )
 
 private val keyTranslations = mapOf(
+    "API key" to ("API 密钥" to "API 金鑰"),
+    "Key" to ("密钥" to "金鑰"),
     "Create API key" to ("创建 API 密钥" to "建立 API 金鑰"),
     "Edit API key" to ("编辑 API 密钥" to "編輯 API 金鑰"),
     "Change status" to ("更改状态" to "變更狀態"),

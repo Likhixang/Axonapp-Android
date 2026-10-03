@@ -35,7 +35,10 @@ class GatewayToolsService(private val repository: AxonRepository, private val ca
             val prices = record["channelModelPrices"] as? JsonArray ?: throw AxonException.InvalidResponse
             val ids = prices.map { it["modelID"].text }
             if (ids.any(String::isBlank) || ids.distinct().size != ids.size) throw AxonException.InvalidResponse
-            return JsonArray(prices.map { buildJsonObject { put("modelId", it["modelID"]); put("price", it["price"]) } })
+            val editable = JsonArray(prices.map { buildJsonObject { put("modelId", it["modelID"]); put("price", it["price"]) } })
+            // Output nulls mean inactive pricing branches (and an unbounded upTo).
+            // Omission has the same Go pointer semantics without violating AdminSchema's mutation guard.
+            return catalog.schema.project(editable, "[SaveChannelModelPriceInput!]!") as JsonArray
         }
         suspend fun templates(): List<JsonElement> {
             val records = mutableListOf<JsonElement>(); val cursors = mutableSetOf<String>(); val ids = mutableSetOf<String>()
@@ -158,15 +161,23 @@ class GatewayToolsService(private val repository: AxonRepository, private val ca
         if (saved["id"].text != id || saved["errorMessage"] !is JsonNull) throw AxonException.VerificationFailed
     }
     suspend fun channelPrices(id: String): JsonArray = target { t -> t.prices(id) }
-    suspend fun savePrices(id: String, input: JsonArray): JsonArray {
+    /** Full replacement, guarded by the editor's complete initial snapshot and explicit removals. */
+    suspend fun savePrices(id: String, input: JsonArray, baseline: JsonArray, confirmedRemovedModelIds: Set<String> = emptySet()): JsonArray {
         validate(input, "[SaveChannelModelPriceInput!]!")
-        val modelIds = input.map { it["modelId"].text }; require(modelIds.all(String::isNotBlank) && modelIds.distinct().size == modelIds.size)
+        validate(baseline, "[SaveChannelModelPriceInput!]!")
+        val modelIds = input.map { it["modelId"].text }
+        val baselineIds = baseline.map { it["modelId"].text }
+        require(modelIds.all(String::isNotBlank) && modelIds.distinct().size == modelIds.size)
+        require(baselineIds.all(String::isNotBlank) && baselineIds.distinct().size == baselineIds.size)
+        require(baselineIds.toSet() - modelIds.toSet() == confirmedRemovedModelIds) { "Confirm all removed model prices" }
         return target(write = true) { t ->
-            if (t.channel(id)["id"].text != id) throw AxonException.InvalidResponse
+            // This comparison and the replacement share the same session fence and mutation mutex.
+            if (!gatewayPriceSetsMatch(t.prices(id), baseline)) throw AxonException.TargetChanged
             val result = t.request(GatewayToolDocuments.ChannelSavePrices, buildJsonObject { put("id", id); put("input", input) })["saveChannelModelPrices"]
             if (result !is JsonArray || result.size != input.size || result.map { it["modelID"].text }.toSet() != modelIds.toSet()) throw AxonException.VerificationFailed
             val saved = t.prices(id)
-            input.forEach { expected -> if (saved.none { it["modelId"] == expected["modelId"] && gatewayMatches(it["price"], expected["price"]) }) throw AxonException.VerificationFailed }
+            // Exact model set AND symmetric price comparison: omission of upTo must remain unbounded.
+            if (!gatewayPriceSetsMatch(saved, input)) throw AxonException.VerificationFailed
             saved
         }
     }
@@ -176,11 +187,14 @@ class GatewayToolsService(private val repository: AxonRepository, private val ca
     }
     suspend fun unassociatedChannels(): JsonArray = target { it.request(GatewayToolDocuments.ModelUnassociatedChannels)["queryUnassociatedChannels"] as? JsonArray ?: throw AxonException.InvalidResponse }
     suspend fun providersCatalog(refresh: Boolean = false): JsonElement = target(write = refresh) { t ->
-        // Reuse bundled AdminDocuments for the shared refresh contract; catalog reads need filtered:false.
-        val refreshed = if (refresh) t.request(catalog.document(catalog.operation("refreshProvidersCatalog")))["refreshProvidersCatalog"] else null
+        // Refresh returns filtered:true. Verify the same projection before reading the browsing view.
+        if (refresh) {
+            val refreshed = t.request(catalog.document(catalog.operation("refreshProvidersCatalog")))["refreshProvidersCatalog"] ?: throw AxonException.InvalidResponse
+            val verified = t.request(GatewayToolDocuments.ModelProvidersCatalogFiltered)["providersCatalog"] ?: throw AxonException.InvalidResponse
+            if (refreshed["data"] !is JsonObject || refreshed["fetchedAt"].text.isBlank() || refreshed["filtered"].boolOrNull != true || verified != refreshed) throw AxonException.VerificationFailed
+        }
         val actual = t.request(GatewayToolDocuments.ModelProvidersCatalog)["providersCatalog"] ?: throw AxonException.InvalidResponse
-        if (actual["data"] !is JsonObject || actual["fetchedAt"] is JsonNull) throw AxonException.InvalidResponse
-        if (refreshed != null && (actual["data"] != refreshed["data"] || actual["fetchedAt"] != refreshed["fetchedAt"])) throw AxonException.VerificationFailed
+        if (actual["data"] !is JsonObject || actual["fetchedAt"].text.isBlank() || actual["filtered"].boolOrNull != false) throw AxonException.InvalidResponse
         actual
     }
     suspend fun createModels(inputs: JsonArray): List<String> {
@@ -225,11 +239,16 @@ class GatewayToolsService(private val repository: AxonRepository, private val ca
         return target(write = true) { t ->
             if (mode == ChannelImportMode.ORDERING) source.forEach { if (t.channel(it["id"].text)["id"].text != it["id"].text) throw AxonException.InvalidResponse }
             val result = t.request(mode.document, buildJsonObject { put("input", input) })[mode.root]
-            val records = if (mode == ChannelImportMode.CREATE) result.arr else result["channels"].arr
+            val records = (if (mode == ChannelImportMode.CREATE) result else result["channels"]) as? JsonArray ?: throw AxonException.VerificationFailed
             val ids = records.map { it["id"].text }
             if (ids.any(String::isBlank) || ids.distinct().size != ids.size) throw AxonException.VerificationFailed
             if (mode == ChannelImportMode.CREATE && ids.size != source.size) throw AxonException.VerificationFailed
-            if (mode == ChannelImportMode.IMPORT && (result["success"].boolOrNull != true || result["created"].intOrNull != records.size || result["failed"].intOrNull?.let { it < 0 || it + records.size != source.size } != false)) throw AxonException.VerificationFailed
+            if (mode == ChannelImportMode.IMPORT) {
+                val created = result["created"].intOrNull ?: throw AxonException.VerificationFailed
+                val failed = result["failed"].intOrNull ?: throw AxonException.VerificationFailed
+                // Upstream explicitly defines success as failed == 0, including partial imports.
+                if (created != records.size || created < 0 || failed < 0 || created + failed != source.size || result["success"].boolOrNull != (failed == 0)) throw AxonException.VerificationFailed
+            }
             if (mode == ChannelImportMode.ORDERING && (result["success"].boolOrNull != true || result["updated"].intOrNull != source.size || ids.toSet() != source.map { it["id"].text }.toSet())) throw AxonException.VerificationFailed
             records.forEach { row ->
                 val saved = t.channel(row["id"].text)
@@ -238,7 +257,8 @@ class GatewayToolsService(private val repository: AxonRepository, private val ca
                     val expected = source.first { it["id"].text == row["id"].text }["orderingWeight"]
                     if (saved["orderingWeight"] != expected || row["orderingWeight"] != expected) throw AxonException.VerificationFailed
                 } else if (mode == ChannelImportMode.CREATE) {
-                    val expected = JsonObject(input.filterKeys { it !in setOf("name", "apiKeys", "settings") })
+                    val expected = JsonObject(input.filterKeys { it !in setOf("name", "apiKeys", "settings") } +
+                        ("tags" to if (input["tags"].arr.isEmpty()) JsonArray(listOf(input.getValue("name"))) else input.getValue("tags")))
                     if (!gatewayMatches(saved, expected)) throw AxonException.VerificationFailed
                     val secret = t.secrets(row["id"].text)
                     if (input["settings"] is JsonObject && !gatewayMatches(secret["settings"], input["settings"])) throw AxonException.VerificationFailed
@@ -250,7 +270,14 @@ class GatewayToolsService(private val repository: AxonRepository, private val ca
                     if (expectedKeys.isNotEmpty() && credentials(t.secrets(row["id"].text)).intersect(expectedKeys).isEmpty()) throw AxonException.VerificationFailed
                 }
             }
-            buildJsonObject { put("verified", records.size); put("failed", if (mode == ChannelImportMode.IMPORT) result["failed"] else JsonPrimitive(0)) }
+            buildJsonObject {
+                val failed = if (mode == ChannelImportMode.IMPORT) result["failed"].intOrNull!! else 0
+                put("success", failed == 0); put("partial", failed > 0 && records.isNotEmpty())
+                put("verified", records.size); put("failed", failed)
+                if (mode != ChannelImportMode.ORDERING) put("created", records.size)
+                put("verifiedIds", JsonArray(ids.map(::JsonPrimitive)))
+                // Do not return provider errors or channel credentials in the completion summary.
+            }
         }
     }
     suspend fun duplicateChannel(id: String, input: JsonObject, authorized: Boolean): String {
@@ -341,6 +368,27 @@ internal fun gatewayMatches(actual: JsonElement?, expected: JsonElement?): Boole
     is JsonObject -> expected.all { gatewayMatches(actual[it.key], it.value) }
     is JsonArray -> actual is JsonArray && actual.size == expected.size && actual.zip(expected).all { gatewayMatches(it.first, it.second) }
     else -> if (actual is JsonPrimitive && expected is JsonPrimitive && !actual.isString && !expected.isString && actual.content.toBigDecimalOrNull() != null && expected.content.toBigDecimalOrNull() != null) actual.content.toBigDecimal().compareTo(expected.content.toBigDecimal()) == 0 else actual == expected
+}
+internal fun gatewayPriceSetsMatch(actual: JsonArray, expected: JsonArray): Boolean {
+    // Go price equality treats nil/empty optional lists equally and compares Decimal values,
+    // not their GraphQL string formatting. Never apply this normalization to model IDs.
+    fun canonical(value: JsonElement): JsonElement = when (value) {
+        is JsonObject -> buildJsonObject {
+            value.forEach { (key, item) ->
+                if (key in setOf("promptWriteCacheVariants", "weekdays") && item is JsonArray && item.isEmpty()) return@forEach
+                val decimal = if (key in setOf("flatFee", "usagePerUnit", "pricePerUnit") && item is JsonPrimitive) item.content.toBigDecimalOrNull() else null
+                put(key, if (decimal != null) JsonPrimitive(decimal.stripTrailingZeros().toPlainString()) else canonical(item))
+            }
+        }
+        is JsonArray -> JsonArray(value.map { canonical(it) })
+        else -> value
+    }
+    val actualById = actual.associate { it["modelId"].text to canonical(it["price"]) }
+    val expectedById = expected.associate { it["modelId"].text to canonical(it["price"]) }
+    return actualById.size == actual.size && expectedById.size == expected.size &&
+        actualById.keys == expectedById.keys && expectedById.all { (id, price) ->
+            gatewayMatches(actualById[id], price) && gatewayMatches(price, actualById[id])
+        }
 }
 internal fun gatewayCredentialMatches(actual: JsonElement?, expected: JsonElement?): Boolean = expected.obj.all { (key, value) ->
     if (key == "apiKey" && value.text.isNotBlank()) actual["apiKey"] == value || value in actual["apiKeys"].arr else gatewayMatches(actual[key], value)

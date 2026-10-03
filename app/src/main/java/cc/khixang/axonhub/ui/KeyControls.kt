@@ -43,23 +43,26 @@ private fun copyKey(context: Context, text: String) {
 }
 
 @Composable fun KeyEditorField(title: String, value: String, onChange: (String) -> Unit, enabled: Boolean = true) {
-    var visible by remember { mutableStateOf(true) }
+    val strings = keyLocalization()
+    var visible by remember(title, enabled) { mutableStateOf(false) }
     var copied by remember(value) { mutableStateOf(false) }
     val context = LocalContext.current
+    LaunchedEffect(value) { visible = false }
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(title, style = MaterialTheme.typography.labelMedium)
+        Text(strings.text(title), style = MaterialTheme.typography.labelMedium)
         Row(verticalAlignment = Alignment.Top) {
             OutlinedTextField(value, onChange, Modifier.weight(1f), enabled = enabled,
                 textStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
                 visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation(), maxLines = 6)
-            IconButton({ visible = !visible }, enabled = enabled) { Icon(if (visible) Icons.Default.VisibilityOff else Icons.Default.Visibility, if (visible) "Hide" else "Show") }
-            IconButton({ copyKey(context, value); copied = true }, enabled = enabled && value.isNotEmpty()) { Icon(if (copied) Icons.Default.Check else Icons.Default.ContentCopy, if (copied) "Copied" else "Copy") }
+            IconButton({ visible = !visible }, enabled = enabled) { Icon(if (visible) Icons.Default.VisibilityOff else Icons.Default.Visibility, if (visible) strings.text("Hide") else strings.text("Show")) }
+            IconButton({ copyKey(context, value); copied = true }, enabled = enabled && value.isNotEmpty()) { Icon(if (copied) Icons.Default.Check else Icons.Default.ContentCopy, if (copied) strings.text("Copied") else strings.text("Copy")) }
         }
     }
 }
 
 /** One-tap reveal/copy. Copy while hidden does not reveal or retain the fetched value. */
 @Composable fun KeyValueRow(initialValue: String = "", initiallyVisible: Boolean = false, enabled: Boolean = true, read: suspend () -> String) {
+    val strings = keyLocalization()
     var secret by remember { mutableStateOf(if (initiallyVisible) initialValue else "") }
     var visible by remember { mutableStateOf(initiallyVisible) }
     var busy by remember { mutableStateOf(false) }
@@ -85,10 +88,10 @@ private fun copyKey(context: Context, text: String) {
     Column {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
             Text(if (visible) secret else "••••••••", Modifier.weight(1f).padding(vertical = 12.dp), style = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace))
-            IconButton({ if (visible) { visible = false; secret = ""; copied = false } else obtain(false) }, enabled = enabled && !busy) { Icon(if (visible) Icons.Default.VisibilityOff else Icons.Default.Visibility, if (visible) "Hide" else "Show") }
-            IconButton({ obtain(true) }, enabled = enabled && !busy) { Icon(if (copied) Icons.Default.Check else Icons.Default.ContentCopy, if (copied) "Copied" else "Copy") }
+            IconButton({ if (visible) { visible = false; secret = ""; copied = false } else obtain(false) }, enabled = enabled && !busy) { Icon(if (visible) Icons.Default.VisibilityOff else Icons.Default.Visibility, if (visible) strings.text("Hide") else strings.text("Show")) }
+            IconButton({ obtain(true) }, enabled = enabled && !busy) { Icon(if (copied) Icons.Default.Check else Icons.Default.ContentCopy, if (copied) strings.text("Copied") else strings.text("Copy")) }
         }
         if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
-        error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+        error?.let { Text(strings.text(it), color = MaterialTheme.colorScheme.error) }
     }
 }

@@ -41,7 +41,7 @@ import kotlinx.serialization.json.*
     fun set(key: String, value: JsonElement) = onChange(JsonObject(input + (key to value)))
     IosSectionTitle(strings.text("Basic information"))
     OutlinedTextField(input["name"].text, { set("name", JsonPrimitive(it)) }, label = { Text(strings.text("Name")) }, modifier = Modifier.fillMaxWidth())
-    if (creating) EnumDropdown(strings.text("Key type"), type, listOf("user", "service_account", "noauth", "personal"), label = { managementLabel(it.replace('_', ' ')) }) { next ->
+    if (creating) EnumDropdown(strings.text("Key type"), type, listOf("user", "service_account", "noauth", "personal"), label = { strings.option(it) }) { next ->
         onChange(KeyEditorPolicy.editableKeyInput(JsonObject(input + ("type" to JsonPrimitive(next))), next))
     }
     IosSectionTitle(strings.text("Access restrictions"))
@@ -83,7 +83,7 @@ import kotlinx.serialization.json.*
                         }
                         OutlinedTextField(profile["name"].text, { onChange(KeyEditorPolicy.renameProfile(value, index, it)) }, label = { Text(strings.text("Profile name")) }, modifier = Modifier.fillMaxWidth())
                         if (profile["templateName"].text.isNotBlank()) {
-                            Text("Template: ${profile["templateName"].text}")
+                            Text(strings.text("Template: %s", profile["templateName"].text))
                             TextButton({
                                 val list = profiles.toMutableList(); list[index] = JsonObject(profile.obj.filterKeys { it !in setOf("templateID", "templateName") })
                                 onChange(KeyEditorPolicy.replaceProfiles(value, list))
@@ -101,7 +101,7 @@ import kotlinx.serialization.json.*
                         }
                         if (data == null) Text(strings.text("Refresh the workspace to load channel choices."), style = MaterialTheme.typography.bodySmall)
                         KeyStringList(strings.text("Channel tags"), profile["channelTags"].arr.map { it.text }) { set("channelTags", JsonArray(it.map(::JsonPrimitive))) }
-                        EnumDropdown(strings.text("Tag matching"), profile["channelTagsMatchMode"].text.ifBlank { "any" }, listOf("any", "all", "none")) { set("channelTagsMatchMode", JsonPrimitive(it)) }
+                        EnumDropdown(strings.text("Tag matching"), profile["channelTagsMatchMode"].text.ifBlank { "any" }, listOf("any", "all", "none"), label = { strings.option(it) }) { set("channelTagsMatchMode", JsonPrimitive(it)) }
                         if (isKey) {
                             IosSectionTitle(strings.text("Model permissions and mappings"))
                             var modelSearch by remember { mutableStateOf("") }
@@ -126,8 +126,8 @@ import kotlinx.serialization.json.*
                             }
                             TextButton({ set("modelMappings", JsonArray(profile["modelMappings"].arr + buildJsonObject { put("from", ""); put("to", "") })) }) { Text(strings.text("Add model mapping")) }
                             IosSectionTitle(strings.text("Routing"))
-                            EnumDropdown(strings.text("Load balancing"), profile["loadBalanceStrategy"].text.ifBlank { "default" }, listOf("default", "adaptive", "failover", "circuit-breaker", "round-robin")) { set("loadBalanceStrategy", JsonPrimitive(it)) }
-                            EnumDropdown(strings.text("Trace affinity"), profile["traceStickyMode"].text.ifBlank { "default" }, listOf("default", "disabled", "prefer_previous_channel")) { set("traceStickyMode", JsonPrimitive(it)) }
+                            EnumDropdown(strings.text("Load balancing"), profile["loadBalanceStrategy"].text.ifBlank { "default" }, listOf("default", "adaptive", "failover", "circuit-breaker", "round-robin"), label = { strings.option(it) }) { set("loadBalanceStrategy", JsonPrimitive(it)) }
+                            EnumDropdown(strings.text("Trace affinity"), profile["traceStickyMode"].text.ifBlank { "default" }, listOf("default", "disabled", "prefer_previous_channel"), label = { strings.option(it) }) { set("traceStickyMode", JsonPrimitive(it)) }
                             IosSectionTitle(strings.text("Quota limits"))
                             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                                 Text(strings.text("Enable quota limits"), Modifier.weight(1f)); Switch(profile["quota"] !is JsonNull, { enabled -> set("quota", if (enabled) buildJsonObject { put("period", buildJsonObject { put("type", "all_time") }) } else null) })
@@ -159,10 +159,10 @@ import kotlinx.serialization.json.*
         OutlinedTextField(text, { next ->
             text = next
             set(field, if (next.isEmpty()) null else if (field == "cost") JsonPrimitive(next) else next.toIntOrNull()?.let(::JsonPrimitive) ?: JsonPrimitive(next))
-        }, label = { Text(title) }, keyboardOptions = KeyboardOptions(keyboardType = if (field == "cost") KeyboardType.Decimal else KeyboardType.Number), modifier = Modifier.fillMaxWidth())
+        }, label = { Text(strings.text(title)) }, keyboardOptions = KeyboardOptions(keyboardType = if (field == "cost") KeyboardType.Decimal else KeyboardType.Number), modifier = Modifier.fillMaxWidth())
     }
     val period = quota["period"]
-    EnumDropdown(strings.text("Quota period"), period["type"].text, listOf("all_time", "past_duration", "calendar_duration")) { type ->
+    EnumDropdown(strings.text("Quota period"), period["type"].text, listOf("all_time", "past_duration", "calendar_duration"), label = { strings.option(it) }) { type ->
         set("period", buildJsonObject {
             put("type", type)
             if (type == "past_duration") put("pastDuration", buildJsonObject { put("value", 1); put("unit", "day") })
@@ -172,9 +172,9 @@ import kotlinx.serialization.json.*
     fun setPeriod(group: String, field: String, value: JsonElement) = set("period", JsonObject(period.obj + (group to JsonObject(period[group].obj + (field to value)))))
     if (period["type"].text == "past_duration") {
         OutlinedTextField(period["pastDuration"]["value"].text, { setPeriod("pastDuration", "value", it.toIntOrNull()?.let(::JsonPrimitive) ?: JsonPrimitive(it)) }, label = { Text(strings.text("Window length")) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), modifier = Modifier.fillMaxWidth())
-        EnumDropdown(strings.text("Unit"), period["pastDuration"]["unit"].text, listOf("minute", "hour", "day")) { setPeriod("pastDuration", "unit", JsonPrimitive(it)) }
+        EnumDropdown(strings.text("Unit"), period["pastDuration"]["unit"].text, listOf("minute", "hour", "day"), label = { strings.option(it) }) { setPeriod("pastDuration", "unit", JsonPrimitive(it)) }
     }
-    if (period["type"].text == "calendar_duration") EnumDropdown(strings.text("Unit"), period["calendarDuration"]["unit"].text, listOf("day", "month")) { setPeriod("calendarDuration", "unit", JsonPrimitive(it)) }
+    if (period["type"].text == "calendar_duration") EnumDropdown(strings.text("Unit"), period["calendarDuration"]["unit"].text, listOf("day", "month"), label = { strings.option(it) }) { setPeriod("calendarDuration", "unit", JsonPrimitive(it)) }
 }
 
 @Composable internal fun KeyTemplateFields(app: AxonHubApplication, baseline: JsonElement, input: JsonObject, onChange: (JsonObject) -> Unit) {
@@ -188,7 +188,7 @@ import kotlinx.serialization.json.*
         try {
             app.repository.verify(fence)
             val project = baseline["projectID"].text.ifBlank { fence.projectId.orEmpty() }
-            require(project.isNotBlank()) { strings.text("Select the key's project first") }
+            require(project.isNotBlank()) { "Select the key's project first" }
             val records = mutableListOf<JsonObject>()
             var after: String? = null
             val cursors = mutableSetOf<String>()
@@ -200,7 +200,7 @@ import kotlinx.serialization.json.*
                 app.repository.verify(fence)
                 records += page.items
                 after = page.endCursor
-                require(after == null || cursors.add(after)) { strings.text("Template pagination did not advance") }
+                require(after == null || cursors.add(after)) { "Template pagination did not advance" }
             } while (after != null)
             templates = records.distinctBy { it["id"].text }
         } catch (cancelled: CancellationException) { throw cancelled } catch (t: Exception) { error = t.message } finally { busy = false }
@@ -212,7 +212,7 @@ import kotlinx.serialization.json.*
     }
     if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
     if (!busy && error == null && templates.isEmpty()) Text(strings.text("No templates in this project."), style = MaterialTheme.typography.bodySmall)
-    error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+    error?.let { Text(strings.text(it), color = MaterialTheme.colorScheme.error) }
 }
 
 @Composable internal fun KeyUsage(app: AxonHubApplication, id: String) {
@@ -244,7 +244,7 @@ import kotlinx.serialization.json.*
             if (limit !is JsonNull) {
                 val used = record["usage"][usedKey]
                 val format: (String) -> String = when (limitKey) { "cost" -> { raw -> ManagementFormat.money(raw) }; "totalTokens" -> { raw -> ManagementFormat.compact(raw) }; else -> { raw -> ManagementFormat.number(raw) } }
-                Text("${managementLabel(limitKey)}: ${format(used.text)} / ${format(limit.text)}")
+                Text("${strings.label(limitKey)}: ${format(used.text)} / ${format(limit.text)}")
                 val limitValue = ManagementFormat.parse(limit.text)
                 val usedValue = ManagementFormat.parse(used.text)
                 if (limitValue != null && usedValue != null && limitValue.signum() > 0) {
@@ -254,5 +254,5 @@ import kotlinx.serialization.json.*
             }
         }
     }
-    error?.let { Text(it, color = MaterialTheme.colorScheme.error); TextButton({ revision++ }) { Text(strings.text("Retry")) } }
+    error?.let { Text(strings.text(it), color = MaterialTheme.colorScheme.error); TextButton({ revision++ }) { Text(strings.text("Retry")) } }
 }

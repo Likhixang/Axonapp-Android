@@ -6,6 +6,7 @@ internal object GatewayToolDocuments {
     const val ChannelTestKeys = """mutation ChannelTestKeys(${ '$' }id: ID!, ${ '$' }model: String) { testChannelAPIKeys(channelID: ${ '$' }id, modelID: ${ '$' }model) { channelID total successCount failedCount results { success latency disabled } } }"""
     const val ModelRouteConnections = """query ModelRouteConnections(${ '$' }associations: [ModelAssociationInput!]!) { queryModelChannelConnections(associations: ${ '$' }associations) { channel { id name status } priority models { requestModel actualModel source } } }"""
     const val ModelUnassociatedChannels = """query ModelUnassociatedChannels { queryUnassociatedChannels { channel { id name status } models } }"""
+    const val ModelProvidersCatalogFiltered = """query ModelProvidersCatalogFiltered { providersCatalog(filtered: true) { data source fetchedAt filtered } }"""
     const val ModelProvidersCatalog = """query ModelProvidersCatalog { providersCatalog(filtered: false) { data source fetchedAt filtered } }"""
     const val ModelRefreshProvidersCatalog = """mutation ModelRefreshProvidersCatalog { refreshProvidersCatalog { data source fetchedAt filtered } }"""
     const val ModelBulkCreate = """mutation ModelBulkCreate(${ '$' }inputs: [CreateModelInput!]!) { bulkCreateModels(inputs: ${ '$' }inputs) { id } }"""

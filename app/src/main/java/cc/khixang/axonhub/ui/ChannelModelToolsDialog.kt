@@ -25,6 +25,7 @@ import kotlinx.serialization.json.*
     var search by remember { mutableStateOf("") }
     var templates by remember { mutableStateOf(false) }
     var results by remember { mutableStateOf<GatewayBatchResult?>(null) }
+    var importSummary by remember { mutableStateOf<JsonObject?>(null) }
     val reloadTitle = gt("重新读取服务器列表", "Reload server lists")
     val submitTitle = gt("提交批量配置", "Submit batch configuration")
     val catalogTitle = gt("载入模型目录", "Load model catalog")
@@ -35,7 +36,7 @@ import kotlinx.serialization.json.*
         GatewayOutlineButton(onClick = { runner.submit(ChannelToolCommand(reloadTitle, recovery = true) {
             app.repository.refresh()
             if (app.repository.snapshot.value !is LoadState.Ready) throw cc.khixang.axonhub.network.AxonException.InvalidResponse
-            results = null; selected = emptySet(); null
+            results = null; importSummary = null; selected = emptySet(); null
         }) }) { Text(reloadTitle) }
         IosSectionTitle(gt("批量选择", "Batch selection"))
         rows.forEach { (entityId, name) -> Row { Text(name, Modifier.weight(1f)); Checkbox(entityId in selected, { selected = if (it) selected + entityId else selected - entityId }) } }
@@ -93,11 +94,19 @@ import kotlinx.serialization.json.*
             Text("${gt("待导入模型", "Models to import")}: ${input.arr.size}")
             SchemaValueEditor(app.adminCatalog.schema, "[CreateModelInput!]!", input, { input = it }, gt("模型配置", "Model configuration"))
         }
+        importSummary?.let { response ->
+            Text("${gt("已创建并验证", "Created and verified")}: ${response["verified"].text} · ${gt("失败", "Failed")}: ${response["failed"].text}")
+            if (response["failed"].intOrNull?.let { it > 0 } == true) GatewayNotice(gt("已创建记录不会回滚。请重新读取服务器列表并检查失败项，不要重复导入整批。", "Created records are not rolled back. Reload server lists and inspect failed items; do not reimport the entire batch."), true)
+        }
         GatewayButton(onClick = {
             val captured = input; val capturedMode = mode
             runner.submit(ChannelToolCommand(submitTitle, write = true) {
                 val result = if (channel) {
                     val response = tools.bulkChannels(capturedMode, captured.obj, true)
+                    importSummary = response
+                    app.repository.refresh()
+                    // Preserve verified partial results, and require reload before another import.
+                    if (response["success"].boolOrNull != true) throw cc.khixang.axonhub.network.AxonException.VerificationFailed
                     "${response["verified"].text} / ${response["failed"].text}"
                 } else tools.createModels(captured as? JsonArray ?: throw IllegalArgumentException()).size.toString()
                 app.repository.refresh(); result
@@ -123,10 +132,7 @@ import kotlinx.serialization.json.*
         } }
     }
 }
-internal fun gatewayNumericChannelId(id: String): Int? = id.toIntOrNull()?.takeIf { it > 0 } ?: runCatching {
-    val decoded = java.util.Base64.getDecoder().decode(id).toString(Charsets.UTF_8)
-    decoded.substringAfterLast(':').toIntOrNull()?.takeIf { it > 0 }
-}.getOrNull()
+internal fun gatewayNumericChannelId(id: String): Int? = cc.khixang.axonhub.management.KeyEditorPolicy.channelNumericId(id)
 internal fun catalogModelInput(model: JsonElement, developer: String): JsonObject {
     fun number(value: JsonElement) = JsonPrimitive(value.doubleOrNull ?: 0.0)
     val id = model["id"].text

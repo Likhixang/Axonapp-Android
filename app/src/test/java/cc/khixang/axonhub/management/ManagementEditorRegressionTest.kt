@@ -76,8 +76,12 @@ class ManagementEditorRegressionTest {
         assertTrue(KeyEditorPolicy.profilesReadbackMatches(metadata, expected))
     }
 
-    @Test fun `channel selectors support relay numeric ids without guessing malformed tokens`() {
+    @Test fun `channel selectors support actual GUIDs and validated legacy numeric ids`() {
+        assertEquals(42, KeyEditorPolicy.channelNumericId("gid://axonhub/Channel/42"))
         assertEquals(42, KeyEditorPolicy.channelNumericId("42"))
+        listOf("gid://axonhub/Model/42", "gid://axonhub/Channel/0", "gid://axonhub/Channel/-1", "gid://axonhub/Channel/42/extra", "gid://axonhub/Channel/2147483648", "gid://axonhub/Channel/+42", "0", "-42", "TW9kZWw6NDI=").forEach {
+            assertNull(it, KeyEditorPolicy.channelNumericId(it))
+        }
         assertEquals(42, KeyEditorPolicy.channelNumericId("Q2hhbm5lbDo0Mg=="))
         assertNull(KeyEditorPolicy.channelNumericId("Channel/42"))
         assertNull(KeyEditorPolicy.channelNumericId("invalid="))

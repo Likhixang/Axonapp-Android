@@ -15,6 +15,7 @@ import kotlinx.serialization.json.*
     val tools = remember { GatewayToolsService(app.repository, app.adminCatalog) }
     var selected by remember { mutableStateOf(setOf<String>()) }
     var prices by remember { mutableStateOf<JsonElement>(JsonArray(emptyList())) }
+    var pricesBaseline by remember { mutableStateOf<JsonArray?>(null) }
     var pricesLoaded by remember { mutableStateOf(false) }
     var diagnostics by remember { mutableStateOf<JsonElement>(JsonNull) }
     var history by remember { mutableStateOf(listOf<JsonElement>()) }
@@ -57,10 +58,24 @@ import kotlinx.serialization.json.*
         }, enabled = selected.isNotEmpty() && !runner.uncertain) { Text(testTitle) }
         testResults.forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
         IosSectionTitle(gt("模型价格", "Model prices"))
-        GatewayOutlineButton(onClick = { runner.submit(ChannelToolCommand(pricesTitle, recovery = true) { prices = tools.channelPrices(id); pricesLoaded = true; null }) }) { Text(pricesTitle) }
+        GatewayOutlineButton(onClick = { runner.submit(ChannelToolCommand(pricesTitle, recovery = true) {
+            val loaded = tools.channelPrices(id)
+            prices = loaded; pricesBaseline = loaded; pricesLoaded = true; null
+        }) }) { Text(pricesTitle) }
         if (pricesLoaded) {
+            Text(gt("保存会替换全部模型价格；移除条目会删除对应价格。", "Saving replaces all model prices; removed entries delete their prices."), style = MaterialTheme.typography.bodySmall)
             SchemaValueEditor(app.adminCatalog.schema, "[SaveChannelModelPriceInput!]!", prices, { prices = it }, gt("价格配置", "Price configuration"))
-            GatewayButton(onClick = { val captured = prices; runner.submit(ChannelToolCommand(saveTitle, write = true) { prices = tools.savePrices(id, captured as? JsonArray ?: throw IllegalArgumentException()); null }) }, enabled = !runner.uncertain) { Text(saveTitle) }
+            val removed = (pricesBaseline?.toList() ?: emptyList()).map { it["modelId"].text }.toSet() - prices.arr.map { it["modelId"].text }.toSet()
+            val removalTitle = gt("保存并删除以下模型价格：", "Save and delete prices for: ") + removed.sorted().joinToString(", ")
+            if (removed.isNotEmpty()) GatewayNotice(removalTitle, true)
+            GatewayButton(onClick = {
+                val captured = prices as? JsonArray ?: return@GatewayButton
+                val baseline = pricesBaseline ?: return@GatewayButton
+                runner.submit(ChannelToolCommand(if (removed.isEmpty()) saveTitle else removalTitle, write = true, destructive = removed.isNotEmpty()) {
+                    val saved = tools.savePrices(id, captured, baseline, removed)
+                    prices = saved; pricesBaseline = saved; null
+                })
+            }, enabled = !runner.uncertain && pricesBaseline != null) { Text(saveTitle) }
         }
         IosSectionTitle(gt("渠道诊断", "Channel diagnostics"))
         GatewayOutlineButton(onClick = { runner.submit(ChannelToolCommand(readTitle, recovery = true) { diagnostics = tools.diagnostics(id); null }) }) { Text(readTitle) }
